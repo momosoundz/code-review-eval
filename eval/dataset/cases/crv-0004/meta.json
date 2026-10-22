@@ -1,0 +1,14 @@
+{
+  "family_id": "fam-002",
+  "split": "dev",
+  "source": "seeded",
+  "provenance": {
+    "repo": "momosoundz/genai-challenge",
+    "commit": "5c1ef95",
+    "paths": [
+      "src/"
+    ],
+    "note": "seeded: .lower() removed from the regex input"
+  },
+  "status": "active"
+}

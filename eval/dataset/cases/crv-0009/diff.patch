@@ -1,0 +1,39 @@
+diff --git a/src/agents.py b/src/agents.py
+index d565c94..1e05b6a 100644
+--- a/src/agents.py
++++ b/src/agents.py
+@@ -59,22 +59,21 @@ class RAGAgent(BaseAgent):
+         return "📚 Sources: Airplane Flying Handbook, pages " + ", ".join(map(str, pages))
+ 
+     def _retrieve_for_turn(self, question: str, previous: list[tuple[str, str]]):
+-        """Retrieve for the question; a weak follow-up retries with the previous question.
++        """Retrieve for the question; a weak follow-up retries with the last answered question.
+ 
+-        Only questions that refer back to the conversation get the retry, and only when the
+-        previous turn was answered: "tell me more about that" after an abstention has nothing
+-        to expand on. A weak question that stands on its own is off-topic, and gluing it to
+-        the previous one would hand the model unrelated context to answer from.
++        Only questions that refer back to the conversation get the retry. A weak question
++        that stands on its own is off-topic, and gluing it to the previous one would hand
++        the model unrelated context to answer from.
+         """
+         chunks = self.rag.retrieve(question)
+-        previous_answered = (
+-            len(previous) >= 2
+-            and previous[-2][1] == "user"
+-            and previous[-1][0] != NO_CONTEXT_ANSWER
+-        )
+-        if should_abstain(chunks) and previous_answered and refers_to_previous_turn(question):
+-            logger.debug("Weak retrieval for a follow-up; retrying with the previous question")
+-            chunks = self.rag.retrieve(f"{previous[-2][0]} {question}")
++        answered = [
++            previous[i][0]
++            for i in range(len(previous) - 1)
++            if previous[i][1] == "user" and previous[i + 1][0] != NO_CONTEXT_ANSWER
++        ]
++        if should_abstain(chunks) and answered and refers_to_previous_turn(question):
++            logger.debug("Weak retrieval for a follow-up; retrying with the last answered question")
++            chunks = self.rag.retrieve(f"{answered[-1]} {question}")
+         return chunks
+ 
+     def act(self) -> str:

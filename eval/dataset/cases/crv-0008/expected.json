@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0008",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0008-g1",
+      "file": "src/agents.py",
+      "spans": [
+        [
+          98,
+          98
+        ]
+      ],
+      "category": "wrong_variable_or_argument",
+      "severity": "low",
+      "root_cause": "the per-chunk debug line logs chunks[0].score for every rank instead of chunk.score",
+      "failure_path": "debug mode prints the same score for every retrieved chunk; whoever reads the log to tune the threshold sees ranks 2..k with the top score and draws the wrong conclusion",
+      "needs_context_beyond_diff": false
+    }
+  ],
+  "decoys": []
+}

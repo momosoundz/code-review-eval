@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0010",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0010-g1",
+      "file": "src/agents.py",
+      "spans": [
+        [
+          55,
+          58
+        ]
+      ],
+      "category": "wrong_condition",
+      "severity": "high",
+      "root_cause": "the retry fires for any weak question whenever an earlier user question exists, without checking that the question refers back to the conversation",
+      "failure_path": "user asks about landings, then 'What is the capital of France?'; retrieval is weak (off-topic), earlier_questions is non-empty, the question is glued to the landings one and the model answers about landings instead of abstaining",
+      "needs_context_beyond_diff": false
+    }
+  ],
+  "decoys": []
+}

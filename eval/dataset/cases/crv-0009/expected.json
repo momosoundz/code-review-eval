@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0009",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0009-g1",
+      "file": "src/agents.py",
+      "spans": [
+        [
+          69,
+          76
+        ]
+      ],
+      "category": "wrong_condition",
+      "severity": "medium",
+      "root_cause": "the follow-up retry now expands a weak question with the last answered question anywhere in the history instead of the immediately previous turn",
+      "failure_path": "user asks about landings (answered), then an off-topic question (abstained), then 'tell me more about that'; retrieval is weak, answered[-1] is the landings question, the follow-up is glued to it and the model answers about landings although the previous turn had nothing to expand on",
+      "needs_context_beyond_diff": false
+    }
+  ],
+  "decoys": []
+}

@@ -1,0 +1,57 @@
+diff --git a/src/evaluation.py b/src/evaluation.py
+index 7502f93..8d7a7fa 100644
+--- a/src/evaluation.py
++++ b/src/evaluation.py
+@@ -299,6 +299,14 @@ def compare_runs(baseline: EvalRun, candidate: EvalRun) -> dict:
+     }
+ 
+ 
++def regression(comparison: dict, max_drop: float) -> str | None:
++    """A message when hit@5 fell by more than max_drop against the baseline, else None."""
++    delta = comparison["hit@5_delta"]
++    if delta < -max_drop:
++        return f"hit@5 dropped by {-delta:.3f} against the baseline, more than the allowed {max_drop:.3f}"
++    return None
++
++
+ def format_report(run: EvalRun) -> str:
+     """Plain-text summary: one sentence a non-specialist can read, then the numbers."""
+     m = run.metrics
+diff --git a/src/main.py b/src/main.py
+index 132bbcc..dffcda9 100644
+--- a/src/main.py
++++ b/src/main.py
+@@ -63,6 +63,7 @@ def run_evaluation(args):
+         format_comparison,
+         format_report,
+         load_dataset,
++        regression,
+     )
+     from src.retrievers import build_retriever
+     from src.vector_store import VectorStore
+@@ -84,7 +85,12 @@ def run_evaluation(args):
+     print(format_report(run))
+     print(f"\nrun written to {out}")
+     if args.compare:
+-        print("\n" + format_comparison(compare_runs(EvalRun.from_json(args.compare), run)))
++        comparison = compare_runs(EvalRun.from_json(args.compare), run)
++        print("\n" + format_comparison(comparison))
++        if args.max_drop is not None:
++            failure = regression(comparison, args.max_drop)
++            if failure:
++                raise SystemExit(failure)
+ 
+ 
+ def process_pdf(pdf_path: str, vectorstore_path: str = "vector_store"):
+@@ -157,6 +163,11 @@ def main():
+     eval_parser.add_argument("--k", type=int, default=5)
+     eval_parser.add_argument("--out", help="Where to write the run JSON (default: eval_runs/)")
+     eval_parser.add_argument("--compare", help="Earlier run JSON to compare against, paired")
++    eval_parser.add_argument(
++        "--max-drop",
++        type=float,
++        help="With --compare, exit non-zero if hit@5 fell by more than this (e.g. 0.03)",
++    )
+ 
+     # PDF processing commands
+     pdf_parser = subparsers.add_parser(

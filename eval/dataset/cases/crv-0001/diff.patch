@@ -1,0 +1,67 @@
+diff --git a/src/agents.py b/src/agents.py
+index d565c94..22151f0 100644
+--- a/src/agents.py
++++ b/src/agents.py
+@@ -2,8 +2,16 @@ import logging
+ import re
+ from typing import Literal
+ 
++from src.config import MIN_RELEVANCE_SCORE
+ from src.prompts import load_prompt
+-from src.rag import NO_CONTEXT_ANSWER, BaseRAGPipeline, format_context, generate, should_abstain
++from src.rag import (
++    NO_CONTEXT_ANSWER,
++    BaseRAGPipeline,
++    best_score,
++    format_context,
++    generate,
++    should_abstain,
++)
+ from src.retrievers import RetrievedChunk
+ 
+ logger = logging.getLogger(__name__)
+@@ -67,6 +75,7 @@ class RAGAgent(BaseAgent):
+         the previous one would hand the model unrelated context to answer from.
+         """
+         chunks = self.rag.retrieve(question)
++        self._log_best_score(chunks)
+         previous_answered = (
+             len(previous) >= 2
+             and previous[-2][1] == "user"
+@@ -75,8 +84,17 @@ class RAGAgent(BaseAgent):
+         if should_abstain(chunks) and previous_answered and refers_to_previous_turn(question):
+             logger.debug("Weak retrieval for a follow-up; retrying with the previous question")
+             chunks = self.rag.retrieve(f"{previous[-2][0]} {question}")
++            self._log_best_score(chunks)
+         return chunks
+ 
++    @staticmethod
++    def _log_best_score(chunks: list[RetrievedChunk]) -> None:
++        logger.debug(
++            "Best retrieval score %.3f against the abstention threshold %.2f",
++            best_score(chunks),
++            MIN_RELEVANCE_SCORE,
++        )
++
+     def act(self) -> str:
+         if not self.history or self.history[-1][1] != "user":
+             raise ValueError("No user question in history to answer.")
+diff --git a/src/rag.py b/src/rag.py
+index c45cdea..c117013 100644
+--- a/src/rag.py
++++ b/src/rag.py
+@@ -51,9 +51,13 @@ def format_context(chunks: list[RetrievedChunk]) -> str:
+     return "\n\n".join(f"[p. {chunk.page}] {chunk.text}" for chunk in chunks)
+ 
+ 
++def best_score(chunks: list[RetrievedChunk]) -> float:
++    return max((chunk.score for chunk in chunks), default=0.0)
++
++
+ def should_abstain(chunks: list[RetrievedChunk], threshold: float = MIN_RELEVANCE_SCORE) -> bool:
+     """True when nothing was retrieved or the best chunk scores below the threshold."""
+-    return not chunks or max(chunk.score for chunk in chunks) < threshold
++    return not chunks or best_score(chunks) < threshold
+ 
+ 
+ class BaseRAGPipeline(ABC):

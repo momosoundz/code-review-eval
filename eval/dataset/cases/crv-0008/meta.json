@@ -1,0 +1,14 @@
+{
+  "family_id": "fam-004",
+  "split": "dev",
+  "source": "seeded",
+  "provenance": {
+    "repo": "momosoundz/genai-challenge",
+    "commit": "c7fbc44",
+    "paths": [
+      "src/"
+    ],
+    "note": "seeded: chunk.score replaced by chunks[0].score in the loop"
+  },
+  "status": "active"
+}

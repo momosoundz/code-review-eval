@@ -1,0 +1,14 @@
+{
+  "family_id": "fam-005",
+  "split": "dev",
+  "source": "real_reversed",
+  "provenance": {
+    "repo": "momosoundz/genai-challenge",
+    "commit": "1764ac8",
+    "paths": [
+      "src/"
+    ],
+    "note": "reverse of fix: do not expand a follow-up when the previous turn was abstained"
+  },
+  "status": "active"
+}

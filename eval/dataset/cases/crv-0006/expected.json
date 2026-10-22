@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0006",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0006-g1",
+      "file": "src/evaluation.py",
+      "spans": [
+        [
+          305,
+          305
+        ]
+      ],
+      "category": "wrong_operator_or_operand",
+      "severity": "high",
+      "root_cause": "regression() compares delta against +max_drop instead of -max_drop, so the sign of the check is wrong",
+      "failure_path": "with max_drop=0.03 the check `delta < 0.03` is true for every regression and also for every neutral or small positive delta; a candidate that improves hit@5 by 0.02 fails CI, and the flag no longer expresses 'more than this drop'",
+      "needs_context_beyond_diff": false
+    }
+  ],
+  "decoys": []
+}

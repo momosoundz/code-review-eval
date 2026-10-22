@@ -1,0 +1,32 @@
+{
+  "case_id": "crv-0002",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0002-g1",
+      "file": "src/rag.py",
+      "spans": [
+        [
+          55,
+          55
+        ]
+      ],
+      "category": "null_or_missing_value",
+      "severity": "medium",
+      "root_cause": "best_score calls max() over the chunk scores without a default, so an empty chunk list raises ValueError",
+      "failure_path": "retrieval returns no chunks; _log_best_score calls best_score([]) before should_abstain can short-circuit; max() of an empty sequence raises and the turn crashes instead of abstaining",
+      "needs_context_beyond_diff": false
+    }
+  ],
+  "decoys": [
+    {
+      "file": "src/rag.py",
+      "spans": [
+        [
+          60,
+          60
+        ]
+      ],
+      "why_fine": "should_abstain still guards `not chunks` before calling best_score"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "family_id": "fam-004",
+  "split": "dev",
+  "source": "clean",
+  "provenance": {
+    "repo": "momosoundz/genai-challenge",
+    "commit": "c7fbc44",
+    "paths": [
+      "src/"
+    ],
+    "note": "feat: log the page and score of each retrieved chunk in debug mode"
+  },
+  "status": "active"
+}

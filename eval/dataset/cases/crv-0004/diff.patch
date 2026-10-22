@@ -1,0 +1,52 @@
+diff --git a/src/agents.py b/src/agents.py
+index 1285d8b..1e05b6a 100644
+--- a/src/agents.py
++++ b/src/agents.py
+@@ -1,4 +1,5 @@
+ import logging
++import re
+ from typing import Literal
+ 
+ from src.prompts import load_prompt
+@@ -7,6 +8,14 @@ from src.retrievers import RetrievedChunk
+ 
+ logger = logging.getLogger(__name__)
+ 
++# Words that make a question lean on the previous turn: "tell me more about that".
++REFERENCE_WORDS = {"that", "it", "this", "these", "those", "there", "more", "again", "same", "also"}
++
++
++def refers_to_previous_turn(question: str) -> bool:
++    words = set(re.findall(r"[a-z']+", question))
++    return bool(words & REFERENCE_WORDS)
++
+ 
+ class BaseAgent:
+     """Base agent"""
+@@ -50,12 +59,21 @@ class RAGAgent(BaseAgent):
+         return "📚 Sources: Airplane Flying Handbook, pages " + ", ".join(map(str, pages))
+ 
+     def _retrieve_for_turn(self, question: str, previous: list[tuple[str, str]]):
+-        """Retrieve for the question; a weak follow-up retries with the previous question."""
++        """Retrieve for the question; a weak follow-up retries with the last answered question.
++
++        Only questions that refer back to the conversation get the retry. A weak question
++        that stands on its own is off-topic, and gluing it to the previous one would hand
++        the model unrelated context to answer from.
++        """
+         chunks = self.rag.retrieve(question)
+-        earlier_questions = [m for m, role in previous if role == "user"]
+-        if should_abstain(chunks) and earlier_questions:
+-            logger.debug("Weak retrieval for a follow-up; retrying with the previous question")
+-            chunks = self.rag.retrieve(f"{earlier_questions[-1]} {question}")
++        answered = [
++            previous[i][0]
++            for i in range(len(previous) - 1)
++            if previous[i][1] == "user" and previous[i + 1][0] != NO_CONTEXT_ANSWER
++        ]
++        if should_abstain(chunks) and answered and refers_to_previous_turn(question):
++            logger.debug("Weak retrieval for a follow-up; retrying with the last answered question")
++            chunks = self.rag.retrieve(f"{answered[-1]} {question}")
+         return chunks
+ 
+     def act(self) -> str:

@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0004",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0004-g1",
+      "file": "src/agents.py",
+      "spans": [
+        [
+          16,
+          16
+        ]
+      ],
+      "category": "wrong_condition",
+      "severity": "medium",
+      "root_cause": "refers_to_previous_turn matches the regex against the raw question instead of question.lower(), so capitalised reference words are missed",
+      "failure_path": "a follow-up like 'It stalls, right?' or 'That again?' starts with a capitalised reference word; the lowercase-only regex drops it; the follow-up is treated as standalone and the retry with the previous question never happens",
+      "needs_context_beyond_diff": false
+    }
+  ],
+  "decoys": []
+}

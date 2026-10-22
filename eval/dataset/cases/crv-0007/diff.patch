@@ -1,0 +1,34 @@
+diff --git a/src/agents.py b/src/agents.py
+index 22151f0..c897e09 100644
+--- a/src/agents.py
++++ b/src/agents.py
+@@ -75,7 +75,7 @@ class RAGAgent(BaseAgent):
+         the previous one would hand the model unrelated context to answer from.
+         """
+         chunks = self.rag.retrieve(question)
+-        self._log_best_score(chunks)
++        self._log_retrieval(chunks)
+         previous_answered = (
+             len(previous) >= 2
+             and previous[-2][1] == "user"
+@@ -84,16 +84,18 @@ class RAGAgent(BaseAgent):
+         if should_abstain(chunks) and previous_answered and refers_to_previous_turn(question):
+             logger.debug("Weak retrieval for a follow-up; retrying with the previous question")
+             chunks = self.rag.retrieve(f"{previous[-2][0]} {question}")
+-            self._log_best_score(chunks)
++            self._log_retrieval(chunks)
+         return chunks
+ 
+     @staticmethod
+-    def _log_best_score(chunks: list[RetrievedChunk]) -> None:
++    def _log_retrieval(chunks: list[RetrievedChunk]) -> None:
+         logger.debug(
+             "Best retrieval score %.3f against the abstention threshold %.2f",
+             best_score(chunks),
+             MIN_RELEVANCE_SCORE,
+         )
++        for rank, chunk in enumerate(chunks, 1):
++            logger.debug("Chunk #%d page %s score %.3f", rank, chunk.page, chunk.score)
+ 
+     def act(self) -> str:
+         if not self.history or self.history[-1][1] != "user":

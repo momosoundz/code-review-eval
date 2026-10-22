@@ -1,0 +1,14 @@
+{
+  "family_id": "fam-003",
+  "split": "dev",
+  "source": "seeded",
+  "provenance": {
+    "repo": "momosoundz/genai-challenge",
+    "commit": "dec628b",
+    "paths": [
+      "src/"
+    ],
+    "note": "seeded: sign flipped in the regression gate"
+  },
+  "status": "active"
+}
