@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "properties": {
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file": {"type": "string"},
+          "line": {"type": "integer"},
+          "severity": {"type": "string", "enum": ["high", "medium", "low"]},
+          "category": {
+            "type": "string",
+            "enum": [
+              "boundary",
+              "null_or_missing_value",
+              "wrong_operator_or_operand",
+              "wrong_condition",
+              "wrong_variable_or_argument",
+              "error_handling",
+              "resource_leak",
+              "concurrency",
+              "unsafe_input",
+              "wrong_literal_or_default",
+              "maintainability"
+            ]
+          },
+          "description": {"type": "string"},
+          "rationale": {"type": "string"},
+          "confidence": {"type": "number"}
+        },
+        "required": ["file", "line", "severity", "category", "description", "rationale", "confidence"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["findings"],
+  "additionalProperties": false
+}
