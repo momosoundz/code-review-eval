@@ -1,0 +1,56 @@
+[project]
+name = "code-review-eval"
+version = "0.1.0"
+description = "A small AI code reviewer and the eval harness that decides whether it may ship"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Miguel Elhaiek", email = "mikie.elhaiek@gmail.com" }]
+requires-python = ">=3.13"
+dependencies = [
+    "anthropic==2.1.0",
+    "unidiff==1.0.1",
+]
+
+[dependency-groups]
+dev = [
+    "prek==0.5.7",
+    "pytest==9.1.1",
+    "ruff==0.17.2",
+    "ty==0.0.91",
+]
+
+[build-system]
+requires = ["uv_build>=0.13.0,<0.14.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-root = ""
+module-name = ["reviewer", "eval"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C90", "N", "SIM", "PL", "RUF", "D"]
+ignore = ["D100", "D104", "D203", "D213", "PLR2004"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 8
+
+[tool.ruff.lint.pylint]
+max-args = 5
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D", "PLR0913"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ty.rules]
+possibly-unresolved-reference = "error"
+unused-ignore-comment = "error"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
