@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 
 from unidiff import PatchSet
 
-DEFAULT_MAX_CHARS = 48_000
+from reviewer.config import MAX_DIFF_CHARS
 
 
 class DiffTooLargeError(ValueError):
@@ -29,7 +29,7 @@ def _render_hunk_line(line: object) -> str:
     return f"{number} {marker}{value}"
 
 
-def number_diff(diff_text: str, max_chars: int = DEFAULT_MAX_CHARS) -> NumberedDiff:
+def number_diff(diff_text: str, max_chars: int = MAX_DIFF_CHARS) -> NumberedDiff:
     """Render a unified diff with post-change line numbers in a left gutter.
 
     Args:
