@@ -6,34 +6,63 @@
       "items": {
         "type": "object",
         "properties": {
-          "file": {"type": "string"},
-          "line": {"type": "integer"},
-          "severity": {"type": "string", "enum": ["high", "medium", "low"]},
+          "file": {
+            "type": "string"
+          },
+          "line": {
+            "type": "integer"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          },
           "category": {
             "type": "string",
             "enum": [
               "boundary",
               "null_or_missing_value",
-              "wrong_operator_or_operand",
+              "wrong_operator",
               "wrong_condition",
               "wrong_variable_or_argument",
-              "error_handling",
-              "resource_leak",
-              "concurrency",
-              "unsafe_input",
               "wrong_literal_or_default",
+              "error_handling",
+              "resource_lifecycle",
+              "concurrency",
+              "input_validation",
+              "logic_other",
+              "other",
               "maintainability"
             ]
           },
-          "description": {"type": "string"},
-          "rationale": {"type": "string"},
-          "confidence": {"type": "number"}
+          "description": {
+            "type": "string"
+          },
+          "rationale": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number"
+          }
         },
-        "required": ["file", "line", "severity", "category", "description", "rationale", "confidence"],
+        "required": [
+          "file",
+          "line",
+          "severity",
+          "category",
+          "description",
+          "rationale",
+          "confidence"
+        ],
         "additionalProperties": false
       }
     }
   },
-  "required": ["findings"],
+  "required": [
+    "findings"
+  ],
   "additionalProperties": false
 }

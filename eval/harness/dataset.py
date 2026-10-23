@@ -2,50 +2,59 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
+import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from reviewer.config import CATEGORIES, SEVERITIES
 from reviewer.diffs import number_diff
 
 CASES_DIR = Path(__file__).resolve().parents[1] / "dataset" / "cases"
+CASE_ID = re.compile(r"crv-\d{4}")
+GOLD_ID = re.compile(r"crv-\d{4}-g\d+")
 SPLITS = ("dev", "release")
 SOURCES = ("seeded", "real_reversed", "clean", "discovered")
 STATUSES = ("active", "deprecated")
-SEVERITIES = ("high", "medium", "low")
-CATEGORIES = (
-    "boundary",
-    "null_or_missing_value",
-    "wrong_operator_or_operand",
-    "wrong_condition",
-    "wrong_variable_or_argument",
-    "error_handling",
-    "resource_leak",
-    "concurrency",
-    "unsafe_input",
-    "wrong_literal_or_default",
-)
 
 
 class DatasetError(ValueError):
     """A case violates the dataset contract."""
 
 
+Location = tuple[str, tuple[tuple[int, int], ...]]
+
+
 @dataclass(frozen=True)
 class GoldFinding:
-    """One labeled defect: where it is, what it is, and how it fails."""
+    """One labeled defect: where it is, what it is, and how it fails.
+
+    ``locations`` lists every place a correct finding may anchor, each a file with one or
+    more post-change line spans. The first one is where the defect lives; the others are
+    places where it manifests, such as a call site in another file.
+    """
 
     gold_id: str
-    file: str
-    spans: tuple[tuple[int, int], ...]
+    locations: tuple[Location, ...]
     category: str
     severity: str
     root_cause: str
     failure_path: str
     needs_context_beyond_diff: bool
+
+    @property
+    def file(self) -> str:
+        """The file of the primary location."""
+        return self.locations[0][0]
+
+    @property
+    def spans(self) -> tuple[tuple[int, int], ...]:
+        """The spans of the primary location."""
+        return self.locations[0][1]
 
 
 @dataclass(frozen=True)
@@ -60,7 +69,6 @@ class Case:
     split: str
     source: str
     status: str
-    decoys: tuple[dict[str, Any], ...] = ()
 
     @property
     def is_clean(self) -> bool:
@@ -83,21 +91,35 @@ def _require(condition: bool, case_id: str, message: str) -> None:
         raise DatasetError(f"{case_id}: {message}")
 
 
-def _parse_gold(raw: dict[str, Any], case_id: str, valid: dict[str, set[int]]) -> GoldFinding:
-    gold_id = str(raw["gold_id"])
+def _parse_location(
+    raw: dict[str, Any], gold_id: str, case_id: str, valid: dict[str, set[int]]
+) -> Location:
     path = str(raw["file"])
     _require(path in valid, case_id, f"{gold_id} cites {path!r}, not in the diff")
     spans = tuple((int(a), int(b)) for a, b in raw["spans"])
-    _require(bool(spans), case_id, f"{gold_id} has no spans")
+    _require(bool(spans), case_id, f"{gold_id} has no spans for {path}")
     for start, end in spans:
         inside = start <= end and all(n in valid[path] for n in range(start, end + 1))
         _require(inside, case_id, f"{gold_id} span {start}-{end} is outside the diff hunks")
+    return path, spans
+
+
+def _parse_gold(raw: dict[str, Any], case_id: str, valid: dict[str, set[int]]) -> GoldFinding:
+    gold_id = str(raw["gold_id"])
+    _require(bool(GOLD_ID.fullmatch(gold_id)), case_id, f"gold_id {gold_id!r} must be <case_id>-gN")
+    _require(
+        gold_id.startswith(f"{case_id}-g"), case_id, f"gold_id {gold_id!r} belongs to another case"
+    )
+    primary = {"file": raw["file"], "spans": raw["spans"]}
+    extra = raw.get("also", [])
+    _require(isinstance(extra, list), case_id, f"{gold_id} 'also' must be a list of locations")
+    locations = tuple(_parse_location(loc, gold_id, case_id, valid) for loc in [primary, *extra])
+    _require(len(set(locations)) == len(locations), case_id, f"{gold_id} repeats a location")
     _require(raw["category"] in CATEGORIES, case_id, f"{gold_id} has unknown category")
     _require(raw["severity"] in SEVERITIES, case_id, f"{gold_id} has unknown severity")
     return GoldFinding(
         gold_id=gold_id,
-        file=path,
-        spans=spans,
+        locations=locations,
         category=str(raw["category"]),
         severity=str(raw["severity"]),
         root_cause=str(raw["root_cause"]),
@@ -122,6 +144,7 @@ def load_case(case_dir: Path) -> Case:
         DatasetError: With the case id and the first violated rule.
     """
     case_id = case_dir.name
+    _require(bool(CASE_ID.fullmatch(case_id)), case_id, "case directory must be named crv-NNNN")
     diff = (case_dir / "diff.patch").read_text()
     expected = json.loads((case_dir / "expected.json").read_text())
     meta = json.loads((case_dir / "meta.json").read_text())
@@ -145,7 +168,6 @@ def load_case(case_dir: Path) -> Case:
         split=str(meta["split"]),
         source=str(meta["source"]),
         status=str(meta.get("status", "active")),
-        decoys=tuple(expected.get("decoys", [])),
     )
 
 
@@ -155,7 +177,7 @@ def load_dataset(cases_dir: Path = CASES_DIR) -> list[Case]:
 
 
 def gold_hash(cases: list[Case]) -> str:
-    """Hash of the scoring fields of every case: ids, diffs, spans, severities, splits, status."""
+    """Hash of every field that can change a score: ids, diffs, spans, labels, judge inputs."""
     rows = [
         {
             "case_id": c.case_id,
@@ -164,7 +186,14 @@ def gold_hash(cases: list[Case]) -> str:
             "status": c.status,
             "family_id": c.family_id,
             "gold": [
-                [g.gold_id, g.file, list(g.spans), g.category, g.severity, g.root_cause]
+                [
+                    g.gold_id,
+                    [[f, [list(sp) for sp in spans]] for f, spans in g.locations],
+                    g.category,
+                    g.severity,
+                    g.root_cause,
+                    g.failure_path,
+                ]
                 for g in c.expected_findings
             ],
         }
@@ -181,16 +210,15 @@ def validate_dataset(cases_dir: Path = CASES_DIR) -> list[str]:
             continue
         try:
             load_case(case_dir)
-        except (DatasetError, KeyError, json.JSONDecodeError, FileNotFoundError) as exc:
+        except (DatasetError, KeyError, TypeError, json.JSONDecodeError, FileNotFoundError) as exc:
             problems.append(f"{case_dir.name}: {exc}")
     return problems
 
 
 def _summary(cases: list[Case]) -> str:
     active = [c for c in cases if c.active]
-    by = lambda key: sorted({getattr(c, key) for c in active})  # noqa: E731
     lines = [f"{len(active)} active cases, gold_hash {gold_hash(cases)}"]
-    for split in by("split"):
+    for split in sorted({c.split for c in active}):
         subset = [c for c in active if c.split == split]
         clean = sum(c.is_clean for c in subset)
         golds = sum(len(c.expected_findings) for c in subset)
@@ -199,17 +227,24 @@ def _summary(cases: list[Case]) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
-    """``validate`` exits non-zero when any case is invalid and prints a summary otherwise."""
-    args = argv if argv is not None else sys.argv[1:]
-    if args[:1] != ["validate"]:
-        print("usage: python -m eval.harness.dataset validate", file=sys.stderr)
+    """``validate [--cases-dir DIR]``: exit 1 when any case is invalid, 2 on usage errors."""
+    parser = argparse.ArgumentParser(description="Validate the dataset.")
+    sub = parser.add_subparsers(dest="command", required=True)
+    validate = sub.add_parser("validate")
+    validate.add_argument("--cases-dir", type=Path, default=CASES_DIR)
+    try:
+        args = parser.parse_args(argv)
+    except SystemExit:
         return 2
-    problems = validate_dataset()
+    if not args.cases_dir.is_dir():
+        print(f"not a directory: {args.cases_dir}", file=sys.stderr)
+        return 2
+    problems = validate_dataset(args.cases_dir)
     for problem in problems:
         print(problem, file=sys.stderr)
     if problems:
         return 1
-    print(_summary(load_dataset()))
+    print(_summary(load_dataset(args.cases_dir)))
     return 0
 
 

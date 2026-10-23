@@ -10,7 +10,7 @@
           305
         ]
       ],
-      "category": "wrong_operator_or_operand",
+      "category": "wrong_operator",
       "severity": "high",
       "root_cause": "regression() compares delta against +max_drop instead of -max_drop, so the sign of the check is wrong",
       "failure_path": "with max_drop=0.03 the check `delta < 0.03` is true for every regression and also for every neutral or small positive delta; a candidate that improves hit@5 by 0.02 fails CI, and the flag no longer expresses 'more than this drop'",

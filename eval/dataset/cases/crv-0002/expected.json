@@ -14,7 +14,18 @@
       "severity": "medium",
       "root_cause": "best_score calls max() over the chunk scores without a default, so an empty chunk list raises ValueError",
       "failure_path": "retrieval returns no chunks; _log_best_score calls best_score([]) before should_abstain can short-circuit; max() of an empty sequence raises and the turn crashes instead of abstaining",
-      "needs_context_beyond_diff": false
+      "needs_context_beyond_diff": false,
+      "also": [
+        {
+          "file": "src/agents.py",
+          "spans": [
+            [
+              94,
+              94
+            ]
+          ]
+        }
+      ]
     }
   ],
   "decoys": [

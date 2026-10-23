@@ -17,8 +17,9 @@ cases/crv-0006/
 | `expected_findings[]` | one entry per defect |
 | `.gold_id` | `<case_id>-gN` |
 | `.file` | post-change path as it appears in the diff |
-| `.spans` | one or more `[start, end]` post-change line ranges where a correct finding may anchor |
-| `.category` | one of the ten in `taxonomy.md` |
+| `.spans` | one or more `[start, end]` post-change line ranges where the defect lives |
+| `.also[]` | optional extra locations (`{file, spans}`) where the same defect manifests, such as a call site in another file; a finding anchored there counts |
+| `.category` | one of the categories in `taxonomy.md` |
 | `.severity` | `high`, `medium` or `low`; `high` is the gate slice |
 | `.root_cause` | one sentence the judge compares a finding against |
 | `.failure_path` | trigger, mechanism and observable impact |
