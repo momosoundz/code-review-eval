@@ -1,0 +1,33 @@
+{
+  "run": "dev-smoke",
+  "model": "claude-haiku-5-5",
+  "effort": "low",
+  "prompt_id": "f477d15560c2",
+  "reviewer_version": "f477d15560c2-low",
+  "context_mode": "hunk_only",
+  "k": 1,
+  "split": [
+    "dev"
+  ],
+  "case_ids": [
+    "crv-0001",
+    "crv-0002",
+    "crv-0003",
+    "crv-0004",
+    "crv-0005",
+    "crv-0006",
+    "crv-0007",
+    "crv-0008",
+    "crv-0009",
+    "crv-0010"
+  ],
+  "gold_hash": "13d15ca9c52f",
+  "git_sha": "12d4f77",
+  "calls_made": 10,
+  "cache_hits": 0,
+  "no_output": 0,
+  "cost_usd": 0.0049,
+  "cost_usd_this_invocation": 0.0049,
+  "started_at": "2026-10-23T03:57:15+00:00",
+  "finished_at": "2026-10-23T03:57:52+00:00"
+}

@@ -1,0 +1,61 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/evaluation.py",
+        "line": 305,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The regression check compares the signed delta to max_drop directly, so it flags any run whose hit@5 is below max_drop, including unchanged or improved runs. The comparison should test whether the drop, -delta, exceeds max_drop.",
+        "rationale": "Trigger: run `eval --compare baseline.json --max-drop 0.03` where hit@5_delta is 0.0 or +0.02 (no drop, or an improvement). Mechanism: 0.0 < 0.03 and 0.02 < 0.03 are true, so regression() returns a failure message and main.py raises SystemExit. Impact: the CI gate fails on runs that did not regress, and it does so for any run that is not clearly better than the baseline by more than max_drop.",
+        "confidence": 0.93
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2188,
+      "output_tokens": 605,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3733,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "f477d15560c2"
+  },
+  "raw": {
+    "id": "msg_011CgJVnwTspxeAYxMTiaLpb",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/evaluation.py\",\"line\":305,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The regression check compares the signed delta to max_drop directly, so it flags any run whose hit@5 is below max_drop, including unchanged or improved runs. The comparison should test whether the drop, -delta, exceeds max_drop.\",\"rationale\":\"Trigger: run `eval --compare baseline.json --max-drop 0.03` where hit@5_delta is 0.0 or +0.02 (no drop, or an improvement). Mechanism: 0.0 < 0.03 and 0.02 < 0.03 are true, so regression() returns a failure message and main.py raises SystemExit. Impact: the CI gate fails on runs that did not regress, and it does so for any run that is not clearly better than the baseline by more than max_drop.\",\"confidence\":0.93}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2188,
+      "output_tokens": 605,
+      "output_tokens_details": {
+        "thinking_tokens": 308
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

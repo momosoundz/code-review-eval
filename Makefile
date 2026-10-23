@@ -1,10 +1,13 @@
-.PHONY: check lint types test review validate-dataset eval score compare calibrate
+.PHONY: check lint types test review validate-dataset eval score compare
 
 UV := uv run
 RUN ?= baseline
 K ?= 3
 A ?= baseline
 B ?=
+REPO ?= .
+BASE ?= main
+HEAD ?= HEAD
 
 check: lint types test
 
@@ -38,5 +41,3 @@ score:  ## re-score a run offline from the committed caches (no API key)
 compare:  ## make compare A=baseline B=exp1
 	$(UV) python -m eval.harness.compare --a $(A) --b $(B)
 
-calibrate:
-	$(UV) python -m eval.harness.calibrate

@@ -36,22 +36,24 @@ Both write `findings.json`:
   ],
   "no_output": false,
   "error": null,
+  "dropped": [],
   "usage": {"input_tokens": 812, "output_tokens": 96, "cache_read_input_tokens": 0},
+  "elapsed_ms": 2140,
   "model": "claude-haiku-5-5",
   "prompt_id": "3f1c0a9b2e4d"
 }
 ```
 
-`line` is the post-change line number. `no_output: true` means the model refused, returned invalid JSON or cited a line outside the diff; the harness scores that as a miss, never as a clean review. Exit code is 0 for a valid review, 2 for no usable output, 1 for a diff over the size cap.
+`line` is the post-change line number. `no_output: true` means the model refused or returned invalid JSON; the harness scores that as a miss, never as a clean review. A finding that cites a file or line outside the diff is dropped and its reason listed under `dropped`; the rest of the review stands. Exit code is 0 for a valid review, 2 for no usable output, 1 for a diff over the size cap.
 
 The reviewer is one call to the Anthropic Messages API with a JSON schema enforced through structured outputs, no tools, no agent loop. The prompt is `reviewer/prompt.md`; `prompt_id` is a hash of prompt, schema and context mode, so two runs with the same id used the same reviewer. The default model is `claude-haiku-5-5` at effort `low`. One review of a 100-line diff costs well under a cent.
 
 ## Run the eval
 
 ```bash
-make eval RUN=baseline K=5    # calls the model K times per case, caches raw outputs, scores
-make score RUN=baseline       # re-scores from the committed caches; no API key needed
+make eval RUN=baseline K=5    # calls the model K times per case, stores raw responses, scores
+make score RUN=baseline       # re-scores from the committed responses; no API key needed
 make compare A=baseline B=exp1
 ```
 
-See `EVAL.md` for the dataset, the matching rule, the gate and the results.
+`EVAL.md` (written once the baseline and the experiments have run) holds the dataset, the matching rule, the gate and the results.
