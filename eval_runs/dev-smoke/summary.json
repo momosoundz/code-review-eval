@@ -1,0 +1,108 @@
+{
+  "by_source": {
+    "clean": {
+      "n_cases": 4,
+      "recall_all": {
+        "all_k": null,
+        "any_k": null,
+        "gates": false,
+        "k": 1,
+        "mean": null,
+        "n_cases": 0,
+        "wilson_case_runs": [
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "real_reversed": {
+      "n_cases": 2,
+      "recall_all": {
+        "all_k": 1.0,
+        "any_k": 1.0,
+        "gates": false,
+        "k": 1,
+        "mean": 1.0,
+        "n_cases": 2,
+        "wilson_case_runs": [
+          0.3424,
+          1.0
+        ]
+      }
+    },
+    "seeded": {
+      "n_cases": 4,
+      "recall_all": {
+        "all_k": 1.0,
+        "any_k": 1.0,
+        "gates": false,
+        "k": 1,
+        "mean": 1.0,
+        "n_cases": 4,
+        "wilson_case_runs": [
+          0.5101,
+          1.0
+        ]
+      }
+    }
+  },
+  "clean_fp_rate": {
+    "all_k": 0.0,
+    "any_k": 0.0,
+    "gates": false,
+    "k": 1,
+    "mean": 0.0,
+    "n_cases": 4,
+    "wilson_case_runs": [
+      0.0,
+      0.4899
+    ]
+  },
+  "duplicate_rate": 0.0,
+  "findings_per_diff": 0.8,
+  "gold_hash": "13d15ca9c52f",
+  "judge": {
+    "model": "claude-opus-5-5",
+    "prompt_hash": "d97c19f428f6"
+  },
+  "k": 1,
+  "line_tolerance": 3,
+  "n_cases": 10,
+  "no_output_rate": 0.0,
+  "noise_per_diff": 0.2,
+  "p50_elapsed_ms": 3733,
+  "precision_medium_plus": {
+    "fp": 0,
+    "tp": 4,
+    "value": 1.0,
+    "wilson": [
+      0.5101,
+      1.0
+    ]
+  },
+  "recall_all": {
+    "all_k": 1.0,
+    "any_k": 1.0,
+    "gates": false,
+    "k": 1,
+    "mean": 1.0,
+    "n_cases": 6,
+    "wilson_case_runs": [
+      0.6097,
+      1.0
+    ]
+  },
+  "recall_high": {
+    "all_k": 1.0,
+    "any_k": 1.0,
+    "gates": false,
+    "k": 1,
+    "mean": 1.0,
+    "n_cases": 2,
+    "wilson_case_runs": [
+      0.3424,
+      1.0
+    ]
+  },
+  "unknown_pairs": 0
+}
