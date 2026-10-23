@@ -1,28 +1,7 @@
 import pytest
 
 from reviewer.diffs import DiffTooLargeError, NumberedDiff, number_diff
-
-SAMPLE = """\
-diff --git a/app/orders.py b/app/orders.py
-index 1111111..2222222 100644
---- a/app/orders.py
-+++ b/app/orders.py
-@@ -40,5 +40,6 @@ def get_order(order_id: int, tenant_id: int) -> Order:
-     session = get_session()
--    order = session.query(Order).filter_by(id=order_id, tenant_id=tenant_id).one()
-+    order = session.query(Order).filter_by(id=order_id).one()
-+    log.debug("order %s", order_id)
-     if order is None:
-         raise NotFound(order_id)
-     return order
-diff --git a/app/util.py b/app/util.py
-new file mode 100644
---- /dev/null
-+++ b/app/util.py
-@@ -0,0 +1,2 @@
-+def clamp(x: int, lo: int, hi: int) -> int:
-+    return max(lo, min(x, hi))
-"""
+from tests.conftest import SAMPLE_DIFF as SAMPLE
 
 
 def test_numbers_post_change_lines() -> None:

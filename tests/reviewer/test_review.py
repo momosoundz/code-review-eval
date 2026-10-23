@@ -6,7 +6,7 @@ import pytest
 
 from reviewer import review
 from reviewer.review import InvalidFindingsError, normalize_findings, prompt_id, run_review
-from tests.reviewer.test_diffs import SAMPLE
+from tests.conftest import SAMPLE_DIFF as SAMPLE
 
 
 class FakeBlock:
@@ -30,7 +30,14 @@ class FakeResponse:
         self.id = "msg_test"
 
     def model_dump(self) -> dict[str, Any]:
-        return {"id": self.id, "stop_reason": self.stop_reason, "model": self.model}
+        content = [{"type": "thinking", "thinking": "", "signature": "opaque"}]
+        content += [{"type": "text", "text": b.text} for b in self.content]
+        return {
+            "id": self.id,
+            "stop_reason": self.stop_reason,
+            "model": self.model,
+            "content": content,
+        }
 
 
 def good_payload() -> dict[str, Any]:
@@ -51,37 +58,44 @@ def good_payload() -> dict[str, Any]:
 
 def test_normalize_strips_leading_dot_slash() -> None:
     numbered = review.number_diff(SAMPLE)
-    findings = normalize_findings(good_payload(), numbered)
-    assert findings[0]["file"] == "app/orders.py"
+    findings, dropped = normalize_findings(good_payload(), numbered)
+    assert findings[0]["file"] == "app/orders.py" and dropped == []
 
 
-def test_rejects_finding_on_unknown_file() -> None:
+def test_drops_finding_on_unknown_file_and_keeps_the_rest() -> None:
     numbered = review.number_diff(SAMPLE)
     payload = good_payload()
-    payload["findings"][0]["file"] = "app/other.py"
-    with pytest.raises(InvalidFindingsError, match="not in the diff"):
-        normalize_findings(payload, numbered)
+    bad = {**payload["findings"][0], "file": "app/other.py"}
+    payload["findings"].append(bad)
+    findings, dropped = normalize_findings(payload, numbered)
+    assert len(findings) == 1 and len(dropped) == 1 and "not in the diff" in dropped[0]
 
 
-def test_rejects_line_outside_hunks() -> None:
+def test_drops_line_outside_hunks() -> None:
     numbered = review.number_diff(SAMPLE)
     payload = good_payload()
     payload["findings"][0]["line"] = 400
-    with pytest.raises(InvalidFindingsError, match="outside"):
-        normalize_findings(payload, numbered)
+    findings, dropped = normalize_findings(payload, numbered)
+    assert findings == [] and "outside" in dropped[0]
 
 
-def test_rejects_bad_severity() -> None:
+def test_drops_bad_severity() -> None:
     numbered = review.number_diff(SAMPLE)
     payload = good_payload()
     payload["findings"][0]["severity"] = "critical"
-    with pytest.raises(InvalidFindingsError, match="severity"):
-        normalize_findings(payload, numbered)
+    _, dropped = normalize_findings(payload, numbered)
+    assert "severity" in dropped[0]
+
+
+def test_payload_without_findings_list_is_invalid() -> None:
+    numbered = review.number_diff(SAMPLE)
+    with pytest.raises(InvalidFindingsError, match="findings"):
+        normalize_findings({"items": []}, numbered)
 
 
 def test_empty_findings_is_valid() -> None:
     numbered = review.number_diff(SAMPLE)
-    assert normalize_findings({"findings": []}, numbered) == []
+    assert normalize_findings({"findings": []}, numbered) == ([], [])
 
 
 def test_run_review_writes_findings(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -98,7 +112,7 @@ def test_run_review_writes_findings(tmp_path: Path, monkeypatch: pytest.MonkeyPa
     assert written["findings"][0]["file"] == "app/orders.py"
     assert written["prompt_id"] == prompt_id()
     assert result.no_output is False
-    assert calls[0]["model"] == review.DEFAULT_MODEL
+    assert calls[0]["model"] == review.MODEL
     assert "output_config" in calls[0]
     assert "tools" not in calls[0]
 
@@ -134,3 +148,19 @@ def test_prompt_id_changes_with_prompt(monkeypatch: pytest.MonkeyPatch) -> None:
     before = prompt_id()
     monkeypatch.setattr(review, "load_prompt", lambda: "different prompt")
     assert prompt_id() != before
+
+
+def test_raw_envelope_drops_thinking_blocks(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(review, "_create_message", lambda **kw: FakeResponse(good_payload()))
+    raw_out = tmp_path / "raw.json"
+    run_review(SAMPLE, out_path=tmp_path / "f.json", raw_out=raw_out)
+    raw = json.loads(raw_out.read_text())
+    assert [b["type"] for b in raw["content"]] == ["text"]
+
+
+def test_normalize_keeps_dotfile_directories() -> None:
+    assert review._normalize_path("./.github/ci.yml") == ".github/ci.yml"
+    assert review._normalize_path("b/.env.example") == ".env.example"
+    assert review._normalize_path("app/orders.py") == "app/orders.py"

@@ -5,23 +5,26 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import subprocess
 import sys
+import time
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-import anthropic
-
+from reviewer import llm
+from reviewer.config import (
+    CONTEXT_MODE,
+    EFFORT,
+    MAX_OUTPUT_TOKENS,
+    MODEL,
+    PROMPT_PATH,
+    SCHEMA_PATH,
+    SEVERITIES,
+)
 from reviewer.diffs import DiffTooLargeError, NumberedDiff, number_diff
 
-DEFAULT_MODEL = "claude-haiku-5-5"
-DEFAULT_EFFORT = "low"
-MAX_TOKENS = 8_000
-SEVERITIES = ("high", "medium", "low")
-PROMPT_PATH = Path(__file__).with_name("prompt.md")
-SCHEMA_PATH = Path(__file__).with_name("schema.json")
+THINKING_BLOCKS = ("thinking", "redacted_thinking")
 
 
 class InvalidFindingsError(ValueError):
@@ -35,7 +38,9 @@ class ReviewResult:
     findings: list[dict[str, Any]]
     no_output: bool
     error: str | None
+    dropped: list[str]
     usage: dict[str, int]
+    elapsed_ms: int
     model: str
     prompt_id: str
 
@@ -50,29 +55,29 @@ def load_schema() -> dict[str, Any]:
     return json.loads(SCHEMA_PATH.read_text())
 
 
-def prompt_id(context_mode: str = "hunk_only") -> str:
+def prompt_id(context_mode: str = CONTEXT_MODE) -> str:
     """Hash of prompt, schema and context mode: one id per reviewer version."""
     blob = load_prompt() + json.dumps(load_schema(), sort_keys=True) + context_mode
     return hashlib.sha256(blob.encode()).hexdigest()[:12]
 
 
-def _client() -> anthropic.Anthropic:
-    """Build the API client; a user-scoped key needs ``ANTHROPIC_WORKSPACE_ID`` as a header."""
-    workspace = os.environ.get("ANTHROPIC_WORKSPACE_ID")
-    headers = {"anthropic-workspace-id": workspace} if workspace else None
-    return anthropic.Anthropic(default_headers=headers)
-
-
 def _create_message(**kwargs: Any) -> Any:
-    return _client().messages.create(**kwargs)
+    return llm.client().messages.create(**kwargs)
 
 
 def _normalize_path(path: str) -> str:
-    cleaned = path.strip().lstrip("./")
-    return cleaned[2:] if cleaned.startswith("b/") else cleaned
+    cleaned = path.strip()
+    for prefix in ("./", "b/"):
+        if cleaned.startswith(prefix):
+            cleaned = cleaned[len(prefix) :]
+    return cleaned
 
 
 def _check_finding(raw: dict[str, Any], numbered: NumberedDiff) -> dict[str, Any]:
+    for key in ("file", "line", "severity", "category", "description", "rationale", "confidence"):
+        if key not in raw:
+            msg = f"finding lacks {key!r}"
+            raise InvalidFindingsError(msg)
     path = _normalize_path(str(raw["file"]))
     if path not in numbered.valid_lines:
         msg = f"finding cites {path!r}, which is not in the diff"
@@ -91,18 +96,26 @@ def _check_finding(raw: dict[str, Any], numbered: NumberedDiff) -> dict[str, Any
     return {**raw, "file": path, "line": line, "confidence": confidence}
 
 
-def normalize_findings(payload: dict[str, Any], numbered: NumberedDiff) -> list[dict[str, Any]]:
-    """Validate the model payload against the diff and normalize paths and numbers.
+def normalize_findings(
+    payload: dict[str, Any], numbered: NumberedDiff
+) -> tuple[list[dict[str, Any]], list[str]]:
+    """Validate each finding against the diff; return the valid ones and why the rest were dropped.
 
     Raises:
-        InvalidFindingsError: When a finding cites a file or line not in the diff,
-            or carries a value outside the contract.
+        InvalidFindingsError: When the payload has no ``findings`` list at all.
     """
     findings = payload.get("findings")
     if not isinstance(findings, list):
         msg = "payload has no 'findings' list"
         raise InvalidFindingsError(msg)
-    return [_check_finding(f, numbered) for f in findings]
+    kept: list[dict[str, Any]] = []
+    dropped: list[str] = []
+    for raw in findings:
+        try:
+            kept.append(_check_finding(raw, numbered))
+        except (InvalidFindingsError, TypeError, ValueError) as exc:
+            dropped.append(str(exc))
+    return kept, dropped
 
 
 def _parse_payload(response: Any) -> dict[str, Any]:
@@ -120,32 +133,39 @@ def _parse_payload(response: Any) -> dict[str, Any]:
         raise InvalidFindingsError(msg) from exc
 
 
+def _auditable_envelope(response: Any) -> dict[str, Any]:
+    """The API response minus thinking blocks: their text is empty and the signature is opaque."""
+    raw = json.loads(json.dumps(response.model_dump(), default=str))
+    raw["content"] = [
+        block for block in raw.get("content", []) if block.get("type") not in THINKING_BLOCKS
+    ]
+    return raw
+
+
 def _usage(response: Any) -> dict[str, int]:
-    usage = getattr(response, "usage", None)
+    usage = response.usage
     return {
-        "input_tokens": int(getattr(usage, "input_tokens", 0) or 0),
-        "output_tokens": int(getattr(usage, "output_tokens", 0) or 0),
+        "input_tokens": int(usage.input_tokens),
+        "output_tokens": int(usage.output_tokens),
         "cache_read_input_tokens": int(getattr(usage, "cache_read_input_tokens", 0) or 0),
     }
 
 
-def run_review(
-    diff_text: str,
-    out_path: Path,
-    raw_out: Path | None = None,
-    model: str = DEFAULT_MODEL,
-    effort: str = DEFAULT_EFFORT,
-) -> ReviewResult:
-    """Review ``diff_text`` with one model call and write ``out_path``.
+def review_diff(
+    diff_text: str, model: str = MODEL, effort: str = EFFORT, context_mode: str = CONTEXT_MODE
+) -> tuple[ReviewResult, dict[str, Any]]:
+    """Review ``diff_text`` with one model call; return the result and the raw API envelope.
 
-    A refusal, invalid JSON or a finding outside the diff yields ``no_output=True`` with an
-    empty findings list, so the caller can score it as a miss instead of a clean review.
+    A refusal or invalid JSON yields ``no_output=True`` with an empty findings list, so the
+    caller scores it as a miss instead of a clean review. A finding that cites a file or line
+    outside the diff is dropped and recorded in ``dropped``; the rest of the review stands.
     """
     numbered = number_diff(diff_text)
-    version = prompt_id()
+    version = prompt_id(context_mode)
+    started = time.monotonic()
     response = _create_message(
         model=model,
-        max_tokens=MAX_TOKENS,
+        max_tokens=MAX_OUTPUT_TOKENS,
         system=load_prompt(),
         messages=[{"role": "user", "content": numbered.text}],
         output_config={
@@ -153,13 +173,28 @@ def run_review(
             "format": {"type": "json_schema", "schema": load_schema()},
         },
     )
-    if raw_out is not None:
-        raw_out.write_text(json.dumps(response.model_dump(), indent=2, default=str))
+    elapsed_ms = int((time.monotonic() - started) * 1000)
+    raw = _auditable_envelope(response)
+    usage = _usage(response)
     try:
-        findings = normalize_findings(_parse_payload(response), numbered)
-        result = ReviewResult(findings, False, None, _usage(response), model, version)
+        findings, dropped = normalize_findings(_parse_payload(response), numbered)
+        result = ReviewResult(findings, False, None, dropped, usage, elapsed_ms, model, version)
     except InvalidFindingsError as exc:
-        result = ReviewResult([], True, str(exc), _usage(response), model, version)
+        result = ReviewResult([], True, str(exc), [], usage, elapsed_ms, model, version)
+    return result, raw
+
+
+def run_review(
+    diff_text: str,
+    out_path: Path,
+    raw_out: Path | None = None,
+    model: str = MODEL,
+    effort: str = EFFORT,
+) -> ReviewResult:
+    """Review ``diff_text``, write ``out_path`` and, when given, the raw envelope to ``raw_out``."""
+    result, raw = review_diff(diff_text, model, effort)
+    if raw_out is not None:
+        raw_out.write_text(json.dumps(raw, indent=2))
     out_path.write_text(json.dumps(asdict(result), indent=2) + "\n")
     return result
 
@@ -184,8 +219,8 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser.add_argument("--head", default="HEAD")
     parser.add_argument("--out", type=Path, default=Path("findings.json"))
     parser.add_argument("--raw-out", type=Path, default=None)
-    parser.add_argument("--model", default=DEFAULT_MODEL)
-    parser.add_argument("--effort", default=DEFAULT_EFFORT)
+    parser.add_argument("--model", default=MODEL)
+    parser.add_argument("--effort", default=EFFORT)
     return parser.parse_args(argv)
 
 
