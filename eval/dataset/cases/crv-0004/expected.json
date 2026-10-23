@@ -11,9 +11,9 @@
         ]
       ],
       "category": "wrong_condition",
-      "severity": "medium",
+      "severity": "low",
       "root_cause": "refers_to_previous_turn matches the regex against the raw question instead of question.lower(), so capitalised reference words are missed",
-      "failure_path": "a follow-up like 'It stalls, right?' or 'That again?' starts with a capitalised reference word; the lowercase-only regex drops it; the follow-up is treated as standalone and the retry with the previous question never happens",
+      "failure_path": "a follow-up that starts with a capitalised reference word, such as 'That again?', and whose own retrieval is weak: the regex only matches lowercase letters, so the word set misses 'That', refers_to_previous_turn returns False, the retry with the previous question is skipped, and the user sees the abstention message instead of an answer to the follow-up; a lowercase phrasing of the same question would have been retried",
       "needs_context_beyond_diff": false
     }
   ],
