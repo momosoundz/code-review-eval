@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0004",
+  "gold_id": "crv-0004-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: refers_to_previous_turn matches the regex against the raw question instead of question.lower(), so capitalised reference words are missed\n- failure path: a follow-up that starts with a capitalised reference word, such as 'That again?', and whose own retrieval is weak: the regex only matches lowercase letters, so the word set misses 'That', refers_to_previous_turn returns False, the retry with the previous question is skipped, and the user sees the abstention message instead of an answer to the follow-up; a lowercase phrasing of the same question would have been retried\n\nReviewer finding\n- description: The reference-word check lowercases nothing: the regex only matches lowercase letters, so a capitalized follow-up like \"Also, what about the stall speed?\" or \"It is...\" never matches REFERENCE_WORDS.\n- rationale: Trigger: a weak follow-up whose reference word is capitalized, such as a question starting with \"It\", \"That\", \"Also\" or \"Same\". The findall on [a-z']+ yields \"lso\" or \"t\" instead of the word, so refers_to_previous_turn returns False and the retry with the prior question is skipped. Impact: the model answers from the weak retrieval alone and abstains, where the intended follow-up retry would have found context.\n",
+  "critique": "The finding names the same mechanism: the regex runs on the raw question with only lowercase letters, so capitalised reference words like 'That' or 'It' are missed. refers_to_previous_turn then returns False and the retry is skipped, ending in abstention. This matches the labeled root cause and failure path.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 934,
+    "output_tokens": 114
+  }
+}

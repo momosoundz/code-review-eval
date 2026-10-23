@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "properties": {
+    "critique": {"type": "string"},
+    "verdict": {"type": "string", "enum": ["match", "no_match", "unknown"]}
+  },
+  "required": ["critique", "verdict"],
+  "additionalProperties": false
+}

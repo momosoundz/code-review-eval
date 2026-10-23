@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0006",
+  "gold_id": "crv-0006-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: regression() compares delta against +max_drop instead of -max_drop, so the sign of the check is wrong\n- failure path: with max_drop=0.03 the check `delta < 0.03` is true for every regression and also for every neutral or small positive delta; a candidate that improves hit@5 by 0.02 fails CI, and the flag no longer expresses 'more than this drop'\n\nReviewer finding\n- description: The regression check compares delta against max_drop without negating it, so it fires whenever hit@5 is unchanged or improved (delta below the positive threshold) instead of when it drops by more than max_drop.\n- rationale: Trigger: run with --compare and --max-drop 0.03 where hit@5_delta is 0.0 or +0.05. Mechanism: 0.0 < 0.03 is true, so regression returns a message and main raises SystemExit. Impact: the CI gate fails on runs that did not regress, and any improvement under 0.03 is reported as a drop, while the intended threshold is never applied correctly.\n",
+  "critique": "Both describe the same sign error: `delta` is compared against `+max_drop` instead of `-max_drop`, so the check fires on neutral and small positive deltas. One detail in the finding is wrong: a delta of +0.05 would not actually trigger under 0.03. The core mechanism still matches the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 866,
+    "output_tokens": 193
+  }
+}

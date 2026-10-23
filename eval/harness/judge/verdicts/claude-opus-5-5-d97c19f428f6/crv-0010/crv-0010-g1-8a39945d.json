@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0010",
+  "gold_id": "crv-0010-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the retry fires for any weak question whenever an earlier user question exists, without checking that the question refers back to the conversation\n- failure path: user asks about landings, then 'What is the capital of France?'; retrieval is weak (off-topic), earlier_questions is non-empty, the question is glued to the landings one and the model answers about landings instead of abstaining\n\nReviewer finding\n- description: The condition no longer checks whether the question refers back to the conversation, so any weak standalone question is retried with the previous question's text appended.\n- rationale: Trigger: the user asks about stall recovery, then asks an unrelated standalone question such as a cooking question, and retrieval for it is weak. Mechanism: should_abstain(chunks) is true and earlier_questions is non-empty, so the retry runs with the earlier question prepended, even though the removed refers_to_previous_turn gate existed to prevent exactly this. Impact: the model receives unrelated handbook context and can produce a misleading answer.\n",
+  "critique": "The finding describes the same mechanism: the retry runs for any weak question when earlier questions exist, because the check that the question refers back to the conversation is missing. An unrelated question then gets combined with the earlier one, so the model answers from the wrong context instead of abstaining. The example scenario differs, but the faulty condition and the outcome are identical.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 852,
+    "output_tokens": 127
+  }
+}

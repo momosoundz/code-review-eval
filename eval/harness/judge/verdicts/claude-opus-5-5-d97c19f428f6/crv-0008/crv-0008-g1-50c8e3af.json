@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0008",
+  "gold_id": "crv-0008-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the per-chunk debug line logs chunks[0].score for every rank instead of chunk.score\n- failure path: debug mode prints the same score for every retrieved chunk; whoever reads the log to tune the threshold sees ranks 2..k with the top score and draws the wrong conclusion\n\nReviewer finding\n- description: The per-chunk debug log prints chunks[0].score for every rank instead of the current chunk's score, so the logged scores for ranks 2..N are wrong.\n- rationale: Trigger: retrieval returns more than one chunk with differing scores and debug logging is enabled. Mechanism: the format arguments use chunks[0].score rather than chunk.score, so every line reports the top score. Impact: operators reading the logs to diagnose retrieval quality see misleading per-chunk scores; no user-facing output changes.\n",
+  "critique": "The finding points to the same faulty operation as the label: the per-chunk debug log uses chunks[0].score where it should use chunk.score. It also describes the same consequence, with every rank showing the top score, which misleads anyone reading the logs.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 806,
+    "output_tokens": 94
+  }
+}

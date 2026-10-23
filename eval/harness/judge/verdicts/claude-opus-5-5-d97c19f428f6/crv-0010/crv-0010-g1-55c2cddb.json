@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0010",
+  "gold_id": "crv-0010-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the retry fires for any weak question whenever an earlier user question exists, without checking that the question refers back to the conversation\n- failure path: user asks about landings, then 'What is the capital of France?'; retrieval is weak (off-topic), earlier_questions is non-empty, the question is glued to the landings one and the model answers about landings instead of abstaining\n\nReviewer finding\n- description: The retry now glues the weak question to the most recent earlier user question with no check that it was answered or that the current question refers back to it. The removed code skipped unanswered turns and required reference words.\n- rationale: Trigger: the user asks an off-topic question that gets no context (NO_CONTEXT_ANSWER), then asks an unrelated standalone weak question such as a new topic. The changed line calls rag.retrieve with the unanswered off-topic question plus the new question, so the model receives context from a turn the code previously excluded. Impact: answers can be grounded in unrelated handbook passages, or the retry can pull in an off-topic question's chunks, which the removed comment explicitly said should not happen.\n",
+  "critique": "The finding names the same faulty operation: the retry glues a weak question to an earlier user question without checking whether the current question refers back. It describes an unrelated standalone weak question being combined with the previous one and producing off-topic grounded answers, which is the label's mechanism. Its added emphasis on unanswered turns is extra and does not displace the core point.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 882,
+    "output_tokens": 128
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0009",
+  "gold_id": "crv-0009-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the follow-up retry now expands a weak question with the last answered question anywhere in the history instead of the immediately previous turn\n- failure path: user asks about landings (answered), then an off-topic question (abstained), then 'tell me more about that'; retrieval is weak, answered[-1] is the landings question, the follow-up is glued to it and the model answers about landings although the previous turn had nothing to expand on\n\nReviewer finding\n- description: The retry condition now looks back at any earlier answered user question, not only the immediately preceding turn. When the previous turn was abstained, a weak follow-up is still glued to an older answered question.\n- rationale: Trigger: turn 1 is answered, turn 2 is off-topic and abstained, then turn 3 is a weak reference like 'tell me more about that'. should_abstain and refers_to_previous_turn both hold, so answered is non-empty and the retry uses turn 1's question via answered[-1]. Mechanism: the removed code required previous[-1] to be answered, and the removed docstring said an abstained previous turn has nothing to expand on. The new list comprehension drops that check. Impact: the model receives unrelated context from turn 1 to answer turn 3, which the docstring said must not happen.\n",
+  "critique": "The finding names the same mechanism. The retry expands a weak follow-up using answered[-1], the last answered question anywhere in history, instead of requiring that the immediately previous turn was answered. It also gives the same answered/abstained/'tell me more' failure path.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 935,
+    "output_tokens": 101
+  }
+}

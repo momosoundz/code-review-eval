@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0006",
+  "gold_id": "crv-0006-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: regression() compares delta against +max_drop instead of -max_drop, so the sign of the check is wrong\n- failure path: with max_drop=0.03 the check `delta < 0.03` is true for every regression and also for every neutral or small positive delta; a candidate that improves hit@5 by 0.02 fails CI, and the flag no longer expresses 'more than this drop'\n\nReviewer finding\n- description: The regression check compares the signed delta to max_drop directly, so it flags any run whose hit@5 is below max_drop, including unchanged or improved runs. The comparison should test whether the drop, -delta, exceeds max_drop.\n- rationale: Trigger: run `eval --compare baseline.json --max-drop 0.03` where hit@5_delta is 0.0 or +0.02 (no drop, or an improvement). Mechanism: 0.0 < 0.03 and 0.02 < 0.03 are true, so regression() returns a failure message and main.py raises SystemExit. Impact: the CI gate fails on runs that did not regress, and it does so for any run that is not clearly better than the baseline by more than max_drop.\n",
+  "critique": "The finding describes the same sign error: delta is compared against +max_drop instead of -max_drop, so neutral or improved runs (0.0, +0.02 < 0.03) are flagged and CI fails. The faulty operation and the failure path are the same. The phrase 'hit@5 is below max_drop' is slightly loose, but the trigger it gives shows the same mechanism.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 904,
+    "output_tokens": 140
+  }
+}

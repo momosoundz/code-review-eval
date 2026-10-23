@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0004",
+  "gold_id": "crv-0004-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: refers_to_previous_turn matches the regex against the raw question instead of question.lower(), so capitalised reference words are missed\n- failure path: a follow-up that starts with a capitalised reference word, such as 'That again?', and whose own retrieval is weak: the regex only matches lowercase letters, so the word set misses 'That', refers_to_previous_turn returns False, the retry with the previous question is skipped, and the user sees the abstention message instead of an answer to the follow-up; a lowercase phrasing of the same question would have been retried\n\nReviewer finding\n- description: The regex `[a-z']+` runs on the raw question without lowercasing, so capitalized reference words such as \"It\", \"This\", \"Also\" or \"Same\" never match the lowercase REFERENCE_WORDS set. Only the first letter is lost, so \"Also, what about flaps?\" yields \"lso\" and misses the reference.\n- rationale: Trigger: a follow-up beginning with a capitalized reference word, e.g. \"Also, what about the flaps?\", where the initial retrieval is weak. Mechanism: refers_to_previous_turn returns False because the token is split into \"lso\" and \"hat\"-style fragments, so the retry with the previous question is skipped. Impact: the follow-up is answered from weak retrieval, and the model abstains or answers without the conversational context the retry was meant to supply.\n",
+  "critique": "The finding names the same mechanism: the regex runs on the raw, non-lowercased question, so capitalized reference words are split or dropped and miss the lowercase set. As a result refers_to_previous_turn returns False and the retry is skipped when retrieval is weak, ending in abstention. This is the labeled defect.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 979,
+    "output_tokens": 119
+  }
+}
