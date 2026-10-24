@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_utils.py",
+        "line": 20,
+        "severity": "medium",
+        "category": "other",
+        "description": "Removing the custom __reduce_ex__ means Sentinel members pickle through the default Enum path, which reconstructs them by their object() value. Unpickling yields a new object() that does not match any member, so the round trip fails or produces a non-UNSET value.",
+        "rationale": "Trigger: a Command or Parameter holding the UNSET default is pickled and then unpickled, for example to send it to a multiprocessing worker or cache it. Mechanism: the old __reduce_ex__ returned getattr(Sentinel, name), which preserved identity; the default Enum reduction calls Sentinel(value) with a fresh object(), which fails the lookup. Impact: unpickling raises ValueError or yields a sentinel that fails identity checks such as 'is UNSET', changing option resolution.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1945,
+      "output_tokens": 1282,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 6858,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8a3cd15243ee2240"
+  },
+  "raw": {
+    "id": "msg_011CgLQaXKAGcGfcSa4YkTSN",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/_utils.py\",\"line\":20,\"severity\":\"medium\",\"category\":\"other\",\"description\":\"Removing the custom __reduce_ex__ means Sentinel members pickle through the default Enum path, which reconstructs them by their object() value. Unpickling yields a new object() that does not match any member, so the round trip fails or produces a non-UNSET value.\",\"rationale\":\"Trigger: a Command or Parameter holding the UNSET default is pickled and then unpickled, for example to send it to a multiprocessing worker or cache it. Mechanism: the old __reduce_ex__ returned getattr(Sentinel, name), which preserved identity; the default Enum reduction calls Sentinel(value) with a fresh object(), which fails the lookup. Impact: unpickling raises ValueError or yields a sentinel that fails identity checks such as 'is UNSET', changing option resolution.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1945,
+      "output_tokens": 1282,
+      "output_tokens_details": {
+        "thinking_tokens": 969
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 99,
+        "severity": "low",
+        "category": "wrong_variable_or_argument",
+        "description": "When stripping applies, the prompt text is also whitespace-trimmed with .strip(), which the commit title does not mention. A prompt such as \"Name: \" is passed to input() as \"Name:\", dropping the separating space.",
+        "rationale": "Trigger: a prompt ending in a space (e.g. \"Name: \") is read while the stream is not a TTY or color is disabled, so should_strip_ansi returns true. Mechanism: strip_ansi(text).strip() removes the trailing space, and the strip() also removes any leading whitespace. Impact: non-interactive or captured output shows \"Name:\" with no space, a visible change in prompt text beyond ANSI removal.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1968,
+      "output_tokens": 757,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4274,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "ed6f09c4de2cbd87"
+  },
+  "raw": {
+    "id": "msg_011CgLQJfYKNaVcgcwetFUSN",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/termui.py\",\"line\":99,\"severity\":\"low\",\"category\":\"wrong_variable_or_argument\",\"description\":\"When stripping applies, the prompt text is also whitespace-trimmed with .strip(), which the commit title does not mention. A prompt such as \\\"Name: \\\" is passed to input() as \\\"Name:\\\", dropping the separating space.\",\"rationale\":\"Trigger: a prompt ending in a space (e.g. \\\"Name: \\\") is read while the stream is not a TTY or color is disabled, so should_strip_ansi returns true. Mechanism: strip_ansi(text).strip() removes the trailing space, and the strip() also removes any leading whitespace. Impact: non-interactive or captured output shows \\\"Name:\\\" with no space, a visible change in prompt text beyond ANSI removal.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1968,
+      "output_tokens": 757,
+      "output_tokens_details": {
+        "thinking_tokens": 470
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

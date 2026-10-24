@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 99,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "When ANSI stripping applies, the prompt text is also stripped of leading and trailing whitespace, so a prompt such as \"Name: \" is passed to input() as \"Name:\" and loses its separating space.",
+        "rationale": "Trigger: prompt() or confirm() is called with a default prompt ending in a space while stderr or stdout is not a TTY (or color is disabled), so should_strip_ansi returns true. The line calls .strip() on the whole text, which removes the trailing space. Impact: the prompt is displayed without the intended space before the cursor, and output comparisons or snapshot tests that expect the original prompt text change. The title only mentions stripping ANSI codes, not trimming whitespace.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1968,
+      "output_tokens": 604,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4305,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "ed6f09c4de2cbd87"
+  },
+  "raw": {
+    "id": "msg_011CgLQJMTNfTdMkUt58yU1r",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/termui.py\",\"line\":99,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"When ANSI stripping applies, the prompt text is also stripped of leading and trailing whitespace, so a prompt such as \\\"Name: \\\" is passed to input() as \\\"Name:\\\" and loses its separating space.\",\"rationale\":\"Trigger: prompt() or confirm() is called with a default prompt ending in a space while stderr or stdout is not a TTY (or color is disabled), so should_strip_ansi returns true. The line calls .strip() on the whole text, which removes the trailing space. Impact: the prompt is displayed without the intended space before the cursor, and output comparisons or snapshot tests that expect the original prompt text change. The title only mentions stripping ANSI codes, not trimming whitespace.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1968,
+      "output_tokens": 604,
+      "output_tokens_details": {
+        "thinking_tokens": 316
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

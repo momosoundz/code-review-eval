@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 793,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "Response.__init__ now sets self.reason from self.raw.reason, but self.raw has no value at this point in construction, so instantiating Response() raises an AttributeError.",
+        "rationale": "Trigger: any code calling Response() with no arguments, such as a test or a custom adapter that builds an empty Response before filling it in. Mechanism: line 793 evaluates self.raw.reason while self.raw is unset or None, which raises before the constructor finishes. Impact: the constructor crashes on a path that previously worked, so callers that create a bare Response get an exception instead of an object.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1687,
+      "output_tokens": 830,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5136,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "2bb8bd9869d82518"
+  },
+  "raw": {
+    "id": "msg_011CgLQPFbHzRYLUcyXfNur2",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/models.py\",\"line\":793,\"severity\":\"high\",\"category\":\"null_or_missing_value\",\"description\":\"Response.__init__ now sets self.reason from self.raw.reason, but self.raw has no value at this point in construction, so instantiating Response() raises an AttributeError.\",\"rationale\":\"Trigger: any code calling Response() with no arguments, such as a test or a custom adapter that builds an empty Response before filling it in. Mechanism: line 793 evaluates self.raw.reason while self.raw is unset or None, which raises before the constructor finishes. Impact: the constructor crashes on a path that previously worked, so callers that create a bare Response get an exception instead of an object.\",\"confidence\":0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1687,
+      "output_tokens": 830,
+      "output_tokens_details": {
+        "thinking_tokens": 583
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

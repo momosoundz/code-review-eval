@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_utils.py",
+        "line": 21,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing the custom __reduce_ex__ makes Sentinel fall back to Enum's default pickling, which serializes the raw object() value. Unpickling then cannot find a member with that value, so UNSET/FLAG_NEEDS_VALUE no longer round-trip through pickle.",
+        "rationale": "Trigger: pickling a value that contains click.UNSET, such as a Context or parameter default, then unpickling it. Mechanism: the old __reduce_ex__ returned getattr(Sentinel, name), preserving identity; the default Enum reduce returns (Sentinel, (value,)), and the unpickled value is a new object() that matches no member, so Sentinel(...) raises ValueError or yields a non-identical sentinel. Impact: multiprocessing or caching that pickles click state fails or breaks identity checks against UNSET.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1945,
+      "output_tokens": 1103,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5864,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8a3cd15243ee2240"
+  },
+  "raw": {
+    "id": "msg_011CgLQZLiPzoAdzrqgHfPJy",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/_utils.py\",\"line\":21,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"Removing the custom __reduce_ex__ makes Sentinel fall back to Enum's default pickling, which serializes the raw object() value. Unpickling then cannot find a member with that value, so UNSET/FLAG_NEEDS_VALUE no longer round-trip through pickle.\",\"rationale\":\"Trigger: pickling a value that contains click.UNSET, such as a Context or parameter default, then unpickling it. Mechanism: the old __reduce_ex__ returned getattr(Sentinel, name), preserving identity; the default Enum reduce returns (Sentinel, (value,)), and the unpickled value is a new object() that matches no member, so Sentinel(...) raises ValueError or yields a non-identical sentinel. Impact: multiprocessing or caching that pickles click state fails or breaks identity checks against UNSET.\",\"confidence\":0.55}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1945,
+      "output_tokens": 1103,
+      "output_tokens_details": {
+        "thinking_tokens": 767
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

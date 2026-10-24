@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_utils.py",
+        "line": 20,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing the custom __reduce_ex__ means pickling Sentinel members (e.g. UNSET) now falls back to Enum's default reduction, which pickles the raw object() value and fails.",
+        "rationale": "Trigger: pickle.dumps(UNSET) or pickling an object holding UNSET, such as a Parameter or default value, under the new code. Mechanism: the removed __reduce_ex__ returned getattr(Sentinel, name), which pickles by name; without it Enum reduces using _value_, an object() instance that is not picklable, so pickling raises. Impact: code that previously pickled click objects containing these sentinels, such as multiprocessing or caching, now raises a PicklingError.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1945,
+      "output_tokens": 888,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4871,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8a3cd15243ee2240"
+  },
+  "raw": {
+    "id": "msg_011CgLQZmC48Ha3uXsP6NifB",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/_utils.py\",\"line\":20,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"Removing the custom __reduce_ex__ means pickling Sentinel members (e.g. UNSET) now falls back to Enum's default reduction, which pickles the raw object() value and fails.\",\"rationale\":\"Trigger: pickle.dumps(UNSET) or pickling an object holding UNSET, such as a Parameter or default value, under the new code. Mechanism: the removed __reduce_ex__ returned getattr(Sentinel, name), which pickles by name; without it Enum reduces using _value_, an object() instance that is not picklable, so pickling raises. Impact: code that previously pickled click objects containing these sentinels, such as multiprocessing or caching, now raises a PicklingError.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1945,
+      "output_tokens": 888,
+      "output_tokens_details": {
+        "thinking_tokens": 600
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "high",
+        "category": "concurrency",
+        "description": "stats.clear() empties the single dict that wrapped_f.statistics holds, and that dict is now reused by every call. Overlapping calls to the same decorated function, whether from threads or from recursion, wipe and overwrite each other's statistics.",
+        "rationale": "Trigger: a @retry-decorated function is called concurrently from two threads, or recursively so an inner call starts while an outer call is still running. Previously each call rebound wrapped_f.statistics to its own fresh copy dict. Now the inner or second call clears the shared dict and writes its own values into it, so the outer call's attempt counts and timings are reset or corrupted. The impact is silently wrong retry statistics for the outer call.",
+        "confidence": 0.6
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 218,
+        "severity": "high",
+        "category": "concurrency",
+        "description": "stats.clear() on the shared async_wrapped.statistics dict lets concurrent coroutines awaiting the same decorated function clobber each other's statistics.",
+        "rationale": "Trigger: the same @retry-decorated coroutine is awaited concurrently by multiple tasks, or recursively. Previously each call got its own statistics dict through rebinding. Now every call clears and writes into one dict, so the statistics read by one task reflect another task's attempts. The impact is silently wrong statistics under concurrent async use.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2492,
+      "output_tokens": 1716,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 9006,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "71abc98a95e33cc0"
+  },
+  "raw": {
+    "id": "msg_011CgLPgCoiqP53yAzU79kei",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":377,\"severity\":\"high\",\"category\":\"concurrency\",\"description\":\"stats.clear() empties the single dict that wrapped_f.statistics holds, and that dict is now reused by every call. Overlapping calls to the same decorated function, whether from threads or from recursion, wipe and overwrite each other's statistics.\",\"rationale\":\"Trigger: a @retry-decorated function is called concurrently from two threads, or recursively so an inner call starts while an outer call is still running. Previously each call rebound wrapped_f.statistics to its own fresh copy dict. Now the inner or second call clears the shared dict and writes its own values into it, so the outer call's attempt counts and timings are reset or corrupted. The impact is silently wrong retry statistics for the outer call.\",\"confidence\":0.6},{\"file\":\"tenacity/asyncio/__init__.py\",\"line\":218,\"severity\":\"high\",\"category\":\"concurrency\",\"description\":\"stats.clear() on the shared async_wrapped.statistics dict lets concurrent coroutines awaiting the same decorated function clobber each other's statistics.\",\"rationale\":\"Trigger: the same @retry-decorated coroutine is awaited concurrently by multiple tasks, or recursively. Previously each call got its own statistics dict through rebinding. Now every call clears and writes into one dict, so the statistics read by one task reflect another task's attempts. The impact is silently wrong statistics under concurrent async use.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2492,
+      "output_tokens": 1716,
+      "output_tokens_details": {
+        "thinking_tokens": 1212
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

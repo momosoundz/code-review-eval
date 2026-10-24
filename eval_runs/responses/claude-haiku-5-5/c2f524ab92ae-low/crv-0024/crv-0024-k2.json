@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3814,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "Argument.get_help_record now always returns a tuple, but when help is None it returns (metavar, None) instead of an empty description string as the docstring and commit title promise. The removed fallback in format_options that substituted \"\" is gone too.",
+        "rationale": "Trigger: a command has one Argument with help set, so the Positional arguments section is rendered, plus another Argument with no help. The second argument yields (metavar, None). HelpFormatter.write_dl then passes None into text wrapping (wrap_text calls expandtabs on the description), which raises AttributeError, or otherwise renders a bogus row. Impact: --help crashes or misprints for any command that mixes documented and undocumented positional arguments, a common pattern.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2134,
+      "output_tokens": 1046,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5902,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "6ec690de339368e8"
+  },
+  "raw": {
+    "id": "msg_011CgLQ3xKhEDossdFuZLQc8",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\": [{\"file\": \"src/click/core.py\", \"line\": 3814, \"severity\": \"high\", \"category\": \"null_or_missing_value\", \"description\": \"Argument.get_help_record now always returns a tuple, but when help is None it returns (metavar, None) instead of an empty description string as the docstring and commit title promise. The removed fallback in format_options that substituted \\\"\\\" is gone too.\", \"rationale\": \"Trigger: a command has one Argument with help set, so the Positional arguments section is rendered, plus another Argument with no help. The second argument yields (metavar, None). HelpFormatter.write_dl then passes None into text wrapping (wrap_text calls expandtabs on the description), which raises AttributeError, or otherwise renders a bogus row. Impact: --help crashes or misprints for any command that mixes documented and undocumented positional arguments, a common pattern.\", \"confidence\": 0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2134,
+      "output_tokens": 1046,
+      "output_tokens_details": {
+        "thinking_tokens": 745
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

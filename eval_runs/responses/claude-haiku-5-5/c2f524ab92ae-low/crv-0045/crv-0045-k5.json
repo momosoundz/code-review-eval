@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 180,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The cycle guard was removed from the walk over the __cause__ chain, so a cyclic chain now loops forever.",
+        "rationale": "Trigger: a retried call raises an exception whose __cause__ chain forms a cycle (e.g., a.__cause__ = b and b.__cause__ = a, which Python allows when assigned manually), and no exception in the cycle matches exception_cause_types. Mechanism: the while loop on line 180 never reaches None and never hits the seen-set break that was just deleted, so each iteration keeps following the cycle. Impact: the retry decision never returns, so the calling thread hangs instead of retrying or raising.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1490,
+      "output_tokens": 546,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3859,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8d370141e2500f80"
+  },
+  "raw": {
+    "id": "msg_011CgLQZ3YYCK1Yye7MU3aRP",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\": [{\"file\": \"tenacity/retry.py\", \"line\": 180, \"severity\": \"medium\", \"category\": \"logic_other\", \"description\": \"The cycle guard was removed from the walk over the __cause__ chain, so a cyclic chain now loops forever.\", \"rationale\": \"Trigger: a retried call raises an exception whose __cause__ chain forms a cycle (e.g., a.__cause__ = b and b.__cause__ = a, which Python allows when assigned manually), and no exception in the cycle matches exception_cause_types. Mechanism: the while loop on line 180 never reaches None and never hits the seen-set break that was just deleted, so each iteration keeps following the cycle. Impact: the retry decision never returns, so the calling thread hangs instead of retrying or raising.\", \"confidence\": 0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1490,
+      "output_tokens": 546,
+      "output_tokens_details": {
+        "thinking_tokens": 271
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

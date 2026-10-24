@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 239,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "Removing the `hasattr(fp, \"read\")` fallback makes the file-object check depend only on `isinstance(fp, _SupportsRead)`, which on newer Python versions uses static attribute lookup and misses readers whose `read` is provided dynamically via `__getattr__`.",
+        "rationale": "Trigger: a file-like proxy or wrapper that delegates `read` through `__getattr__` and is passed in `files`. Previously `hasattr` returned True and `fp.read()` was called. Now the runtime protocol check may return False, so the object falls through to the other branches and its content is not read as a file part. Impact: the upload silently sends wrong or missing file content instead of the file's data.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1675,
+      "output_tokens": 825,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5833,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "761607eaab997ea2"
+  },
+  "raw": {
+    "id": "msg_011CgLQf8Sd8A113SAM77Vya",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/models.py\",\"line\":239,\"severity\":\"medium\",\"category\":\"wrong_condition\",\"description\":\"Removing the `hasattr(fp, \\\"read\\\")` fallback makes the file-object check depend only on `isinstance(fp, _SupportsRead)`, which on newer Python versions uses static attribute lookup and misses readers whose `read` is provided dynamically via `__getattr__`.\",\"rationale\":\"Trigger: a file-like proxy or wrapper that delegates `read` through `__getattr__` and is passed in `files`. Previously `hasattr` returned True and `fp.read()` was called. Now the runtime protocol check may return False, so the object falls through to the other branches and its content is not read as a file part. Impact: the upload silently sends wrong or missing file content instead of the file's data.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1675,
+      "output_tokens": 825,
+      "output_tokens_details": {
+        "thinking_tokens": 539
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

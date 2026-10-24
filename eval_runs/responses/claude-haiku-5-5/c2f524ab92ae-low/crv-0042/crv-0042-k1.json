@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 304,
+        "severity": "medium",
+        "category": "error_handling",
+        "description": "The missing-CA-bundle check now emits a warning instead of raising OSError, so a non-existent certificate path no longer fails fast with a clear error.",
+        "rationale": "Trigger: cert_loc resolves to a path that does not exist, for example when certifi's bundle is missing or the verify argument points to a bad file. Mechanism: the changed code calls warnings.warn instead of raising OSError, so request setup continues with the invalid path. Impact: the user gets only a warning, and the failure surfaces later as a less clear SSL or verification error, or the warning is hidden by warning filters. The title announces only removing the extraction call, not changing this error path.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1879,
+      "output_tokens": 977,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 6054,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "c36073f1ad756e56"
+  },
+  "raw": {
+    "id": "msg_011CgLQTM5K8qh58Vgd9yePa",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":304,\"severity\":\"medium\",\"category\":\"error_handling\",\"description\":\"The missing-CA-bundle check now emits a warning instead of raising OSError, so a non-existent certificate path no longer fails fast with a clear error.\",\"rationale\":\"Trigger: cert_loc resolves to a path that does not exist, for example when certifi's bundle is missing or the verify argument points to a bad file. Mechanism: the changed code calls warnings.warn instead of raising OSError, so request setup continues with the invalid path. Impact: the user gets only a warning, and the failure surfaces later as a less clear SSL or verification error, or the warning is hidden by warning filters. The title announces only removing the extraction call, not changing this error path.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1879,
+      "output_tokens": 977,
+      "output_tokens_details": {
+        "thinking_tokens": 707
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

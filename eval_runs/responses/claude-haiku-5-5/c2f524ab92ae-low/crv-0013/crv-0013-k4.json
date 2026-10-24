@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "The wrapper now clears and reuses one shared statistics dict for every call, so overlapping calls to the same decorated function (threads, or recursion) write into and clear the same dict. A call that is still running can have its attempt counts reset mid-retry.",
+        "rationale": "Trigger: two threads call the same @retry-decorated function at once, or a decorated function recurses. Mechanism: each call runs stats.clear() on the same dict object that the other in-flight call is updating through copy._local.statistics. Before this change each call had its own dict, so in-flight counts were not reset. Impact: statistics read from an in-progress call (e.g. attempt_number) can be wrong or reset to empty, and the values reported for each call are mixed together.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2492,
+      "output_tokens": 1371,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 8053,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "71abc98a95e33cc0"
+  },
+  "raw": {
+    "id": "msg_011CgLPi6vZZi1gte3UHFryW",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":377,\"severity\":\"medium\",\"category\":\"concurrency\",\"description\":\"The wrapper now clears and reuses one shared statistics dict for every call, so overlapping calls to the same decorated function (threads, or recursion) write into and clear the same dict. A call that is still running can have its attempt counts reset mid-retry.\",\"rationale\":\"Trigger: two threads call the same @retry-decorated function at once, or a decorated function recurses. Mechanism: each call runs stats.clear() on the same dict object that the other in-flight call is updating through copy._local.statistics. Before this change each call had its own dict, so in-flight counts were not reset. Impact: statistics read from an in-progress call (e.g. attempt_number) can be wrong or reset to empty, and the values reported for each call are mixed together.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2492,
+      "output_tokens": 1371,
+      "output_tokens_details": {
+        "thinking_tokens": 1077
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 237,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "The match check changed from truthiness to 'is not None', so an empty match pattern is now compiled and accepted. The title only mentions accepting an empty message.",
+        "rationale": "Trigger: retry_if_exception_message(match=\"\") with no message. Before this change, the falsy match raised the 'missing 1 required argument' TypeError. Now re.compile(\"\") is stored, and _check calls self.match.match(...), which succeeds for every exception string, so every exception is retried. Impact: a caller who passes an empty pattern by mistake gets silent retries on all exceptions instead of an error. The title does not announce this change.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1823,
+      "output_tokens": 900,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 6417,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "8f16be3ae5dd3284"
+  },
+  "raw": {
+    "id": "msg_011CgLPz9Pqq98K2zredg82W",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/retry.py\",\"line\":237,\"severity\":\"medium\",\"category\":\"wrong_condition\",\"description\":\"The match check changed from truthiness to 'is not None', so an empty match pattern is now compiled and accepted. The title only mentions accepting an empty message.\",\"rationale\":\"Trigger: retry_if_exception_message(match=\\\"\\\") with no message. Before this change, the falsy match raised the 'missing 1 required argument' TypeError. Now re.compile(\\\"\\\") is stored, and _check calls self.match.match(...), which succeeds for every exception string, so every exception is retried. Impact: a caller who passes an empty pattern by mistake gets silent retries on all exceptions instead of an error. The title does not announce this change.\",\"confidence\":0.55}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1823,
+      "output_tokens": 900,
+      "output_tokens_details": {
+        "thinking_tokens": 638
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

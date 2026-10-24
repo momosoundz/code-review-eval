@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 301,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "The default CA bundle path is now used directly without passing through extract_zipped_paths, so when requests is loaded from a zip archive the certifi path points inside the zip and is not a real file.",
+        "rationale": "Trigger: requests and certifi are imported from a zip or pex archive and a request is made with default verify. certifi.where() returns a path inside the archive, so os.path.exists(cert_loc) is False and the code raises OSError. Mechanism: the removed call was the only step that extracted the bundle to a temporary real file, so the call is not unused in zipped installs. Impact: every HTTPS request fails in such deployments.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1867,
+      "output_tokens": 685,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3976,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "dc2bf5f2d0587853"
+  },
+  "raw": {
+    "id": "msg_011CgLQT419YeSqrLrYhc65L",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":301,\"severity\":\"high\",\"category\":\"wrong_variable_or_argument\",\"description\":\"The default CA bundle path is now used directly without passing through extract_zipped_paths, so when requests is loaded from a zip archive the certifi path points inside the zip and is not a real file.\",\"rationale\":\"Trigger: requests and certifi are imported from a zip or pex archive and a request is made with default verify. certifi.where() returns a path inside the archive, so os.path.exists(cert_loc) is False and the code raises OSError. Mechanism: the removed call was the only step that extracted the bundle to a temporary real file, so the call is not unused in zipped installs. Impact: every HTTPS request fails in such deployments.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1867,
+      "output_tokens": 685,
+      "output_tokens_details": {
+        "thinking_tokens": 419
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

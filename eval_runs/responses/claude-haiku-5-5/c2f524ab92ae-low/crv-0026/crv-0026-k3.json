@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1321,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The guard `all(arg.help is not None for arg in args)` shows the Positional arguments section only when every argument has help, but the docstring and commit title say it should appear when at least one is documented. It also evaluates true for a command with no positional arguments, so an empty section header is rendered.",
+        "rationale": "Trigger: a command with two arguments, one with help and one without. Under the original code the documented argument is listed. Under this guard all() is False, so the whole section is dropped and the undocumented argument is not listed either, contradicting the title. Trigger: a command with no Argument params. all([]) is True, so an empty 'Positional arguments:' heading is written, which the original code skipped. The impact is that help output loses positional arguments or shows an empty section.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1979,
+      "output_tokens": 713,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4434,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "f8beab929d73aa79"
+  },
+  "raw": {
+    "id": "msg_011CgLQ7naBUwLK48QXCdYeZ",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1321,\"severity\":\"high\",\"category\":\"wrong_operator\",\"description\":\"The guard `all(arg.help is not None for arg in args)` shows the Positional arguments section only when every argument has help, but the docstring and commit title say it should appear when at least one is documented. It also evaluates true for a command with no positional arguments, so an empty section header is rendered.\",\"rationale\":\"Trigger: a command with two arguments, one with help and one without. Under the original code the documented argument is listed. Under this guard all() is False, so the whole section is dropped and the undocumented argument is not listed either, contradicting the title. Trigger: a command with no Argument params. all([]) is True, so an empty 'Positional arguments:' heading is written, which the original code skipped. The impact is that help output loses positional arguments or shows an empty section.\",\"confidence\":0.85}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1979,
+      "output_tokens": 713,
+      "output_tokens_details": {
+        "thinking_tokens": 417
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

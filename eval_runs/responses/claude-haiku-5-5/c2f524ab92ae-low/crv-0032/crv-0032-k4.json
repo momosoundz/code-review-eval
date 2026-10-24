@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1188,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The loop now removes only param.opts from the help option names and no longer removes param.secondary_opts, which the old code did.",
+        "rationale": "Trigger: a command has a boolean option such as @click.option('--verbose/--help') whose secondary opt '--help' is reserved. Before this change, '--help' was removed from the candidate help names, so no conflicting help option was created. After it, '--help' stays in the candidates and the help option is added with that name, colliding with the secondary flag. Impact: the command gets a duplicate or shadowed --help, and users can no longer reach the intended behavior through that name.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1824,
+      "output_tokens": 648,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3762,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "177b00e760144ff6"
+  },
+  "raw": {
+    "id": "msg_011CgLQGSh6gW29kw6aoF4Bc",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1188,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The loop now removes only param.opts from the help option names and no longer removes param.secondary_opts, which the old code did.\",\"rationale\":\"Trigger: a command has a boolean option such as @click.option('--verbose/--help') whose secondary opt '--help' is reserved. Before this change, '--help' was removed from the candidate help names, so no conflicting help option was created. After it, '--help' stays in the candidates and the help option is added with that name, colliding with the secondary flag. Impact: the command gets a duplicate or shadowed --help, and users can no longer reach the intended behavior through that name.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1824,
+      "output_tokens": 648,
+      "output_tokens_details": {
+        "thinking_tokens": 400
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

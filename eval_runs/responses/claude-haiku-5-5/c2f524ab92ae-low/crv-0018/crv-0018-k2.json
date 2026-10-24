@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 258,
+        "severity": "medium",
+        "category": "wrong_literal_or_default",
+        "description": "The new `min` parameter defaults to 1 second, so existing callers that never pass `min` now get a 1-second floor on every wait, which the old code did not have.",
+        "rationale": "Trigger: `wait_exponential_jitter(initial=0.1)` (or any configuration where initial*2**n + jitter is below 1) on an existing call site. Before this change, the first wait was about 0.1s. After this change, `max(max(0, self.min), ...)` with self.min=1 clamps it to 1s. Impact: retry timing changes silently for users who did not opt into `min`, which can slow retries and break callers that depend on the previous timing.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2150,
+      "output_tokens": 619,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4302,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "124d353adf043099"
+  },
+  "raw": {
+    "id": "msg_011CgLPusdwUQFg3dqXbnmm8",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":258,\"severity\":\"medium\",\"category\":\"wrong_literal_or_default\",\"description\":\"The new `min` parameter defaults to 1 second, so existing callers that never pass `min` now get a 1-second floor on every wait, which the old code did not have.\",\"rationale\":\"Trigger: `wait_exponential_jitter(initial=0.1)` (or any configuration where initial*2**n + jitter is below 1) on an existing call site. Before this change, the first wait was about 0.1s. After this change, `max(max(0, self.min), ...)` with self.min=1 clamps it to 1s. Impact: retry timing changes silently for users who did not opt into `min`, which can slow retries and break callers that depend on the previous timing.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2150,
+      "output_tokens": 619,
+      "output_tokens_details": {
+        "thinking_tokens": 349
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

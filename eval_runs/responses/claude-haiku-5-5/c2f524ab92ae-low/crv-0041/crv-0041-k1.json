@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 301,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The default CA bundle path is now used directly, dropping the extract_zipped_paths call that extracted certifi's cert file when the package is loaded from a zip archive.",
+        "rationale": "Trigger: requests and certifi are installed inside a zip archive (for example a zipimport or zipapp deployment) and verify is left at its default with no REQUESTS_CA_BUNDLE set. Mechanism: DEFAULT_CA_BUNDLE_PATH is then a path inside the zip, so os.path.exists(cert_loc) returns False and the adapter raises OSError. Impact: every HTTPS request fails in that deployment. The extraction call was used, not unused, so the title's premise is wrong and the behavior regression is not announced.",
+        "confidence": 0.7
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1867,
+      "output_tokens": 635,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3669,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "dc2bf5f2d0587853"
+  },
+  "raw": {
+    "id": "msg_011CgLQRyqavfjKY11GtNVgM",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":301,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The default CA bundle path is now used directly, dropping the extract_zipped_paths call that extracted certifi's cert file when the package is loaded from a zip archive.\",\"rationale\":\"Trigger: requests and certifi are installed inside a zip archive (for example a zipimport or zipapp deployment) and verify is left at its default with no REQUESTS_CA_BUNDLE set. Mechanism: DEFAULT_CA_BUNDLE_PATH is then a path inside the zip, so os.path.exists(cert_loc) returns False and the adapter raises OSError. Impact: every HTTPS request fails in that deployment. The extraction call was used, not unused, so the title's premise is wrong and the behavior regression is not announced.\",\"confidence\":0.7}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1867,
+      "output_tokens": 635,
+      "output_tokens_details": {
+        "thinking_tokens": 335
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3395,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "The separator condition was inverted when the code moved into get_help_spec: it now uses \"; \" when any_prefix_is_slash is false and \" / \" when it is true, which is the reverse of the original logic.",
+        "rationale": "Trigger: any option whose spellings use a slash prefix, such as a boolean flag declared as \"--shout/--no-shout\", or any option without slash prefixes. Mechanism: the join separator is swapped, so slash-style options render with \"; \" and ordinary options render with \" / \". Impact: the help output's left column is wrong for these options, and the regression is visible in every help page that lists them.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2170,
+      "output_tokens": 612,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4282,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "0f93c8620e419ffe"
+  },
+  "raw": {
+    "id": "msg_011CgLQA9QNMPBPfgetsfChr",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":3395,\"severity\":\"medium\",\"category\":\"wrong_condition\",\"description\":\"The separator condition was inverted when the code moved into get_help_spec: it now uses \\\"; \\\" when any_prefix_is_slash is false and \\\" / \\\" when it is true, which is the reverse of the original logic.\",\"rationale\":\"Trigger: any option whose spellings use a slash prefix, such as a boolean flag declared as \\\"--shout/--no-shout\\\", or any option without slash prefixes. Mechanism: the join separator is swapped, so slash-style options render with \\\"; \\\" and ordinary options render with \\\" / \\\". Impact: the help output's left column is wrong for these options, and the regression is visible in every help page that lists them.\",\"confidence\":0.85}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2170,
+      "output_tokens": 612,
+      "output_tokens_details": {
+        "thinking_tokens": 351
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

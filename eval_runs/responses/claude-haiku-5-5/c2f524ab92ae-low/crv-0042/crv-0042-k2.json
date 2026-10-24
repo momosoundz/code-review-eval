@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 304,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The missing-CA-bundle check now emits a warning instead of raising OSError, so the request proceeds with a nonexistent certificate path. The commit title only mentions removing the unused extraction call, so this behavior change is not announced.",
+        "rationale": "Trigger: the certifi bundle path does not exist (for example, a zipped or frozen install where certifi.where() points to a missing file) and verify is left at its default. Previously the code raised OSError immediately. Now it warns and continues with a bad cert_loc, which reaches the TLS layer and fails there with a less clear error, or the warning is missed entirely. The user observes a changed failure mode for a case the title does not describe.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1879,
+      "output_tokens": 747,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4398,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "c36073f1ad756e56"
+  },
+  "raw": {
+    "id": "msg_011CgLQTnua8wUpnBnXzWzka",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":304,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The missing-CA-bundle check now emits a warning instead of raising OSError, so the request proceeds with a nonexistent certificate path. The commit title only mentions removing the unused extraction call, so this behavior change is not announced.\",\"rationale\":\"Trigger: the certifi bundle path does not exist (for example, a zipped or frozen install where certifi.where() points to a missing file) and verify is left at its default. Previously the code raised OSError immediately. Now it warns and continues with a bad cert_loc, which reaches the TLS layer and fails there with a less clear error, or the warning is missed entirely. The user observes a changed failure mode for a case the title does not describe.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1879,
+      "output_tokens": 747,
+      "output_tokens_details": {
+        "thinking_tokens": 471
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

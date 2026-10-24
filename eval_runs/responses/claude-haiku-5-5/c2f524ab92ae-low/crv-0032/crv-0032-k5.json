@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1188,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The loop that removed each parameter's secondary_opts from the help option names was dropped, so only primary opts are now excluded. A help name that is a secondary option of another parameter is no longer filtered out.",
+        "rationale": "Trigger: a boolean flag such as '--color/--no-color' is defined and help_option_names includes '--no-color'. The old code removed '--no-color' via param.secondary_opts. The new code only pops param.opts, so '--no-color' stays in the result and is added as a help option that collides with the flag's secondary option. Impact: the parser can route '--no-color' to the help option or report a conflict, a behavior regression. The new docstring also says names reserved by another parameter are dropped, which is no longer true for secondary names.",
+        "confidence": 0.7
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1824,
+      "output_tokens": 721,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4137,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "177b00e760144ff6"
+  },
+  "raw": {
+    "id": "msg_011CgLQGikVWixnRf3hLjK2J",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1188,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The loop that removed each parameter's secondary_opts from the help option names was dropped, so only primary opts are now excluded. A help name that is a secondary option of another parameter is no longer filtered out.\",\"rationale\":\"Trigger: a boolean flag such as '--color/--no-color' is defined and help_option_names includes '--no-color'. The old code removed '--no-color' via param.secondary_opts. The new code only pops param.opts, so '--no-color' stays in the result and is added as a help option that collides with the flag's secondary option. Impact: the parser can route '--no-color' to the help option or report a conflict, a behavior regression. The new docstring also says names reserved by another parameter are dropped, which is no longer true for secondary names.\",\"confidence\":0.7}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1824,
+      "output_tokens": 721,
+      "output_tokens_details": {
+        "thinking_tokens": 426
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

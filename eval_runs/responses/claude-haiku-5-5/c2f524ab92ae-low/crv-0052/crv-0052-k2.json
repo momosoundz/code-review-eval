@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 275,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The change removes the `self.initial` attribute entirely, so code that reads `wait.initial` on a `wait_exponential_jitter` instance now raises AttributeError, even though the parameter is only meant to be deprecated.",
+        "rationale": "Trigger: any caller or subclass that reads `strategy.initial` after constructing `wait_exponential_jitter(initial=...)` or with the default. Mechanism: the old assignment `self.initial = initial` was deleted and nothing replaces it, so the attribute no longer exists. Impact: a deprecation should keep existing code working with a warning, but such code now fails at runtime with AttributeError.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2339,
+      "output_tokens": 974,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5202,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "7b807a1616887da5"
+  },
+  "raw": {
+    "id": "msg_011CgLTSMRxW9GqZn6TULBM1",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":275,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The change removes the `self.initial` attribute entirely, so code that reads `wait.initial` on a `wait_exponential_jitter` instance now raises AttributeError, even though the parameter is only meant to be deprecated.\",\"rationale\":\"Trigger: any caller or subclass that reads `strategy.initial` after constructing `wait_exponential_jitter(initial=...)` or with the default. Mechanism: the old assignment `self.initial = initial` was deleted and nothing replaces it, so the attribute no longer exists. Impact: a deprecation should keep existing code working with a warning, but such code now fails at runtime with AttributeError.\",\"confidence\":0.55}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2339,
+      "output_tokens": 974,
+      "output_tokens_details": {
+        "thinking_tokens": 707
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The short-circuit fires when the exponent is below the threshold, which is when the exponential result is still under max. The early return then yields self.max, so waits that should grow are pinned at the cap from the start.",
+        "rationale": "Trigger: multiplier=1, exp_base=2, max=100, min=0, and attempt_number=2, so exponent=1. log(100/1, 2) is about 6.64, and 1 < 6.64 is true, so the method returns 100 on the second attempt. The original code computes 1*2**1=2 and returns max(0, min(2, 100))=2. Impact: every exponential backoff wait below the cap becomes the cap, so retries sleep far longer than configured and the backoff schedule is silently wrong.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1812,
+      "output_tokens": 824,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4743,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a7694e2c1dc3fa55"
+  },
+  "raw": {
+    "id": "msg_011CgLPfZWPeu6uyYqEGYNBX",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":211,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The short-circuit fires when the exponent is below the threshold, which is when the exponential result is still under max. The early return then yields self.max, so waits that should grow are pinned at the cap from the start.\",\"rationale\":\"Trigger: multiplier=1, exp_base=2, max=100, min=0, and attempt_number=2, so exponent=1. log(100/1, 2) is about 6.64, and 1 < 6.64 is true, so the method returns 100 on the second attempt. The original code computes 1*2**1=2 and returns max(0, min(2, 100))=2. Impact: every exponential backoff wait below the cap becomes the cap, so retries sleep far longer than configured and the backoff schedule is silently wrong.\",\"confidence\":0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1812,
+      "output_tokens": 824,
+      "output_tokens_details": {
+        "thinking_tokens": 529
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

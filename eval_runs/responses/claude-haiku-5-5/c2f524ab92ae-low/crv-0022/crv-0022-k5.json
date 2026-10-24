@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 244,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The match check changed from re.match (prefix match) to fullmatch (whole-string match), which the commit title does not mention.",
+        "rationale": "Trigger: retry_if_exception_message(match=\"timeout\") and an exception whose str is \"timeout after 5s\". Before this change, match() succeeds and the retry happens. After it, fullmatch() fails, so the exception is not retried. Any existing pattern that relied on a prefix or partial match now silently stops retrying, and callers see the original exception raised with no retries.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1849,
+      "output_tokens": 650,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4194,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "4107f170dc778f1a"
+  },
+  "raw": {
+    "id": "msg_011CgLQ2Ch5qfGNfvjSmssTM",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/retry.py\",\"line\":244,\"severity\":\"high\",\"category\":\"wrong_operator\",\"description\":\"The match check changed from re.match (prefix match) to fullmatch (whole-string match), which the commit title does not mention.\",\"rationale\":\"Trigger: retry_if_exception_message(match=\\\"timeout\\\") and an exception whose str is \\\"timeout after 5s\\\". Before this change, match() succeeds and the retry happens. After it, fullmatch() fails, so the exception is not retried. Any existing pattern that relied on a prefix or partial match now silently stops retrying, and callers see the original exception raised with no retries.\",\"confidence\":0.85}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1849,
+      "output_tokens": 650,
+      "output_tokens_details": {
+        "thinking_tokens": 423
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

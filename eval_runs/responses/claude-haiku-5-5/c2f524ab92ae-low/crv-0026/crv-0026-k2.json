@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1321,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The guard `all(arg.help is not None for arg in args)` is True when there are no Argument params, so the Positional arguments heading is now emitted even for commands that take no arguments.",
+        "rationale": "Trigger: any command or group with no Argument parameters. all() over an empty sequence returns True, so formatter.section(_(\"Positional arguments\")) runs with an empty records list. The section heading is written with no entries beneath it. Previously, nothing was written when args was empty. Impact: every help page for a command without positional arguments shows a spurious empty \"Positional arguments:\" heading.",
+        "confidence": 0.8
+      },
+      {
+        "file": "src/click/core.py",
+        "line": 1321,
+        "severity": "medium",
+        "category": "wrong_operator",
+        "description": "The guard requires every argument to have help, but the docstring says the section is written if at least one argument is documented. Using all() instead of any() hides the whole section when only some arguments have help.",
+        "rationale": "Trigger: a command with two positional arguments where only one has help=... set. all() returns False, so the section is skipped entirely and the documented argument is no longer listed. Before this change, that argument was listed. The new docstring states the intended rule is 'at least one documented', which this condition does not implement. Impact: help text that existed for a documented argument disappears from --help output.",
+        "confidence": 0.75
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1979,
+      "output_tokens": 1034,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5747,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "f8beab929d73aa79"
+  },
+  "raw": {
+    "id": "msg_011CgLQ7MvM6L4bcmcLAxLZm",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1321,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The guard `all(arg.help is not None for arg in args)` is True when there are no Argument params, so the Positional arguments heading is now emitted even for commands that take no arguments.\",\"rationale\":\"Trigger: any command or group with no Argument parameters. all() over an empty sequence returns True, so formatter.section(_(\\\"Positional arguments\\\")) runs with an empty records list. The section heading is written with no entries beneath it. Previously, nothing was written when args was empty. Impact: every help page for a command without positional arguments shows a spurious empty \\\"Positional arguments:\\\" heading.\",\"confidence\":0.8},{\"file\":\"src/click/core.py\",\"line\":1321,\"severity\":\"medium\",\"category\":\"wrong_operator\",\"description\":\"The guard requires every argument to have help, but the docstring says the section is written if at least one argument is documented. Using all() instead of any() hides the whole section when only some arguments have help.\",\"rationale\":\"Trigger: a command with two positional arguments where only one has help=... set. all() returns False, so the section is skipped entirely and the documented argument is no longer listed. Before this change, that argument was listed. The new docstring states the intended rule is 'at least one documented', which this condition does not implement. Impact: help text that existed for a documented argument disappears from --help output.\",\"confidence\":0.75}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1979,
+      "output_tokens": 1034,
+      "output_tokens_details": {
+        "thinking_tokens": 560
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

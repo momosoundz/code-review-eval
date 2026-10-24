@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 906,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The single-path check was changed from `isinstance(filename, str)` to `isinstance(filename, os.PathLike)`, so a plain `str` filename is no longer wrapped in a tuple before being passed to `edit_files`.",
+        "rationale": "Trigger: calling `click.edit(filename=\"notes.txt\")` with a str. Mechanism: `str` is not `os.PathLike`, so the string is passed unwrapped to `ed.edit_files`, which iterates it character by character and tries to open files named 'n', 'o', 't', and so on. Impact: the editor opens wrong or nonexistent files for every existing str-based call, a silent regression on a common path. The condition needs to accept both types, e.g. `isinstance(filename, (str, os.PathLike))`.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2650,
+      "output_tokens": 641,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3776,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "99339c90541464dd"
+  },
+  "raw": {
+    "id": "msg_011CgLQDt1m2bUyfe6Kjdunq",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/termui.py\",\"line\":906,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The single-path check was changed from `isinstance(filename, str)` to `isinstance(filename, os.PathLike)`, so a plain `str` filename is no longer wrapped in a tuple before being passed to `edit_files`.\",\"rationale\":\"Trigger: calling `click.edit(filename=\\\"notes.txt\\\")` with a str. Mechanism: `str` is not `os.PathLike`, so the string is passed unwrapped to `ed.edit_files`, which iterates it character by character and tries to open files named 'n', 'o', 't', and so on. Impact: the editor opens wrong or nonexistent files for every existing str-based call, a silent regression on a common path. The condition needs to accept both types, e.g. `isinstance(filename, (str, os.PathLike))`.\",\"confidence\":0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2650,
+      "output_tokens": 641,
+      "output_tokens_details": {
+        "thinking_tokens": 328
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

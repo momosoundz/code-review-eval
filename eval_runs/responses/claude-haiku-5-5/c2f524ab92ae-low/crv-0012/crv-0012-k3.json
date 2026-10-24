@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The early-return condition is inverted. It returns the max wait when exponent is below the threshold, which is when the computed exponential value is still under max, instead of when it has reached max.",
+        "rationale": "Trigger: wait_exponential(multiplier=1, max=10, exp_base=2) on attempt 1 gives exponent 0, and log(10, 2) is about 3.32, so 0 < 3.32 holds and the code returns 10. The correct wait is multiplier * 2**0 = 1. Early attempts therefore sleep for the maximum, and the wait grows only after the cap is reached, which inverts the intended backoff. Users see retries spaced at max from the first attempt, with the exponential ramp missing.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1812,
+      "output_tokens": 618,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3666,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a7694e2c1dc3fa55"
+  },
+  "raw": {
+    "id": "msg_011CgLPfHu2eQLttCo1oG3v9",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":211,\"severity\":\"high\",\"category\":\"wrong_operator\",\"description\":\"The early-return condition is inverted. It returns the max wait when exponent is below the threshold, which is when the computed exponential value is still under max, instead of when it has reached max.\",\"rationale\":\"Trigger: wait_exponential(multiplier=1, max=10, exp_base=2) on attempt 1 gives exponent 0, and log(10, 2) is about 3.32, so 0 < 3.32 holds and the code returns 10. The correct wait is multiplier * 2**0 = 1. Early attempts therefore sleep for the maximum, and the wait grows only after the cap is reached, which inverts the intended backoff. Users see retries spaced at max from the first attempt, with the exponential ramp missing.\",\"confidence\":0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1812,
+      "output_tokens": 618,
+      "output_tokens_details": {
+        "thinking_tokens": 329
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

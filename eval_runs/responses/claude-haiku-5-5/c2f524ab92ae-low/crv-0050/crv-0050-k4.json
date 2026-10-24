@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/utils.py",
+        "line": 544,
+        "severity": "medium",
+        "category": "null_or_missing_value",
+        "description": "A bare parameter without '=' such as 'charset' is now stored as the boolean True, so get_encoding_from_headers calls .strip() on a bool when 'charset' is present without a value.",
+        "rationale": "Trigger: a Content-Type header like 'text/html; charset' (no '='). The changed parser at line 520 stores params['charset'] = True instead of skipping it. Line 544 then calls True.strip(...), raising AttributeError. Before the change, the token was ignored and the function fell through to the 'text' branch and returned ISO-8859-1. The user sees an exception while decoding a response from a malformed header, where it previously succeeded.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2109,
+      "output_tokens": 606,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3981,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "1afc750f3de9d94b"
+  },
+  "raw": {
+    "id": "msg_011CgLQh15veo4TaDYfairZZ",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/utils.py\",\"line\":544,\"severity\":\"medium\",\"category\":\"null_or_missing_value\",\"description\":\"A bare parameter without '=' such as 'charset' is now stored as the boolean True, so get_encoding_from_headers calls .strip() on a bool when 'charset' is present without a value.\",\"rationale\":\"Trigger: a Content-Type header like 'text/html; charset' (no '='). The changed parser at line 520 stores params['charset'] = True instead of skipping it. Line 544 then calls True.strip(...), raising AttributeError. Before the change, the token was ignored and the function fell through to the 'text' branch and returned ISO-8859-1. The user sees an exception while decoding a response from a malformed header, where it previously succeeded.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2109,
+      "output_tokens": 606,
+      "output_tokens_details": {
+        "thinking_tokens": 334
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

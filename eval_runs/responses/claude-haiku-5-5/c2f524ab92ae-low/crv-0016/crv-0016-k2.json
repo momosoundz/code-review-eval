@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 112,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "In the async retry_any.__ror__, the flatten check tests isinstance(other, retry_all) instead of retry_any, so a left-hand retry_all is merged into the retry_any.",
+        "rationale": "Trigger: an async retry_all as the left operand of |, e.g. all_cond | any_cond, which dispatches to any_cond.__ror__(all_cond). The check passes, so the result is retry_any(*all_cond.retries, *any_cond.retries), i.e. any(a, b, c) instead of any(all(a, b), c). Impact: the retry predicate silently changes meaning and retries under conditions it should not, or fails to retry when it should.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2739,
+      "output_tokens": 1769,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 8473,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "54bc3d49e9eef4a3"
+  },
+  "raw": {
+    "id": "msg_011CgLPrDRx6sNVSpbFJSkCA",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/asyncio/retry.py\",\"line\":112,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"In the async retry_any.__ror__, the flatten check tests isinstance(other, retry_all) instead of retry_any, so a left-hand retry_all is merged into the retry_any.\",\"rationale\":\"Trigger: an async retry_all as the left operand of |, e.g. all_cond | any_cond, which dispatches to any_cond.__ror__(all_cond). The check passes, so the result is retry_any(*all_cond.retries, *any_cond.retries), i.e. any(a, b, c) instead of any(all(a, b), c). Impact: the retry predicate silently changes meaning and retries under conditions it should not, or fails to retry when it should.\",\"confidence\":0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2739,
+      "output_tokens": 1769,
+      "output_tokens_details": {
+        "thinking_tokens": 1491
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

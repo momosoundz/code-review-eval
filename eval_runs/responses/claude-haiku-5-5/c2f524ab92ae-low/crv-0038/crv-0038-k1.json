@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 793,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "`self.reason` is now assigned from `self.raw.reason` in `Response.__init__`, but `self.raw` is `None` at that point, so constructing a bare `Response()` raises AttributeError.",
+        "rationale": "Trigger: any code path that calls `Response()` without a raw urllib3 response, such as direct construction in user code or tests. Mechanism: `__init__` sets `self.raw = None` before this line, so evaluating `self.raw.reason` raises AttributeError. Impact: instantiating Response crashes, where it previously succeeded with `reason=None`.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1687,
+      "output_tokens": 882,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4706,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "2bb8bd9869d82518"
+  },
+  "raw": {
+    "id": "msg_011CgLQNuPs4oFGvHFDUUdQH",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/models.py\",\"line\":793,\"severity\":\"high\",\"category\":\"null_or_missing_value\",\"description\":\"`self.reason` is now assigned from `self.raw.reason` in `Response.__init__`, but `self.raw` is `None` at that point, so constructing a bare `Response()` raises AttributeError.\",\"rationale\":\"Trigger: any code path that calls `Response()` without a raw urllib3 response, such as direct construction in user code or tests. Mechanism: `__init__` sets `self.raw = None` before this line, so evaluating `self.raw.reason` raises AttributeError. Impact: instantiating Response crashes, where it previously succeeded with `reason=None`.\",\"confidence\":0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1687,
+      "output_tokens": 882,
+      "output_tokens_details": {
+        "thinking_tokens": 634
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

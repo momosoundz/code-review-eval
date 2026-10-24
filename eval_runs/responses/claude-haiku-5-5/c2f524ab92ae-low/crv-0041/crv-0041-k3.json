@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 301,
+        "severity": "medium",
+        "category": "wrong_variable_or_argument",
+        "description": "The default CA bundle path is now used directly instead of being passed through extract_zipped_paths, so a certifi bundle that lives inside a zip archive is no longer extracted to a real file.",
+        "rationale": "Trigger: requests and certifi are installed as a zip archive or zipped egg, and verify is left at its default so cert_loc falls back to DEFAULT_CA_BUNDLE_PATH. Mechanism: the path points inside the archive, so os.path.exists(cert_loc) at line 303 returns False and the code raises OSError. Impact: every HTTPS request from such an installation fails, where the previous code extracted the bundle and succeeded. The title calls the call unused, but on this branch it is used.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1867,
+      "output_tokens": 671,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3568,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "dc2bf5f2d0587853"
+  },
+  "raw": {
+    "id": "msg_011CgLQSZwhGBX93kYFcckhY",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":301,\"severity\":\"medium\",\"category\":\"wrong_variable_or_argument\",\"description\":\"The default CA bundle path is now used directly instead of being passed through extract_zipped_paths, so a certifi bundle that lives inside a zip archive is no longer extracted to a real file.\",\"rationale\":\"Trigger: requests and certifi are installed as a zip archive or zipped egg, and verify is left at its default so cert_loc falls back to DEFAULT_CA_BUNDLE_PATH. Mechanism: the path points inside the archive, so os.path.exists(cert_loc) at line 303 returns False and the code raises OSError. Impact: every HTTPS request from such an installation fails, where the previous code extracted the bundle and succeeded. The title calls the call unused, but on this branch it is used.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1867,
+      "output_tokens": 671,
+      "output_tokens_details": {
+        "thinking_tokens": 373
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_utils.py",
+        "line": 21,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing the custom __reduce_ex__ means pickling a Sentinel member now uses Enum's default reduction, which pickles the internal object() value and rebuilds the member by value.",
+        "rationale": "Under the trigger of pickling UNSET or FLAG_NEEDS_VALUE (for example, a pickled Click parameter or context that holds the sentinel as a default), the default reduction serializes a fresh object() as the value. On unpickling, Sentinel(value) looks up a value that does not match the singleton's identity and raises ValueError, or yields a member that no longer compares identical to UNSET, so the identity checks used throughout Click fail. The impact is a crash or silently broken sentinel comparisons after a pickle round-trip.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1945,
+      "output_tokens": 1140,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 6082,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8a3cd15243ee2240"
+  },
+  "raw": {
+    "id": "msg_011CgLQb2eGZ9sLwoQFuzfCu",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/_utils.py\",\"line\":21,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"Removing the custom __reduce_ex__ means pickling a Sentinel member now uses Enum's default reduction, which pickles the internal object() value and rebuilds the member by value.\",\"rationale\":\"Under the trigger of pickling UNSET or FLAG_NEEDS_VALUE (for example, a pickled Click parameter or context that holds the sentinel as a default), the default reduction serializes a fresh object() as the value. On unpickling, Sentinel(value) looks up a value that does not match the singleton's identity and raises ValueError, or yields a member that no longer compares identical to UNSET, so the identity checks used throughout Click fail. The impact is a crash or silently broken sentinel comparisons after a pickle round-trip.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1945,
+      "output_tokens": 1140,
+      "output_tokens_details": {
+        "thinking_tokens": 841
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

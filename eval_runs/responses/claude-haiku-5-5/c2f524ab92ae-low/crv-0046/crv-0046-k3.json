@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_utils.py",
+        "line": 21,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "Removing the custom __reduce_ex__ means pickling UNSET or FLAG_NEEDS_VALUE falls back to Enum's default reduce, which pickles the underlying object() value; unpickling then produces a value that does not match the sentinel.",
+        "rationale": "Trigger: a Context, parameter, or default containing UNSET is pickled and unpickled. Mechanism: the removed __reduce_ex__ returned getattr(cls, name) so the singleton was restored by name; the default Enum reduce reconstructs via the value, which is a fresh object() that no longer matches any member, so lookup fails or yields a non-identical sentinel. Impact: unpickling raises ValueError or the restored sentinel fails `is UNSET` checks, changing option-resolution behavior. Copy and deepcopy are unaffected because Enum already returns self.",
+        "confidence": 0.45
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1945,
+      "output_tokens": 1036,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5426,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8a3cd15243ee2240"
+  },
+  "raw": {
+    "id": "msg_011CgLQa7yxQYJmUp5CNCuqE",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/_utils.py\",\"line\":21,\"severity\":\"low\",\"category\":\"logic_other\",\"description\":\"Removing the custom __reduce_ex__ means pickling UNSET or FLAG_NEEDS_VALUE falls back to Enum's default reduce, which pickles the underlying object() value; unpickling then produces a value that does not match the sentinel.\",\"rationale\":\"Trigger: a Context, parameter, or default containing UNSET is pickled and unpickled. Mechanism: the removed __reduce_ex__ returned getattr(cls, name) so the singleton was restored by name; the default Enum reduce reconstructs via the value, which is a fresh object() that no longer matches any member, so lookup fails or yields a non-identical sentinel. Impact: unpickling raises ValueError or the restored sentinel fails `is UNSET` checks, changing option-resolution behavior. Copy and deepcopy are unaffected because Enum already returns self.\",\"confidence\":0.45}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1945,
+      "output_tokens": 1036,
+      "output_tokens_details": {
+        "thinking_tokens": 699
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}
