@@ -65,6 +65,8 @@ uv run python -m eval.harness.collect --run exp2a --k 5 --split release \
 uv run python -m eval.harness.score --run exp2a --online   # judge calls for new pairs only
 ```
 
+Cost, at the current price table: one Haiku run over the 49 release cases at K=5 is about 0.13 USD, one Sonnet run about 1.4 USD, and each new (finding, gold) pair the Opus judge has not seen costs about 0.006 USD; rescoring a committed run costs nothing. Expect `make eval` with a new reviewer version to spend under 1 USD with Haiku.
+
 `python -m eval.harness.compare` exits 0 on `PASS`, 1 on `FAIL`, 2 on `INCONCLUSIVE`, so it can gate a pipeline; call the module directly for that, because `make` reports any failing recipe as 2. Runs with different gold hashes refuse to compare.
 
 ## What is where
