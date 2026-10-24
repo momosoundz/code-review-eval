@@ -8,7 +8,7 @@
     "paths": [
       "production code only"
     ],
-    "note": "merged commit as is",
+    "note": "merged commit as is; context-only hunk 3806-3810 (Argument.get_help_record) added after adjudication so the None fallback at 1323 can be judged",
     "commit_title": "List every argument in the `Positional arguments` help section"
   },
   "status": "active"

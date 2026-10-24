@@ -10,7 +10,7 @@ index 3b53da2..a662eef 100644
  import random
  import typing
  import warnings
-@@ -201,8 +202,17 @@ class wait_exponential(wait_base):
+@@ -201,10 +202,19 @@ class wait_exponential(wait_base):
          self.exp_base = exp_base
  
      def __call__(self, retry_state: "RetryCallState") -> float:
@@ -29,3 +29,5 @@ index 3b53da2..a662eef 100644
              result = self.multiplier * exp
          except OverflowError:
              return self.max
+         return max(max(0, self.min), min(result, self.max))
+ 

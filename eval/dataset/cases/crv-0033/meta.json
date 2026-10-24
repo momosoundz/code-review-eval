@@ -8,7 +8,7 @@
     "paths": [
       "production code only"
     ],
-    "note": "merged commit as is",
+    "note": "merged commit as is; context-only section of src/click/testing.py 504-523 (CliRunner patch targets) added after adjudication so the should_strip_ansi lookup can be judged",
     "commit_title": "Strip ANSI from `confirm()` and `prompt()` when the stream don't support them"
   },
   "status": "active"

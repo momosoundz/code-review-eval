@@ -31,3 +31,27 @@ index e5e9678..4780902 100644
      if err:
          with redirect_stdout(sys.stderr):
              return func(text)
+diff --git a/src/click/testing.py b/src/click/testing.py
+--- a/src/click/testing.py
++++ b/src/click/testing.py
+@@ -504,20 +504,20 @@
+         default_color = color
+ 
+         def should_strip_ansi(
+             stream: t.IO[t.Any] | None = None, color: bool | None = None
+         ) -> bool:
+             if color is None:
+                 return not default_color
+             return not color
+ 
+         old_visible_prompt_func = termui.visible_prompt_func
+         old_hidden_prompt_func = termui.hidden_prompt_func
+         old__getchar_func = termui._getchar
+         old_should_strip_ansi = utils.should_strip_ansi  # type: ignore
+         old__compat_should_strip_ansi = _compat.should_strip_ansi
+         old_pdb_init = pdb.Pdb.__init__
+         termui.visible_prompt_func = visible_input
+         termui.hidden_prompt_func = hidden_input
+         termui._getchar = _getchar
+         utils.should_strip_ansi = should_strip_ansi  # type: ignore
+         _compat.should_strip_ansi = should_strip_ansi

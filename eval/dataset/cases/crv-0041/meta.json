@@ -11,5 +11,6 @@
     "note": "merged commit as is",
     "commit_title": "Remove unused extraction call (#7292)"
   },
-  "status": "active"
+  "status": "deprecated",
+  "deprecated_reason": "adjudication rules v1: the only claim on this case (adapters.py:301, the CA bundle path is no longer passed through extract_zipped_paths) depends on which certifi versions extract the bundle themselves, an external version floor that no code in the diff or the repository pins; the case cannot be decided from the diff and cannot serve as a clean control"
 }

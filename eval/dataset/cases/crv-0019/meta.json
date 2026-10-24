@@ -8,7 +8,7 @@
     "paths": [
       "production code only"
     ],
-    "note": "merged commit as is",
+    "note": "merged commit as is; context-only hunk 195-203 (AttemptManager.__init__ and __enter__) added after adjudication so __aenter__ can be compared with __enter__",
     "commit_title": "feat: add async context manager support to AttemptManager (#605)"
   },
   "status": "active"

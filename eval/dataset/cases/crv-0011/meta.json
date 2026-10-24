@@ -8,7 +8,7 @@
     "paths": [
       "production code only"
     ],
-    "note": "merged commit as is",
+    "note": "merged commit as is; context-only lines 219-220 (the fallback return) added after adjudication so the shortcut can be compared with the original expression",
     "commit_title": "Avoid unnecessary exponential wait computation (#654)"
   },
   "status": "active"

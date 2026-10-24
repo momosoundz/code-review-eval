@@ -1,37 +1,27 @@
 {
   "result": {
-    "findings": [
-      {
-        "file": "src/click/termui.py",
-        "line": 98,
-        "severity": "medium",
-        "category": "wrong_variable_or_argument",
-        "description": "The code calls `_compat.should_strip_ansi` while the comment says the lookup goes through the module so that CliRunner's patch is honored. CliRunner patches the name `should_strip_ansi` on `termui`, so this call bypasses the patch.",
-        "rationale": "Trigger: a test runs `prompt()` or `confirm()` under CliRunner with color disabled. Mechanism: the call resolves to the unpatched `_compat` function, which checks the real stream and may return False, so ANSI codes are not stripped. Impact: test isolation does not apply to prompt text, so tests get output with escape codes that the author's comment says would be removed.",
-        "confidence": 0.55
-      }
-    ],
+    "findings": [],
     "no_output": false,
     "error": null,
     "dropped": [],
     "usage": {
-      "input_tokens": 1965,
-      "output_tokens": 1073,
+      "input_tokens": 2361,
+      "output_tokens": 522,
       "cache_read_input_tokens": 0
     },
-    "elapsed_ms": 5737,
+    "elapsed_ms": 2997,
     "model": "claude-haiku-5-5",
     "prompt_id": "c2f524ab92ae",
     "context_used": "hunk_plus_title_verified",
-    "input_sha256": "54f7b3755a0a27bd"
+    "input_sha256": "2b359924dbe2338d"
   },
   "raw": {
-    "id": "msg_011CgLQH2QdTMvW4kUXgVJp9",
+    "id": "msg_011CgMe7DzFEokd2AzENWMpK",
     "container": null,
     "content": [
       {
         "citations": null,
-        "text": "{\"findings\":[{\"file\":\"src/click/termui.py\",\"line\":98,\"severity\":\"medium\",\"category\":\"wrong_variable_or_argument\",\"description\":\"The code calls `_compat.should_strip_ansi` while the comment says the lookup goes through the module so that CliRunner's patch is honored. CliRunner patches the name `should_strip_ansi` on `termui`, so this call bypasses the patch.\",\"rationale\":\"Trigger: a test runs `prompt()` or `confirm()` under CliRunner with color disabled. Mechanism: the call resolves to the unpatched `_compat` function, which checks the real stream and may return False, so ANSI codes are not stripped. Impact: test isolation does not apply to prompt text, so tests get output with escape codes that the author's comment says would be removed.\",\"confidence\":0.55}]}",
+        "text": "{\"findings\": []}",
         "type": "text"
       }
     ],
@@ -50,10 +40,10 @@
       "cache_creation_input_tokens": 0,
       "cache_read_input_tokens": 0,
       "inference_geo": "global",
-      "input_tokens": 1965,
-      "output_tokens": 1073,
+      "input_tokens": 2361,
+      "output_tokens": 522,
       "output_tokens_details": {
-        "thinking_tokens": 799
+        "thinking_tokens": 513
       },
       "server_tool_use": null,
       "service_tier": "standard",

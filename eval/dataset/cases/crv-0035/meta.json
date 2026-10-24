@@ -8,7 +8,7 @@
     "paths": [
       "production code only"
     ],
-    "note": "merged commit as is",
+    "note": "merged commit as is; context-only hunk 8-17 (models.py imports) added after adjudication so the Mapping annotation can be judged",
     "commit_title": "Move Request.headers back to Mapping (#7441)"
   },
   "status": "active"

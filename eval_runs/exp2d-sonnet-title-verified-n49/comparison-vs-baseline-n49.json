@@ -1,0 +1,114 @@
+{
+  "baseline": "baseline-n49",
+  "candidate": "exp2d-sonnet-title-verified-n49",
+  "verdict": "INCONCLUSIVE",
+  "gate": {
+    "metric": "recall_medium_plus",
+    "max_drop": 0.1,
+    "min_families": 20,
+    "rule": "PASS: families >= min_families and ci_low >= -max_drop and floors ok; FAIL: ci_high < -max_drop or a floor broken; else INCONCLUSIVE"
+  },
+  "gate_metric": {
+    "delta": 0.0783,
+    "ci95": [
+      -0.0417,
+      0.2087
+    ],
+    "families": 22,
+    "resamples": 10000,
+    "n_cases": 23
+  },
+  "floors": {
+    "precision": {
+      "baseline": 0.9038,
+      "candidate": 0.8182,
+      "ok": false,
+      "enough_findings": true
+    },
+    "clean_fp_rate": {
+      "baseline": 0.0455,
+      "candidate": 0.2273,
+      "unit": "share of clean cases alarming in any of K runs",
+      "ok": false,
+      "enough_cases": true
+    }
+  },
+  "lost_cases": [
+    {
+      "case_id": "crv-0046",
+      "baseline": 0.8,
+      "candidate": 0.2
+    },
+    {
+      "case_id": "crv-0057",
+      "baseline": 0.4,
+      "candidate": 0.0
+    }
+  ],
+  "gained_cases": [
+    {
+      "case_id": "crv-0016",
+      "baseline": 0.8,
+      "candidate": 1.0
+    },
+    {
+      "case_id": "crv-0020",
+      "baseline": 0.8,
+      "candidate": 1.0
+    },
+    {
+      "case_id": "crv-0026",
+      "baseline": 0.8,
+      "candidate": 1.0
+    },
+    {
+      "case_id": "crv-0042",
+      "baseline": 0.6,
+      "candidate": 1.0
+    },
+    {
+      "case_id": "crv-0043",
+      "baseline": 0.0,
+      "candidate": 1.0
+    },
+    {
+      "case_id": "crv-0049",
+      "baseline": 0.2,
+      "candidate": 0.8
+    },
+    {
+      "case_id": "crv-0052",
+      "baseline": 0.0,
+      "candidate": 0.2
+    }
+  ],
+  "new_clean_alarms": [
+    {
+      "case_id": "crv-0011",
+      "baseline": 0.0,
+      "candidate": 1.0
+    },
+    {
+      "case_id": "crv-0017",
+      "baseline": 0.0,
+      "candidate": 1.0
+    },
+    {
+      "case_id": "crv-0025",
+      "baseline": 0.0,
+      "candidate": 0.2
+    },
+    {
+      "case_id": "crv-0053",
+      "baseline": 0.0,
+      "candidate": 0.8
+    },
+    {
+      "case_id": "crv-0061",
+      "baseline": 0.0,
+      "candidate": 0.8
+    }
+  ],
+  "baseline_prompt_id": "00086104baa0",
+  "candidate_prompt_id": "c2f524ab92ae"
+}

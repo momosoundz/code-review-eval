@@ -1,0 +1,184 @@
+{
+  "by_source": {
+    "clean": {
+      "n_cases": 22,
+      "recall_all": {
+        "all_k": null,
+        "any_k": null,
+        "gates": false,
+        "k": 5,
+        "mean": null,
+        "n_cases": 0,
+        "wilson_case_runs": [
+          0.0,
+          1.0
+        ],
+        "wilson_cases": [
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "discovered": {
+      "n_cases": 3,
+      "recall_all": {
+        "all_k": 0.3333,
+        "any_k": 0.3333,
+        "gates": false,
+        "k": 5,
+        "mean": 0.6667,
+        "n_cases": 3,
+        "wilson_case_runs": [
+          0.4171,
+          0.8482
+        ],
+        "wilson_cases": [
+          0.0615,
+          0.7923
+        ]
+      }
+    },
+    "real_reversed": {
+      "n_cases": 8,
+      "recall_all": {
+        "all_k": 0.625,
+        "any_k": 0.875,
+        "gates": false,
+        "k": 5,
+        "mean": 0.75,
+        "n_cases": 8,
+        "wilson_case_runs": [
+          0.5981,
+          0.8581
+        ],
+        "wilson_cases": [
+          0.5291,
+          0.9776
+        ]
+      }
+    },
+    "seeded": {
+      "n_cases": 16,
+      "recall_all": {
+        "all_k": 0.875,
+        "any_k": 0.9375,
+        "gates": false,
+        "k": 5,
+        "mean": 0.9563,
+        "n_cases": 16,
+        "wilson_case_runs": [
+          0.8784,
+          0.9804
+        ],
+        "wilson_cases": [
+          0.7167,
+          0.9889
+        ]
+      }
+    }
+  },
+  "clean_fp_rate": {
+    "all_k": 0.0909,
+    "any_k": 0.2273,
+    "gates": true,
+    "k": 5,
+    "mean": 0.1727,
+    "n_cases": 22,
+    "wilson_case_runs": [
+      0.1135,
+      0.2541
+    ],
+    "wilson_cases": [
+      0.1012,
+      0.4344
+    ]
+  },
+  "duplicate_rate": 0.0226,
+  "findings_per_diff": 0.7224,
+  "gate_metric": "recall_medium_plus",
+  "gold_hash": "8da70ac14b15",
+  "judge": {
+    "model": "claude-opus-5-5",
+    "prompt_hash": "d97c19f428f6"
+  },
+  "k": 5,
+  "line_tolerance": 3,
+  "n_cases": 49,
+  "no_output_rate": 0.0,
+  "noise_per_diff": 0.0816,
+  "p50_elapsed_ms": 2917,
+  "precision_medium_plus": {
+    "fp": 28,
+    "tp": 126,
+    "value": 0.8182,
+    "wilson": [
+      0.7498,
+      0.8711
+    ]
+  },
+  "recall_all": {
+    "all_k": 0.7407,
+    "any_k": 0.8519,
+    "gates": true,
+    "k": 5,
+    "mean": 0.863,
+    "n_cases": 27,
+    "wilson_case_runs": [
+      0.7906,
+      0.908
+    ],
+    "wilson_cases": [
+      0.6752,
+      0.9408
+    ]
+  },
+  "recall_high": {
+    "all_k": 1.0,
+    "any_k": 1.0,
+    "gates": false,
+    "k": 5,
+    "mean": 1.0,
+    "n_cases": 7,
+    "wilson_case_runs": [
+      0.9011,
+      1.0
+    ],
+    "wilson_cases": [
+      0.6457,
+      1.0
+    ]
+  },
+  "recall_low": {
+    "all_k": 0.7143,
+    "any_k": 1.0,
+    "gates": false,
+    "k": 5,
+    "mean": 0.9429,
+    "n_cases": 7,
+    "wilson_case_runs": [
+      0.8139,
+      0.9842
+    ],
+    "wilson_cases": [
+      0.6457,
+      1.0
+    ]
+  },
+  "recall_medium_plus": {
+    "all_k": 0.7391,
+    "any_k": 0.8696,
+    "gates": true,
+    "k": 5,
+    "mean": 0.7913,
+    "n_cases": 23,
+    "wilson_case_runs": [
+      0.7082,
+      0.8556
+    ],
+    "wilson_cases": [
+      0.6787,
+      0.9546
+    ]
+  },
+  "unknown_pairs": 0
+}

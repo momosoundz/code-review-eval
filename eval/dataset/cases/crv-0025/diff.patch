@@ -31,3 +31,9 @@ index 18a43ac..7af4bd8 100644
  
      def format_epilog(self, ctx: Context, formatter: HelpFormatter) -> None:
          """Writes the epilog into the formatter if it exists."""
+@@ -3802,5 +3806,5 @@
+     def get_help_record(self, ctx: Context) -> tuple[str, str] | None:
+         if self.help is None:
+             return None
+ 
+         return self.make_metavar(ctx), self.help

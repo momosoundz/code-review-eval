@@ -8,7 +8,7 @@
     "paths": [
       "production code only"
     ],
-    "note": "merged commit as is; added to reach 20 clean cases for the false-alarm floor",
+    "note": "merged commit as is; added to reach 20 clean cases for the false-alarm floor; context-only hunks 96-100 and 264-316 (_completed_intervals init, render_progress, make_step) added after adjudication so the early render can be judged",
     "commit_title": "Land the progress bar on its final position"
   },
   "status": "active"
