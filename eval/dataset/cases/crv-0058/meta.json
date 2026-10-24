@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-038",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "pallets/click",
+    "commit": "1f9cd54",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is; clean controls batch 2, pre-registered in eval/labels/clean-batch-2.md; pending blind pass 1d",
+    "commit_title": "Close the pager temp file before unlinking it"
+  },
+  "status": "active"
+}

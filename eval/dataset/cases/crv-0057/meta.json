@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-037",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "jd/tenacity",
+    "commit": "e5179bd",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is; clean controls batch 2, pre-registered in eval/labels/clean-batch-2.md; pending blind pass 1d",
+    "commit_title": "fix: reraise underlying exception when TryAgain wraps a cause (#640)"
+  },
+  "status": "active"
+}

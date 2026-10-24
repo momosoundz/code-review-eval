@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-040",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "psf/requests",
+    "commit": "6404f345",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is; clean controls batch 2, pre-registered in eval/labels/clean-batch-2.md; pending blind pass 1d",
+    "commit_title": "Fix `prepare_body` stream detection for `__getattr__`-based file wrappers (#7433)"
+  },
+  "status": "active"
+}

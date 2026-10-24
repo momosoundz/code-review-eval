@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-041",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "psf/requests",
+    "commit": "a4f9a599",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is; clean controls batch 2, pre-registered in eval/labels/clean-batch-2.md; pending blind pass 1d",
+    "commit_title": "Port bpo-39057 to Requests (#7427)"
+  },
+  "status": "active"
+}
