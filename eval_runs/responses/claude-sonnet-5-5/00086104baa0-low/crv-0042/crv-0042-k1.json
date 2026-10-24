@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 304,
+        "severity": "high",
+        "category": "error_handling",
+        "description": "When the CA bundle path is missing or does not exist, the code now only emits a warning instead of raising OSError. Execution continues with an invalid cert_loc.",
+        "rationale": "Trigger: verify=True and the CA bundle file is missing, for example in a broken install or a zipped package. Mechanism: the OSError is replaced by warnings.warn, so the adapter goes on to set conn.ca_certs to a nonexistent path. Impact: the user sees a less clear SSL failure later, or verification is silently misconfigured, instead of an immediate explicit error.",
+        "confidence": 0.6
+      },
+      {
+        "file": "src/requests/adapters.py",
+        "line": 301,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "extract_zipped_paths was removed, so DEFAULT_CA_BUNDLE_PATH is used directly. A cert bundle located inside a zip archive, such as a zipapp or zipimport, is no longer extracted.",
+        "rationale": "Trigger: requests is run from a zip archive, where certs.where() returns a path inside the zip. Mechanism: os.path.exists returns False for that path, and the failure is now only a warning. Impact: TLS verification breaks for zipped deployments.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1768,
+      "output_tokens": 452,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4622,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "e960625343f4db45"
+  },
+  "raw": {
+    "id": "msg_011CgLRCZSea5YqJ4oGGDLB9",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":304,\"severity\":\"high\",\"category\":\"error_handling\",\"description\":\"When the CA bundle path is missing or does not exist, the code now only emits a warning instead of raising OSError. Execution continues with an invalid cert_loc.\",\"rationale\":\"Trigger: verify=True and the CA bundle file is missing, for example in a broken install or a zipped package. Mechanism: the OSError is replaced by warnings.warn, so the adapter goes on to set conn.ca_certs to a nonexistent path. Impact: the user sees a less clear SSL failure later, or verification is silently misconfigured, instead of an immediate explicit error.\",\"confidence\":0.6},{\"file\":\"src/requests/adapters.py\",\"line\":301,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"extract_zipped_paths was removed, so DEFAULT_CA_BUNDLE_PATH is used directly. A cert bundle located inside a zip archive, such as a zipapp or zipimport, is no longer extracted.\",\"rationale\":\"Trigger: requests is run from a zip archive, where certs.where() returns a path inside the zip. Mechanism: os.path.exists returns False for that path, and the failure is now only a warning. Impact: TLS verification breaks for zipped deployments.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1768,
+      "output_tokens": 452,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

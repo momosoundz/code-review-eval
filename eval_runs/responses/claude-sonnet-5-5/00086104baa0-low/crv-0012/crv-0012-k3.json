@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 213,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The new fast path returns max(max(0, self.min), self.max), which is effectively self.max, in the case where the exponential value is still below the cap. The inequality `exponent < log(max/multiplier)` is true for small attempts, where the wait should be small, so those attempts wait the full max.",
+        "rationale": "Trigger: multiplier=1, max=10, exp_base=2, attempt 1. exponent=0 < log2(10)=3.3, so the function returns 10 instead of 1. Every early attempt then waits max. Exponential backoff is broken and the delay is wrong on the most common path. The condition and the returned value are inverted: the cap should apply when exponent >= log(...), and the early-attempt branch should compute multiplier*exp.",
+        "confidence": 0.93
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1695,
+      "output_tokens": 300,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3998,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "9b6bc2ac461b1171"
+  },
+  "raw": {
+    "id": "msg_011CgLQjLBw3ZJABBZUHjGm6",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":213,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The new fast path returns max(max(0, self.min), self.max), which is effectively self.max, in the case where the exponential value is still below the cap. The inequality `exponent < log(max/multiplier)` is true for small attempts, where the wait should be small, so those attempts wait the full max.\",\"rationale\":\"Trigger: multiplier=1, max=10, exp_base=2, attempt 1. exponent=0 < log2(10)=3.3, so the function returns 10 instead of 1. Every early attempt then waits max. Exponential backoff is broken and the delay is wrong on the most common path. The condition and the returned value are inverted: the cap should apply when exponent >= log(...), and the early-attempt branch should compute multiplier*exp.\",\"confidence\":0.93}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1695,
+      "output_tokens": 300,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

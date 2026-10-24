@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_termui_impl.py",
+        "line": 160,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "render_finish applies the pending remainder through make_step, which can return early on the time check and skip ETA bookkeeping. The extra render_progress call also runs for hidden bars and non-TTY output.",
+        "rationale": "Trigger: a progress bar whose length is not a multiple of update_min_steps, finished with a pending remainder. make_step increments pos and then returns early if less than 1s has passed since last_eta, so only the pos update is guaranteed. render_progress is called unconditionally, so for non-TTY output it only prints the label once and does nothing new. The impact is minor and I cannot name a concrete wrong output, so confidence is low.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2489,
+      "output_tokens": 267,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3191,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "48f3dece20513909"
+  },
+  "raw": {
+    "id": "msg_011CgMeNEThMLakSHXTYjZXM",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/_termui_impl.py\",\"line\":160,\"severity\":\"low\",\"category\":\"logic_other\",\"description\":\"render_finish applies the pending remainder through make_step, which can return early on the time check and skip ETA bookkeeping. The extra render_progress call also runs for hidden bars and non-TTY output.\",\"rationale\":\"Trigger: a progress bar whose length is not a multiple of update_min_steps, finished with a pending remainder. make_step increments pos and then returns early if less than 1s has passed since last_eta, so only the pos update is guaranteed. render_progress is called unconditionally, so for non-TTY output it only prints the label once and does nothing new. The impact is minor and I cannot name a concrete wrong output, so confidence is low.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2489,
+      "output_tokens": 267,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

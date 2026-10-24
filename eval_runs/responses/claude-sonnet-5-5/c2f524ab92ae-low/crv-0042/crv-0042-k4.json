@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 304,
+        "severity": "high",
+        "category": "error_handling",
+        "description": "When the CA bundle path is missing or does not exist, the code now calls warnings.warn instead of raising OSError. Execution continues with an invalid cert_loc.",
+        "rationale": "Trigger: verify=True and the CA bundle is not found on disk (the default certs path is missing). The error is downgraded to a warning, so the code proceeds to set conn.ca_certs to a nonexistent or None path, and the failure appears later as an obscure SSL error or, worse, verification is silently misconfigured. This is unrelated to the stated commit purpose.",
+        "confidence": 0.6
+      },
+      {
+        "file": "src/requests/adapters.py",
+        "line": 301,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing extract_zipped_paths means DEFAULT_CA_BUNDLE_PATH is used directly. If the bundle lives inside a zip archive (zipapp/zipimport), it is not a real filesystem path.",
+        "rationale": "Trigger: requests is run from a zipapp or zip import where certs.where() returns a path inside the archive. Previously extract_zipped_paths extracted it to a temp file. Now os.path.exists fails, and combined with the warn change, the connection proceeds without a valid CA bundle. The call was not unused.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1879,
+      "output_tokens": 465,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4441,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "c36073f1ad756e56"
+  },
+  "raw": {
+    "id": "msg_011CgLVYZh4DnMhwjkVUSLDu",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":304,\"severity\":\"high\",\"category\":\"error_handling\",\"description\":\"When the CA bundle path is missing or does not exist, the code now calls warnings.warn instead of raising OSError. Execution continues with an invalid cert_loc.\",\"rationale\":\"Trigger: verify=True and the CA bundle is not found on disk (the default certs path is missing). The error is downgraded to a warning, so the code proceeds to set conn.ca_certs to a nonexistent or None path, and the failure appears later as an obscure SSL error or, worse, verification is silently misconfigured. This is unrelated to the stated commit purpose.\",\"confidence\":0.6},{\"file\":\"src/requests/adapters.py\",\"line\":301,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"Removing extract_zipped_paths means DEFAULT_CA_BUNDLE_PATH is used directly. If the bundle lives inside a zip archive (zipapp/zipimport), it is not a real filesystem path.\",\"rationale\":\"Trigger: requests is run from a zipapp or zip import where certs.where() returns a path inside the archive. Previously extract_zipped_paths extracted it to a temp file. Now os.path.exists fails, and combined with the warn change, the connection proceeds without a valid CA bundle. The call was not unused.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1879,
+      "output_tokens": 465,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 421,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "`if not self.wait` uses truthiness to detect \"no wait\", which is not equivalent to the removed `wait is None or wait == 0` check. Any wait object that defines `__bool__` or `__len__` returning falsy is silently treated as no wait.",
+        "rationale": "Trigger: a user passes a wait callable whose instance is falsy, for example a custom class defining `__len__` or `__bool__`, or a wait_combine of an empty tuple, as in `wait_combine()`. The retry loop then skips calling it and sets upcoming_sleep to 0.0, so the user sees retries with no delay and no error. Another effect is that `self.wait` can now be None or 0 with the `wait_none` normalization removed, and any code that reads `retry.wait` expecting a callable gets None or 0 instead.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2107,
+      "output_tokens": 326,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3714,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "c1f08bb1923e8913"
+  },
+  "raw": {
+    "id": "msg_011CgLRExTJpvWDsVSLe5DH8",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":421,\"severity\":\"medium\",\"category\":\"wrong_condition\",\"description\":\"`if not self.wait` uses truthiness to detect \\\"no wait\\\", which is not equivalent to the removed `wait is None or wait == 0` check. Any wait object that defines `__bool__` or `__len__` returning falsy is silently treated as no wait.\",\"rationale\":\"Trigger: a user passes a wait callable whose instance is falsy, for example a custom class defining `__len__` or `__bool__`, or a wait_combine of an empty tuple, as in `wait_combine()`. The retry loop then skips calling it and sets upcoming_sleep to 0.0, so the user sees retries with no delay and no error. Another effect is that `self.wait` can now be None or 0 with the `wait_none` normalization removed, and any code that reads `retry.wait` expecting a callable gets None or 0 instead.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2107,
+      "output_tokens": 326,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

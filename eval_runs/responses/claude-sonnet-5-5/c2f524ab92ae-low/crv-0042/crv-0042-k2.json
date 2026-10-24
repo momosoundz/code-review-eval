@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 304,
+        "severity": "high",
+        "category": "error_handling",
+        "description": "When the CA bundle path is missing or does not exist, the code now emits a warning instead of raising OSError. Execution then continues with an invalid cert_loc.",
+        "rationale": "Trigger: verify=True and DEFAULT_CA_BUNDLE_PATH is missing or invalid. Previously this raised OSError with a clear message. Now it only warns and continues, so the failure surfaces later as an obscure SSL error, or the bad path is used silently. The commit title only mentions removing an unused extraction call, so this is an unrelated behavior change.",
+        "confidence": 0.7
+      },
+      {
+        "file": "src/requests/adapters.py",
+        "line": 301,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The call to extract_zipped_paths was removed, but it is still needed when the default CA bundle path points inside a zip archive, for example in zipapp or zipimport deployments.",
+        "rationale": "Trigger: requests is run from a zip archive, so certs.where() returns a path inside the zip. Without extraction, os.path.exists fails and no usable CA bundle is found. The call was not unused.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1879,
+      "output_tokens": 412,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4174,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "c36073f1ad756e56"
+  },
+  "raw": {
+    "id": "msg_011CgLVXuYPEjvNvp2CZ8Zd4",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":304,\"severity\":\"high\",\"category\":\"error_handling\",\"description\":\"When the CA bundle path is missing or does not exist, the code now emits a warning instead of raising OSError. Execution then continues with an invalid cert_loc.\",\"rationale\":\"Trigger: verify=True and DEFAULT_CA_BUNDLE_PATH is missing or invalid. Previously this raised OSError with a clear message. Now it only warns and continues, so the failure surfaces later as an obscure SSL error, or the bad path is used silently. The commit title only mentions removing an unused extraction call, so this is an unrelated behavior change.\",\"confidence\":0.7},{\"file\":\"src/requests/adapters.py\",\"line\":301,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The call to extract_zipped_paths was removed, but it is still needed when the default CA bundle path points inside a zip archive, for example in zipapp or zipimport deployments.\",\"rationale\":\"Trigger: requests is run from a zip archive, so certs.where() returns a path inside the zip. Without extraction, os.path.exists fails and no usable CA bundle is found. The call was not unused.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1879,
+      "output_tokens": 412,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

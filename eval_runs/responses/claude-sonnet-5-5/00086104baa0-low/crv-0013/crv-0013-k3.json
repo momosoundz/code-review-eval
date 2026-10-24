@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 376,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "All concurrent or nested calls of the same wrapped function now share and clear one statistics dict. The old code gave each call a fresh copy's dict.",
+        "rationale": "Trigger: the same decorated function runs concurrently (threads, asyncio tasks) or recursively. Each call runs stats.clear() and assigns the shared dict to its own copy, so one call wipes the other's attempt_number and delay_since_first_attempt mid-run. Impact: the statistics are corrupted, and anything that reads them, such as the attempt_number used by stop conditions, can be wrong. The shared dict also breaks the intent of the 'copy' comment above it.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2366,
+      "output_tokens": 269,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3577,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "3e58b62371b612c9"
+  },
+  "raw": {
+    "id": "msg_011CgLQkjsVFWYJ5UKQPRxA1",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":376,\"severity\":\"medium\",\"category\":\"concurrency\",\"description\":\"All concurrent or nested calls of the same wrapped function now share and clear one statistics dict. The old code gave each call a fresh copy's dict.\",\"rationale\":\"Trigger: the same decorated function runs concurrently (threads, asyncio tasks) or recursively. Each call runs stats.clear() and assigns the shared dict to its own copy, so one call wipes the other's attempt_number and delay_since_first_attempt mid-run. Impact: the statistics are corrupted, and anything that reads them, such as the attempt_number used by stop conditions, can be wrong. The shared dict also breaks the intent of the 'copy' comment above it.\",\"confidence\":0.55}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2366,
+      "output_tokens": 269,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

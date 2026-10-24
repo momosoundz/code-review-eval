@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 213,
+        "severity": "medium",
+        "category": "wrong_operator",
+        "description": "The early-return shortcut returns max(max(0, self.min), self.max), which differs from the original final expression max(max(0, self.min), min(result, self.max)). The min(result, self.max) clamp is omitted. In the original, the result is always bounded by max(min, 0) up to the case where min > max, and the shortcut yields the same in that case; however the shortcut is taken based on a log comparison that can be imprecise.",
+        "rationale": "Trigger: the exponent is just above log(max/multiplier, base), where floating-point error in math.log can make the condition true although multiplier*base**exponent is slightly less than max. The shortcut then returns max instead of the exact smaller value. Impact: the wait time is slightly wrong at the boundary attempt. This is a minor floating-point edge case.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1838,
+      "output_tokens": 315,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3903,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "1411fba03c0901df"
+  },
+  "raw": {
+    "id": "msg_011CgMeJ4hwd6MWcxHXr8AgM",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":213,\"severity\":\"medium\",\"category\":\"wrong_operator\",\"description\":\"The early-return shortcut returns max(max(0, self.min), self.max), which differs from the original final expression max(max(0, self.min), min(result, self.max)). The min(result, self.max) clamp is omitted. In the original, the result is always bounded by max(min, 0) up to the case where min > max, and the shortcut yields the same in that case; however the shortcut is taken based on a log comparison that can be imprecise.\",\"rationale\":\"Trigger: the exponent is just above log(max/multiplier, base), where floating-point error in math.log can make the condition true although multiplier*base**exponent is slightly less than max. The shortcut then returns max instead of the exact smaller value. Impact: the wait time is slightly wrong at the boundary attempt. This is a minor floating-point edge case.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1838,
+      "output_tokens": 315,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

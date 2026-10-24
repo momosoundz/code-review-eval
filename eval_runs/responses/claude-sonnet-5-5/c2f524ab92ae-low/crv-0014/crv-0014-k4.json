@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 378,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "The sync wrapper sets `copy._local.statistics = self._local.statistics`, not the shared `stats` dict. The async version correctly uses `stats`. The copy's retry loop therefore writes to a different dict than the one exposed as `wrapped_f.statistics`.",
+        "rationale": "Trigger: any call to a function decorated with sync @retry. `stats.clear()` empties the exposed dict, and `copy(f)` then updates `copy._local.statistics`, which is `self._local.statistics`. That dict is the previous call's one, or the original per-instance dict. Only after this does `self._local.statistics = stats` run. The exposed `wrapped_f.statistics` stays empty, and a previously held dict is mutated. Users reading `f.statistics` after a call see an empty dict, which breaks the statistics feature.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2497,
+      "output_tokens": 336,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3807,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "831389d6ee1e24ae"
+  },
+  "raw": {
+    "id": "msg_011CgLV5ep8RKbG44heqbRbu",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":378,\"severity\":\"high\",\"category\":\"wrong_variable_or_argument\",\"description\":\"The sync wrapper sets `copy._local.statistics = self._local.statistics`, not the shared `stats` dict. The async version correctly uses `stats`. The copy's retry loop therefore writes to a different dict than the one exposed as `wrapped_f.statistics`.\",\"rationale\":\"Trigger: any call to a function decorated with sync @retry. `stats.clear()` empties the exposed dict, and `copy(f)` then updates `copy._local.statistics`, which is `self._local.statistics`. That dict is the previous call's one, or the original per-instance dict. Only after this does `self._local.statistics = stats` run. The exposed `wrapped_f.statistics` stays empty, and a previously held dict is mutated. Users reading `f.statistics` after a call see an empty dict, which breaks the statistics feature.\",\"confidence\":0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2497,
+      "output_tokens": 336,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

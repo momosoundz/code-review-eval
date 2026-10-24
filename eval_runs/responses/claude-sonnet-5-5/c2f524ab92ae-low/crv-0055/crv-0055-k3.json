@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 592,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The removed block normalized a path beginning with '//' to a single '/'. Now request.path_url is passed to urllib3 unmodified, so a leading '//' goes straight through for non-proxied requests.",
+        "rationale": "Trigger: a request to a URL such as http://host//foo, where path_url is '//foo'. urllib3 can parse a '//'-prefixed target as a scheme-relative URL (authority 'foo') rather than a path, so the wrong host or path may be used and the request can fail or hit the wrong target. This holds unless path_url or urllib3 was changed elsewhere in the same commit to handle it. The diff does not show such a change.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1590,
+      "output_tokens": 270,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3149,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "65402fdef27c9e2c"
+  },
+  "raw": {
+    "id": "msg_011CgLVnhiPo8YLyoMv5obcD",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":592,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The removed block normalized a path beginning with '//' to a single '/'. Now request.path_url is passed to urllib3 unmodified, so a leading '//' goes straight through for non-proxied requests.\",\"rationale\":\"Trigger: a request to a URL such as http://host//foo, where path_url is '//foo'. urllib3 can parse a '//'-prefixed target as a scheme-relative URL (authority 'foo') rather than a path, so the wrong host or path may be used and the request can fail or hit the wrong target. This holds unless path_url or urllib3 was changed elsewhere in the same commit to handle it. The diff does not show such a change.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1590,
+      "output_tokens": 270,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

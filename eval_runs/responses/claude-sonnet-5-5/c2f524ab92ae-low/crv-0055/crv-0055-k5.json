@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 592,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The removed block normalized a path_url starting with \"//\" to a single leading slash before it was passed to urllib3. With it gone, a request path_url like \"//foo\" is handed to urllib3.urlopen unchanged.",
+        "rationale": "Trigger: a request to a URL such as http://host//evil.com/path, so path_url is \"//evil.com/path\". urllib3 treats a url starting with \"//\" as a scheme-relative reference and can parse \"evil.com\" as the host. The request may then be sent to the wrong target or fail. Unless the commit also changes path_url or urllib3 handling elsewhere, which is not visible in this diff, the guard is lost with no replacement.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1590,
+      "output_tokens": 285,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 2883,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "65402fdef27c9e2c"
+  },
+  "raw": {
+    "id": "msg_011CgLVoACMaR65zGeDXv7E9",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":592,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The removed block normalized a path_url starting with \\\"//\\\" to a single leading slash before it was passed to urllib3. With it gone, a request path_url like \\\"//foo\\\" is handed to urllib3.urlopen unchanged.\",\"rationale\":\"Trigger: a request to a URL such as http://host//evil.com/path, so path_url is \\\"//evil.com/path\\\". urllib3 treats a url starting with \\\"//\\\" as a scheme-relative reference and can parse \\\"evil.com\\\" as the host. The request may then be sent to the wrong target or fail. Unless the commit also changes path_url or urllib3 handling elsewhere, which is not visible in this diff, the guard is lost with no replacement.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1590,
+      "output_tokens": 285,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

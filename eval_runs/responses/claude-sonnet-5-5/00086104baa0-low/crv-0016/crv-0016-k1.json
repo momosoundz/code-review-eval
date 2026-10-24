@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 112,
+        "severity": "medium",
+        "category": "wrong_variable_or_argument",
+        "description": "The async `retry_any.__ror__` checks `isinstance(other, retry_all)` when it should check `retry_any`, and the async `retry_all.__rand__` checks `retry_all` correctly. The `__ror__` check is therefore wrong: it unpacks a `retry_all`'s retries into a `retry_any`.",
+        "rationale": "Trigger: `sync_retry_all | async_retry_any`. `retry_base.__or__` dispatches to `other.__ror__(self)`, and the `isinstance(other, retry_all)` branch fires. The result is `retry_any(*all.retries, *any.retries)`, which turns an AND group into separate OR members. The `retry_all` semantics are silently lost, so retries happen under the wrong conditions.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2615,
+      "output_tokens": 319,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3658,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "2a6e05b6ea9f513c"
+  },
+  "raw": {
+    "id": "msg_011CgLQoNKH6dSRJWyc4RSpS",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/asyncio/retry.py\",\"line\":112,\"severity\":\"medium\",\"category\":\"wrong_variable_or_argument\",\"description\":\"The async `retry_any.__ror__` checks `isinstance(other, retry_all)` when it should check `retry_any`, and the async `retry_all.__rand__` checks `retry_all` correctly. The `__ror__` check is therefore wrong: it unpacks a `retry_all`'s retries into a `retry_any`.\",\"rationale\":\"Trigger: `sync_retry_all | async_retry_any`. `retry_base.__or__` dispatches to `other.__ror__(self)`, and the `isinstance(other, retry_all)` branch fires. The result is `retry_any(*all.retries, *any.retries)`, which turns an AND group into separate OR members. The `retry_all` semantics are silently lost, so retries happen under the wrong conditions.\",\"confidence\":0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2615,
+      "output_tokens": 319,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

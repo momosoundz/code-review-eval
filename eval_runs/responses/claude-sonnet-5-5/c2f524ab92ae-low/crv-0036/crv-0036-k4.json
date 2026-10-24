@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 313,
+        "severity": "medium",
+        "category": "wrong_variable_or_argument",
+        "description": "The annotation for `PreparedRequest.headers` was changed to an immutable `Mapping[str, object]`. The runtime object is a mutable `CaseInsensitiveDict`, and the title says to move `Request.headers` back to Mapping, not `PreparedRequest.headers`.",
+        "rationale": "Trigger: user or hook code does `prepared.headers['X'] = ...`, which is the documented way to modify a PreparedRequest, or calls `.update()`/`.pop()`. Mechanism: the Mapping annotation has no `__setitem__`, so type checkers report errors on these valid operations. Impact: false type errors in user code, and the type no longer matches the real behavior. The `object` value type also loses the str/bytes guarantee on prepared headers.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1831,
+      "output_tokens": 316,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3538,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "d6705743290ca9eb"
+  },
+  "raw": {
+    "id": "msg_011CgLVT5N69WJ8V69bgqqJe",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/models.py\",\"line\":313,\"severity\":\"medium\",\"category\":\"wrong_variable_or_argument\",\"description\":\"The annotation for `PreparedRequest.headers` was changed to an immutable `Mapping[str, object]`. The runtime object is a mutable `CaseInsensitiveDict`, and the title says to move `Request.headers` back to Mapping, not `PreparedRequest.headers`.\",\"rationale\":\"Trigger: user or hook code does `prepared.headers['X'] = ...`, which is the documented way to modify a PreparedRequest, or calls `.update()`/`.pop()`. Mechanism: the Mapping annotation has no `__setitem__`, so type checkers report errors on these valid operations. Impact: false type errors in user code, and the type no longer matches the real behavior. The `object` value type also loses the str/bytes guarantee on prepared headers.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1831,
+      "output_tokens": 316,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

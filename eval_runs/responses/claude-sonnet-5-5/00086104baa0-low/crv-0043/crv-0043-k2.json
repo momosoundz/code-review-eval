@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 421,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "`if not self.wait` uses truthiness to detect \"no wait\". A wait strategy object that defines `__len__` or `__bool__` returning falsy (or an empty composite) is silently treated as no wait. `wait_combine` and `wait_chain` may also be affected.",
+        "rationale": "Trigger: a custom wait callable object with `__bool__` or `__len__` that evaluates False (e.g. a wait_chain-like container with no entries, or a Mock). Mechanism: `not self.wait` is True, so the wait is skipped and upcoming_sleep is 0.0 without calling it. Impact: retries run with no delay, silently ignoring the configured wait.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2107,
+      "output_tokens": 281,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3196,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "c1f08bb1923e8913"
+  },
+  "raw": {
+    "id": "msg_011CgLREUyZwXo8GWaW9Kkqn",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":421,\"severity\":\"medium\",\"category\":\"wrong_condition\",\"description\":\"`if not self.wait` uses truthiness to detect \\\"no wait\\\". A wait strategy object that defines `__len__` or `__bool__` returning falsy (or an empty composite) is silently treated as no wait. `wait_combine` and `wait_chain` may also be affected.\",\"rationale\":\"Trigger: a custom wait callable object with `__bool__` or `__len__` that evaluates False (e.g. a wait_chain-like container with no entries, or a Mock). Mechanism: `not self.wait` is True, so the wait is skipped and upcoming_sleep is 0.0 without calling it. Impact: retries run with no delay, silently ignoring the configured wait.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2107,
+      "output_tokens": 281,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

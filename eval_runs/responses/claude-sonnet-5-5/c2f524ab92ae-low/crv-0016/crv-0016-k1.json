@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 112,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "In async retry_any.__ror__, the flatten check tests `isinstance(other, retry_all)` instead of `retry_any`. A retry_all on the left is spliced into a retry_any, which changes the logic.",
+        "rationale": "Trigger: `(a & b) | async_retry_any(c, d)`, where the left operand is a retry_all. The code returns `retry_any(a, b, c, d)`, which retries if any of a, b, c or d holds. The intended meaning is `(a and b) or c or d`. Retries then fire when only `a` is true, so retries happen when they should not.",
+        "confidence": 0.9
+      },
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 134,
+        "severity": "low",
+        "category": "maintainability",
+        "description": "The async retry_all.__rand__ flatten check is correct, but the matching async retry_any.__ror__ is wrong because it uses retry_all, which suggests the two methods were copy-pasted.",
+        "rationale": "The copy-paste pattern across the two methods risks the same kind of bug recurring.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2739,
+      "output_tokens": 402,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4418,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "54bc3d49e9eef4a3"
+  },
+  "raw": {
+    "id": "msg_011CgLV7PbQ7dHMqsq3Hwc4G",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/asyncio/retry.py\",\"line\":112,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"In async retry_any.__ror__, the flatten check tests `isinstance(other, retry_all)` instead of `retry_any`. A retry_all on the left is spliced into a retry_any, which changes the logic.\",\"rationale\":\"Trigger: `(a & b) | async_retry_any(c, d)`, where the left operand is a retry_all. The code returns `retry_any(a, b, c, d)`, which retries if any of a, b, c or d holds. The intended meaning is `(a and b) or c or d`. Retries then fire when only `a` is true, so retries happen when they should not.\",\"confidence\":0.9},{\"file\":\"tenacity/asyncio/retry.py\",\"line\":134,\"severity\":\"low\",\"category\":\"maintainability\",\"description\":\"The async retry_all.__rand__ flatten check is correct, but the matching async retry_any.__ror__ is wrong because it uses retry_all, which suggests the two methods were copy-pasted.\",\"rationale\":\"The copy-paste pattern across the two methods risks the same kind of bug recurring.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2739,
+      "output_tokens": 402,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

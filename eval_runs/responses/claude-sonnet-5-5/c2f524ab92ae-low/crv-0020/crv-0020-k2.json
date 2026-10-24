@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 226,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "__aexit__ calls self.__exit__(None, None, None) instead of passing exc_type, exc_value, traceback, so the exception raised in the async with body is discarded.",
+        "rationale": "Trigger: an exception is raised inside `async with attempt:`. __exit__ gets None and takes the success path, calling retry_state.set_result(None) and returning None. The failure is recorded as a success, so the retry does not happen and the exception is not recorded in the retry state. The sync __exit__ presumably branches on exc_type to call set_exception and suppress the error, so passing the real arguments is required.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1671,
+      "output_tokens": 257,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3053,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "3040043f88ebe9e3"
+  },
+  "raw": {
+    "id": "msg_011CgLVCHxDCZCm17ExXC1o2",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":226,\"severity\":\"high\",\"category\":\"wrong_variable_or_argument\",\"description\":\"__aexit__ calls self.__exit__(None, None, None) instead of passing exc_type, exc_value, traceback, so the exception raised in the async with body is discarded.\",\"rationale\":\"Trigger: an exception is raised inside `async with attempt:`. __exit__ gets None and takes the success path, calling retry_state.set_result(None) and returning None. The failure is recorded as a success, so the retry does not happen and the exception is not recorded in the retry state. The sync __exit__ presumably branches on exc_type to call set_exception and suppress the error, so passing the real arguments is required.\",\"confidence\":0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1671,
+      "output_tokens": 257,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

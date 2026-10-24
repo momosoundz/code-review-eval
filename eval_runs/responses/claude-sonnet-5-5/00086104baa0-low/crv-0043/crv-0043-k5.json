@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 421,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "`if not self.wait` uses truthiness to detect \"no wait\". Any wait object that defines `__bool__` or `__len__` and evaluates falsy is silently skipped, giving a 0.0 sleep. For example, a custom wait object that defines `__len__`, or a `wait_combine` of an empty tuple of strategies.",
+        "rationale": "Trigger: a wait callable that is falsy but valid, such as a custom class with `__len__` returning 0. Mechanism: `not self.wait` is true, so the wait callable is never invoked. Impact: retries run with no delay and any side effects are skipped, with no error. The previous code avoided this by testing only `None` and `== 0`.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2107,
+      "output_tokens": 287,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3195,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "c1f08bb1923e8913"
+  },
+  "raw": {
+    "id": "msg_011CgLRFERzY8mfc7abmJYRQ",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":421,\"severity\":\"medium\",\"category\":\"wrong_condition\",\"description\":\"`if not self.wait` uses truthiness to detect \\\"no wait\\\". Any wait object that defines `__bool__` or `__len__` and evaluates falsy is silently skipped, giving a 0.0 sleep. For example, a custom wait object that defines `__len__`, or a `wait_combine` of an empty tuple of strategies.\",\"rationale\":\"Trigger: a wait callable that is falsy but valid, such as a custom class with `__len__` returning 0. Mechanism: `not self.wait` is true, so the wait callable is never invoked. Impact: retries run with no delay and any side effects are skipped, with no error. The previous code avoided this by testing only `None` and `== 0`.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2107,
+      "output_tokens": 287,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

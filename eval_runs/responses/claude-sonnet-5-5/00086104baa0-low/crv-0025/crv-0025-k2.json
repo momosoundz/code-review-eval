@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1319,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "Arguments that are hidden or deprecated are not filtered out. The new code includes every Argument in the help listing, and it uses a fallback record built from make_metavar for any argument without help.",
+        "rationale": "Trigger: a command with one documented argument and another argument that is hidden or intentionally undocumented. Mechanism: the old code only listed arguments whose get_help_record returned a record. The new code builds a fallback record for every argument lacking help and writes it. Impact: the help output changes and may expose arguments the author did not intend to show. This is a deliberate behavior change per the docstring, and Argument does not support hidden, so confidence is low.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1963,
+      "output_tokens": 262,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3295,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "ffc7865a3c0b0a6c"
+  },
+  "raw": {
+    "id": "msg_011CgMeCkCpe7j9gv2SCB48Z",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1319,\"severity\":\"low\",\"category\":\"logic_other\",\"description\":\"Arguments that are hidden or deprecated are not filtered out. The new code includes every Argument in the help listing, and it uses a fallback record built from make_metavar for any argument without help.\",\"rationale\":\"Trigger: a command with one documented argument and another argument that is hidden or intentionally undocumented. Mechanism: the old code only listed arguments whose get_help_record returned a record. The new code builds a fallback record for every argument lacking help and writes it. Impact: the help output changes and may expose arguments the author did not intend to show. This is a deliberate behavior change per the docstring, and Argument does not support hidden, so confidence is low.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1963,
+      "output_tokens": 262,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

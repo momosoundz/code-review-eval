@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3395,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The separator conditional was inverted while moving the join into get_help_spec. The original was `(\"; \" if any_prefix_is_slash else \" / \")`, and the new code is `(\"; \" if not any_prefix_is_slash else \" / \")`.",
+        "rationale": "Trigger: any option with secondary opts, e.g. a boolean flag `--shout/--no-shout`. The original code joined with \" / \" when no slash prefix was used, but the new code joins with \"; \". Help output becomes `--shout; --no-shout` instead of `--shout / --no-shout`. Options using a slash prefix such as `/debug;/no-debug` get \" / \" instead of \"; \". The help text changes for every flag with a secondary option, and help-output tests would fail.",
+        "confidence": 0.88
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2170,
+      "output_tokens": 310,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3224,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "0f93c8620e419ffe"
+  },
+  "raw": {
+    "id": "msg_011CgLVKxPhYJbVuAaihDTZd",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":3395,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The separator conditional was inverted while moving the join into get_help_spec. The original was `(\\\"; \\\" if any_prefix_is_slash else \\\" / \\\")`, and the new code is `(\\\"; \\\" if not any_prefix_is_slash else \\\" / \\\")`.\",\"rationale\":\"Trigger: any option with secondary opts, e.g. a boolean flag `--shout/--no-shout`. The original code joined with \\\" / \\\" when no slash prefix was used, but the new code joins with \\\"; \\\". Help output becomes `--shout; --no-shout` instead of `--shout / --no-shout`. Options using a slash prefix such as `/debug;/no-debug` get \\\" / \\\" instead of \\\"; \\\". The help text changes for every flag with a secondary option, and help-output tests would fail.\",\"confidence\":0.88}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2170,
+      "output_tokens": 310,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

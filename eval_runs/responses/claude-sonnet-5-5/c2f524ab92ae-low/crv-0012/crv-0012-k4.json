@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 213,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The shortcut is inverted: it fires when the exponent is below log_base(max/multiplier), meaning the computed wait would be below max, yet it returns max. It should fire when the exponent is greater than or equal to that threshold, since only then is the result capped at max.",
+        "rationale": "Trigger: multiplier=1, exp_base=2, max=10, attempt_number=1. exponent=0 < log2(10)\u22483.3, so the shortcut returns max(max(0,min),10)=10 instead of 1. Early attempts wait the maximum time instead of backing off exponentially. Late attempts, where the cap applies, go to the normal path and still work.",
+        "confidence": 0.93
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1812,
+      "output_tokens": 270,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 2938,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a7694e2c1dc3fa55"
+  },
+  "raw": {
+    "id": "msg_011CgLV2mzeguPv9BJFKo842",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":213,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The shortcut is inverted: it fires when the exponent is below log_base(max/multiplier), meaning the computed wait would be below max, yet it returns max. It should fire when the exponent is greater than or equal to that threshold, since only then is the result capped at max.\",\"rationale\":\"Trigger: multiplier=1, exp_base=2, max=10, attempt_number=1. exponent=0 < log2(10)\u22483.3, so the shortcut returns max(max(0,min),10)=10 instead of 1. Early attempts wait the maximum time instead of backing off exponentially. Late attempts, where the cap applies, go to the normal path and still work.\",\"confidence\":0.93}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1812,
+      "output_tokens": 270,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

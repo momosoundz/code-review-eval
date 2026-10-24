@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 793,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "Response.__init__ now reads self.raw.reason, but self.raw is None on a freshly constructed Response (it is set later by the adapter, and Response() is built directly in tests and user code). The original code set self.reason = None.",
+        "rationale": "Trigger: calling Response() directly, or any code path where raw is not yet assigned. Mechanism: attribute access on None raises AttributeError in __init__. Impact: crash on construction. Even when raw is set, it may lack a reason, and the adapter's later assignment of response.reason is overwritten or inconsistent. The title only says to constrain the type to str, not to change the initialization logic.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1687,
+      "output_tokens": 265,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3774,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "2bb8bd9869d82518"
+  },
+  "raw": {
+    "id": "msg_011CgLVV1vGWZAPu7UXuNeHo",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/models.py\",\"line\":793,\"severity\":\"high\",\"category\":\"null_or_missing_value\",\"description\":\"Response.__init__ now reads self.raw.reason, but self.raw is None on a freshly constructed Response (it is set later by the adapter, and Response() is built directly in tests and user code). The original code set self.reason = None.\",\"rationale\":\"Trigger: calling Response() directly, or any code path where raw is not yet assigned. Mechanism: attribute access on None raises AttributeError in __init__. Impact: crash on construction. Even when raw is set, it may lack a reason, and the adapter's later assignment of response.reason is overwritten or inconsistent. The title only says to constrain the type to str, not to change the initialization logic.\",\"confidence\":0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1687,
+      "output_tokens": 265,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

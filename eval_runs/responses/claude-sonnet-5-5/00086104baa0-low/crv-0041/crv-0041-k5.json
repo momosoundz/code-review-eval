@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 301,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The adapter no longer passes DEFAULT_CA_BUNDLE_PATH through extract_zipped_paths. If the default CA bundle path points inside a zip archive, such as a zipapp or a zipped package, os.path.exists fails on it.",
+        "rationale": "Trigger: requests runs from a zip archive and verify=True, so DEFAULT_CA_BUNDLE_PATH is a path inside the zip. Mechanism: the raw path is no longer extracted, so os.path.exists(cert_loc) is False. Impact: an OSError about an invalid CA bundle path is raised on every HTTPS request, which is a regression for zipped deployments. The new comment says certifi extracts the file, but certs.where() is evaluated at import time and may return a path that was never extracted. This is inferred from the diff and was not run.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1756,
+      "output_tokens": 331,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3516,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "dd1bf95d9a7a35b1"
+  },
+  "raw": {
+    "id": "msg_011CgLRCJUjrqnVd4QAhzrCz",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":301,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The adapter no longer passes DEFAULT_CA_BUNDLE_PATH through extract_zipped_paths. If the default CA bundle path points inside a zip archive, such as a zipapp or a zipped package, os.path.exists fails on it.\",\"rationale\":\"Trigger: requests runs from a zip archive and verify=True, so DEFAULT_CA_BUNDLE_PATH is a path inside the zip. Mechanism: the raw path is no longer extracted, so os.path.exists(cert_loc) is False. Impact: an OSError about an invalid CA bundle path is raised on every HTTPS request, which is a regression for zipped deployments. The new comment says certifi extracts the file, but certs.where() is evaluated at import time and may return a path that was never extracted. This is inferred from the diff and was not run.\",\"confidence\":0.55}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1756,
+      "output_tokens": 331,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 258,
+        "severity": "medium",
+        "category": "wrong_literal_or_default",
+        "description": "The new `min` parameter defaults to 1, whereas the previous behavior had effectively no minimum (floor of 0). Existing users who construct wait_exponential_jitter with a small initial (e.g. 0.1) or a small jitter now get at least 1 second of wait.",
+        "rationale": "Trigger: wait_exponential_jitter(initial=0.1, max=5) with no min argument. The return is now max(max(0, 1), ...) = at least 1s, whereas before it could be 0.1s. Users see longer waits and retry timing changes silently. A default of 0 would preserve the old behavior.",
+        "confidence": 0.85
+      },
+      {
+        "file": "tenacity/wait.py",
+        "line": 273,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "The min floor is applied after the max cap, so if min > max the result is min, exceeding the configured maximum wait.",
+        "rationale": "Trigger: wait_exponential_jitter(max=0.5) with the default min=1. The return is 1, which is greater than max. The max bound is silently violated.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2020,
+      "output_tokens": 400,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3641,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "1182a1436f18c412"
+  },
+  "raw": {
+    "id": "msg_011CgLQrV3BEgoMgcC2zHDDC",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":258,\"severity\":\"medium\",\"category\":\"wrong_literal_or_default\",\"description\":\"The new `min` parameter defaults to 1, whereas the previous behavior had effectively no minimum (floor of 0). Existing users who construct wait_exponential_jitter with a small initial (e.g. 0.1) or a small jitter now get at least 1 second of wait.\",\"rationale\":\"Trigger: wait_exponential_jitter(initial=0.1, max=5) with no min argument. The return is now max(max(0, 1), ...) = at least 1s, whereas before it could be 0.1s. Users see longer waits and retry timing changes silently. A default of 0 would preserve the old behavior.\",\"confidence\":0.85},{\"file\":\"tenacity/wait.py\",\"line\":273,\"severity\":\"low\",\"category\":\"logic_other\",\"description\":\"The min floor is applied after the max cap, so if min > max the result is min, exceeding the configured maximum wait.\",\"rationale\":\"Trigger: wait_exponential_jitter(max=0.5) with the default min=1. The return is 1, which is greater than max. The max bound is silently violated.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2020,
+      "output_tokens": 400,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

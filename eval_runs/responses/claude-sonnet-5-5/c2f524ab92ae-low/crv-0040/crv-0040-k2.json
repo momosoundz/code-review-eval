@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/sessions.py",
+        "line": 671,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "`get` now takes `params` as an explicit named parameter but no longer forwards it to `self.request`. The call at line 671 is still `self.request(\"GET\", url, **kwargs)`, and `params` is no longer in `kwargs`.",
+        "rationale": "Trigger: `session.get(url, params={'a': 1})` or `session.get(url, {'a': 1})`. Mechanism: `params` binds to the new named parameter, so it is removed from `kwargs` and silently dropped. Impact: the query string is never sent, and callers get wrong results with no error.",
+        "confidence": 0.96
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1908,
+      "output_tokens": 249,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 2500,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a4d6f77f87e107d6"
+  },
+  "raw": {
+    "id": "msg_011CgLVWDAEJT2WcpBkrBW7W",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/sessions.py\",\"line\":671,\"severity\":\"high\",\"category\":\"wrong_variable_or_argument\",\"description\":\"`get` now takes `params` as an explicit named parameter but no longer forwards it to `self.request`. The call at line 671 is still `self.request(\\\"GET\\\", url, **kwargs)`, and `params` is no longer in `kwargs`.\",\"rationale\":\"Trigger: `session.get(url, params={'a': 1})` or `session.get(url, {'a': 1})`. Mechanism: `params` binds to the new named parameter, so it is removed from `kwargs` and silently dropped. Impact: the query string is never sent, and callers get wrong results with no error.\",\"confidence\":0.96}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1908,
+      "output_tokens": 249,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

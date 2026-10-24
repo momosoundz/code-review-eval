@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 793,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "Response.__init__ now reads self.raw.reason, but self.raw is None on a freshly constructed Response, and the adapter sets raw and reason only after construction. This raises AttributeError.",
+        "rationale": "Trigger: any call to Response(), e.g. in adapters.build_response or by users and tests. Mechanism: self.raw is initialized to None in __init__, so accessing .reason on None fails. Impact: constructing any Response crashes, breaking essentially all requests.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1687,
+      "output_tokens": 215,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 2814,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "2bb8bd9869d82518"
+  },
+  "raw": {
+    "id": "msg_011CgLVUaQr5LPfYUxa2C92W",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/models.py\",\"line\":793,\"severity\":\"high\",\"category\":\"null_or_missing_value\",\"description\":\"Response.__init__ now reads self.raw.reason, but self.raw is None on a freshly constructed Response, and the adapter sets raw and reason only after construction. This raises AttributeError.\",\"rationale\":\"Trigger: any call to Response(), e.g. in adapters.build_response or by users and tests. Mechanism: self.raw is initialized to None in __init__, so accessing .reason on None fails. Impact: constructing any Response crashes, breaking essentially all requests.\",\"confidence\":0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1687,
+      "output_tokens": 215,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

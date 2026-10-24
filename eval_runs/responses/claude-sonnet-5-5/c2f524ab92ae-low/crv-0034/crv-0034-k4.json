@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 99,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "When ANSI stripping is triggered, the code calls `.strip()` on the whole prompt text. That removes leading and trailing whitespace, not only the escape codes.",
+        "rationale": "Trigger: the output is redirected (not a tty) or color is disabled, and the prompt ends with a space, e.g. 'Name: ' or the confirm suffix ' [y/N]: '. strip_ansi alone removes the codes, but `.strip()` also drops the trailing space, so the prompt prints as 'Name:' directly against the user's input. Leading indentation and newlines are lost too. The output differs depending on whether stripping applies, and the title only promises ANSI stripping.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1968,
+      "output_tokens": 276,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 2856,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "ed6f09c4de2cbd87"
+  },
+  "raw": {
+    "id": "msg_011CgLVQo3WvQRxUpxwXt2yp",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/termui.py\",\"line\":99,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"When ANSI stripping is triggered, the code calls `.strip()` on the whole prompt text. That removes leading and trailing whitespace, not only the escape codes.\",\"rationale\":\"Trigger: the output is redirected (not a tty) or color is disabled, and the prompt ends with a space, e.g. 'Name: ' or the confirm suffix ' [y/N]: '. strip_ansi alone removes the codes, but `.strip()` also drops the trailing space, so the prompt prints as 'Name:' directly against the user's input. Leading indentation and newlines are lost too. The output differs depending on whether stripping applies, and the title only promises ANSI stripping.\",\"confidence\":0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1968,
+      "output_tokens": 276,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

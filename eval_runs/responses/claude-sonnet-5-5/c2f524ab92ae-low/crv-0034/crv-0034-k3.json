@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 99,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "When ANSI stripping applies, the code calls `.strip()` on the prompt text in addition to `strip_ansi`. This removes leading and trailing whitespace that is part of the prompt.",
+        "rationale": "Trigger: a prompt such as 'Name: ' or 'Continue? [y/N]: ' on a non-tty stream or under CliRunner, where stripping is active. The trailing space is removed, so the user's input appears directly after the colon with no separator. The title only calls for ANSI removal, and the same prompt keeps its trailing space when stripping is not active, so behavior is inconsistent.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1968,
+      "output_tokens": 253,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 2837,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "ed6f09c4de2cbd87"
+  },
+  "raw": {
+    "id": "msg_011CgLVQarnE4yD5zHMfKzew",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/termui.py\",\"line\":99,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"When ANSI stripping applies, the code calls `.strip()` on the prompt text in addition to `strip_ansi`. This removes leading and trailing whitespace that is part of the prompt.\",\"rationale\":\"Trigger: a prompt such as 'Name: ' or 'Continue? [y/N]: ' on a non-tty stream or under CliRunner, where stripping is active. The trailing space is removed, so the user's input appears directly after the colon with no separator. The title only calls for ANSI removal, and the same prompt keeps its trailing space when stripping is not active, so behavior is inconsistent.\",\"confidence\":0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1968,
+      "output_tokens": 253,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

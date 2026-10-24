@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 244,
+        "severity": "medium",
+        "category": "wrong_operator",
+        "description": "The regex check was changed from `match` to `fullmatch`, so a pattern that previously matched a prefix of the exception message now has to match the whole message.",
+        "rationale": "Trigger: `match=\"timeout\"` with an exception message like \"timeout after 5s\". `re.match` returned True and retried. `fullmatch` returns False, so retries silently stop. Existing users who pass prefix patterns see a behavior change that the empty-string handling fix does not call for.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1732,
+      "output_tokens": 211,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 2716,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "51789677b9874d69"
+  },
+  "raw": {
+    "id": "msg_011CgLQuMzrN5RM5djut7Wyt",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/retry.py\",\"line\":244,\"severity\":\"medium\",\"category\":\"wrong_operator\",\"description\":\"The regex check was changed from `match` to `fullmatch`, so a pattern that previously matched a prefix of the exception message now has to match the whole message.\",\"rationale\":\"Trigger: `match=\\\"timeout\\\"` with an exception message like \\\"timeout after 5s\\\". `re.match` returned True and retried. `fullmatch` returns False, so retries silently stop. Existing users who pass prefix patterns see a behavior change that the empty-string handling fix does not call for.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1732,
+      "output_tokens": 211,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

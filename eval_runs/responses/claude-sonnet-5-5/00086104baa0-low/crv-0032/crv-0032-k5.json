@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1189,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The rewrite removes only `param.opts` from the reserved names and no longer removes `param.secondary_opts`. The original code removed both.",
+        "rationale": "Trigger: a boolean flag such as `--verbose/--no-verbose`, or any option whose secondary name collides with a help name (e.g. a flag declared as `-v/-h`, where `-h` is a secondary opt). Mechanism: the secondary opt stays in `all_names`, so the help option is still registered under that name. Impact: the help option and the user's option both claim the name, which causes a conflict or makes the user's flag unusable, a regression from the previous behavior.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1715,
+      "output_tokens": 261,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4040,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "2514beb431c2b241"
+  },
+  "raw": {
+    "id": "msg_011CgLR4r1KtQrmDavXwQRzp",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1189,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The rewrite removes only `param.opts` from the reserved names and no longer removes `param.secondary_opts`. The original code removed both.\",\"rationale\":\"Trigger: a boolean flag such as `--verbose/--no-verbose`, or any option whose secondary name collides with a help name (e.g. a flag declared as `-v/-h`, where `-h` is a secondary opt). Mechanism: the secondary opt stays in `all_names`, so the help option is still registered under that name. Impact: the help option and the user's option both claim the name, which causes a conflict or makes the user's flag unusable, a regression from the previous behavior.\",\"confidence\":0.85}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1715,
+      "output_tokens": 261,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

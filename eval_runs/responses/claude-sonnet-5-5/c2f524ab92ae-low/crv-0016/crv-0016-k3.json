@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 112,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "async retry_any.__ror__ checks `isinstance(other, retry_all)` and then flattens `other.retries` into a retry_any. The check should be `retry_any`.",
+        "rationale": "Trigger: `retry_all(a, b) | async_retry_any(c, d)`. The code returns `retry_any(a, b, c, d)`, which turns the AND group into an OR. Retry decisions then silently change, since `a and b` becomes `a or b`. The same-type flattening for `retry_any | retry_any` is not performed.",
+        "confidence": 0.93
+      },
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 134,
+        "severity": "low",
+        "category": "maintainability",
+        "description": "The async retry_all.__rand__ flattening is correct only in the sense that it duplicates the sync logic. It does not handle the case where `other` is an async-flavoured retry_all, because the async class is a different class from the sync `retry_all`.",
+        "rationale": "The isinstance check refers to whichever `retry_all` is in scope in the async module. Mixed sync and async chains may therefore not flatten consistently. Flattening is only an optimisation, so the behaviour stays correct.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2739,
+      "output_tokens": 448,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4012,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "54bc3d49e9eef4a3"
+  },
+  "raw": {
+    "id": "msg_011CgLV842S3MjMCYqNXZ7uL",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/asyncio/retry.py\",\"line\":112,\"severity\":\"high\",\"category\":\"wrong_variable_or_argument\",\"description\":\"async retry_any.__ror__ checks `isinstance(other, retry_all)` and then flattens `other.retries` into a retry_any. The check should be `retry_any`.\",\"rationale\":\"Trigger: `retry_all(a, b) | async_retry_any(c, d)`. The code returns `retry_any(a, b, c, d)`, which turns the AND group into an OR. Retry decisions then silently change, since `a and b` becomes `a or b`. The same-type flattening for `retry_any | retry_any` is not performed.\",\"confidence\":0.93},{\"file\":\"tenacity/asyncio/retry.py\",\"line\":134,\"severity\":\"low\",\"category\":\"maintainability\",\"description\":\"The async retry_all.__rand__ flattening is correct only in the sense that it duplicates the sync logic. It does not handle the case where `other` is an async-flavoured retry_all, because the async class is a different class from the sync `retry_all`.\",\"rationale\":\"The isinstance check refers to whichever `retry_all` is in scope in the async module. Mixed sync and async chains may therefore not flatten consistently. Flattening is only an optimisation, so the behaviour stays correct.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2739,
+      "output_tokens": 448,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

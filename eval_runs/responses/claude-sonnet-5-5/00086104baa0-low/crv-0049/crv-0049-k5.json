@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 239,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "The `hasattr(fp, \"read\")` fallback was removed, leaving only `isinstance(fp, _SupportsRead)`. File-like objects that have a `read` attribute but fail the runtime protocol check are no longer read.",
+        "rationale": "Trigger: a caller passes a file-like object to `files=` whose `read` is a non-callable attribute or is provided dynamically in a way `runtime_checkable` does not detect. The branch is skipped and the code falls through to the later `else`, which treats the object as raw data. Impact: the multipart upload body contains the object itself rather than its contents, or the request raises, where it previously worked.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1675,
+      "output_tokens": 267,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 2904,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "761607eaab997ea2"
+  },
+  "raw": {
+    "id": "msg_011CgLRMuDHR1hw6AXGFBAHG",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/models.py\",\"line\":239,\"severity\":\"medium\",\"category\":\"wrong_condition\",\"description\":\"The `hasattr(fp, \\\"read\\\")` fallback was removed, leaving only `isinstance(fp, _SupportsRead)`. File-like objects that have a `read` attribute but fail the runtime protocol check are no longer read.\",\"rationale\":\"Trigger: a caller passes a file-like object to `files=` whose `read` is a non-callable attribute or is provided dynamically in a way `runtime_checkable` does not detect. The branch is skipped and the code falls through to the later `else`, which treats the object as raw data. Impact: the multipart upload body contains the object itself rather than its contents, or the request raises, where it previously worked.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1675,
+      "output_tokens": 267,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

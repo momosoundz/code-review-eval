@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 213,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The early-return condition is inverted. It fires when the exponent is below log_base(max/multiplier), meaning the computed wait is still below max, and it then returns max. The fast path is meant for the case where the exponent is large enough that the wait would overflow or be capped.",
+        "rationale": "Trigger: multiplier=1, exp_base=2, max=10, attempt_number=1. The exponent is 0 and log2(10) is about 3.3, so the condition is true and max(max(0, min), 10) returns 10. The correct wait would be 1. Every early attempt waits max seconds instead of growing exponentially. The final return also uses max(\u2026, self.max) instead of min, so it can never return less than max.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1812,
+      "output_tokens": 283,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3267,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a7694e2c1dc3fa55"
+  },
+  "raw": {
+    "id": "msg_011CgLV2zcB4PBQrf6sEYmru",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":213,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The early-return condition is inverted. It fires when the exponent is below log_base(max/multiplier), meaning the computed wait is still below max, and it then returns max. The fast path is meant for the case where the exponent is large enough that the wait would overflow or be capped.\",\"rationale\":\"Trigger: multiplier=1, exp_base=2, max=10, attempt_number=1. The exponent is 0 and log2(10) is about 3.3, so the condition is true and max(max(0, min), 10) returns 10. The correct wait would be 1. Every early attempt waits max seconds instead of growing exponentially. The final return also uses max(\u2026, self.max) instead of min, so it can never return less than max.\",\"confidence\":0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1812,
+      "output_tokens": 283,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1189,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The rewrite removes only names found in param.opts and drops the removal of param.secondary_opts. Names reserved by a secondary option (such as the off-switch of a boolean flag like --help/--no-help) are no longer excluded from the help option names.",
+        "rationale": "Trigger: a command declares a boolean flag whose secondary opt matches an entry in help_option_names, for example an option with '--foo/-h' where -h is a secondary opt, and the context uses help_option_names including '-h'. The old code excluded it. The new code keeps '-h' in the list, so the help option is registered with the same name and conflicts with the user's parameter. Impact: duplicate option registration or the help option shadowing the user's secondary flag.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1715,
+      "output_tokens": 289,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3071,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "2514beb431c2b241"
+  },
+  "raw": {
+    "id": "msg_011CgLR4cv33wUsBZsvw1zqp",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1189,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The rewrite removes only names found in param.opts and drops the removal of param.secondary_opts. Names reserved by a secondary option (such as the off-switch of a boolean flag like --help/--no-help) are no longer excluded from the help option names.\",\"rationale\":\"Trigger: a command declares a boolean flag whose secondary opt matches an entry in help_option_names, for example an option with '--foo/-h' where -h is a secondary opt, and the context uses help_option_names including '-h'. The old code excluded it. The new code keeps '-h' in the list, so the help option is registered with the same name and conflicts with the user's parameter. Impact: duplicate option registration or the help option shadowing the user's secondary flag.\",\"confidence\":0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1715,
+      "output_tokens": 289,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

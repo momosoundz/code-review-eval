@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 112,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "async retry_any.__ror__ flattens `other` when it is an instance of retry_all, but the check should be for retry_any. `retry_all | retry_any` therefore loses the AND semantics of the retry_all operand.",
+        "rationale": "Trigger: `(a & b) | async_retry_any(c, d)`. The code splices `other.retries` (a, b) into retry_any(a, b, c, d), turning `(a and b) or c or d` into `a or b or c or d`. The retry decision becomes silently wrong.",
+        "confidence": 0.93
+      },
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 134,
+        "severity": "low",
+        "category": "wrong_condition",
+        "description": "async retry_all.__rand__ flattens when other is a retry_all, which is correct. It does not handle the sync/async mix the type hints allow, but that is not a clear defect.",
+        "rationale": "Low confidence that this is a real bug.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2739,
+      "output_tokens": 361,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3295,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "54bc3d49e9eef4a3"
+  },
+  "raw": {
+    "id": "msg_011CgLV8XecFfPMyUpCuPVQg",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/asyncio/retry.py\",\"line\":112,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"async retry_any.__ror__ flattens `other` when it is an instance of retry_all, but the check should be for retry_any. `retry_all | retry_any` therefore loses the AND semantics of the retry_all operand.\",\"rationale\":\"Trigger: `(a & b) | async_retry_any(c, d)`. The code splices `other.retries` (a, b) into retry_any(a, b, c, d), turning `(a and b) or c or d` into `a or b or c or d`. The retry decision becomes silently wrong.\",\"confidence\":0.93},{\"file\":\"tenacity/asyncio/retry.py\",\"line\":134,\"severity\":\"low\",\"category\":\"wrong_condition\",\"description\":\"async retry_all.__rand__ flattens when other is a retry_all, which is correct. It does not handle the sync/async mix the type hints allow, but that is not a clear defect.\",\"rationale\":\"Low confidence that this is a real bug.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2739,
+      "output_tokens": 361,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

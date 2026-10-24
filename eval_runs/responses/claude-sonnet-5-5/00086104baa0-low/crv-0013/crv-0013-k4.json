@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 376,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "All concurrent or nested calls of the same wrapped function now share and clear one statistics dict. Previously each call created a copy with its own statistics dict.",
+        "rationale": "Trigger: two threads, or a recursive call, invoke the same decorated function. The second call runs stats.clear() and writes into the same dict that the first call is still updating, so the first call's attempt_number and delay_since_first_attempt are reset or interleaved. Impact: wrong statistics, and possibly wrong behavior for code that reads them. The code comment on copy() says it exists to prevent overwriting local contexts across repeated calls in the same stack, and this change undoes that for statistics.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2366,
+      "output_tokens": 272,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3520,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "3e58b62371b612c9"
+  },
+  "raw": {
+    "id": "msg_011CgLQm11KGrAUatUKhm12e",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":376,\"severity\":\"medium\",\"category\":\"concurrency\",\"description\":\"All concurrent or nested calls of the same wrapped function now share and clear one statistics dict. Previously each call created a copy with its own statistics dict.\",\"rationale\":\"Trigger: two threads, or a recursive call, invoke the same decorated function. The second call runs stats.clear() and writes into the same dict that the first call is still updating, so the first call's attempt_number and delay_since_first_attempt are reset or interleaved. Impact: wrong statistics, and possibly wrong behavior for code that reads them. The code comment on copy() says it exists to prevent overwriting local contexts across repeated calls in the same stack, and this change undoes that for statistics.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2366,
+      "output_tokens": 272,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

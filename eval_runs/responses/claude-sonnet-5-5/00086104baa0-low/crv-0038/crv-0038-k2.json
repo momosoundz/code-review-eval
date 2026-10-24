@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 793,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "Response.__init__ now reads self.raw.reason, but self.raw is not set at that point in __init__ and defaults to None. Adapter.build_response sets resp.raw after construction. Also, Response() created directly has raw=None.",
+        "rationale": "Trigger: any `Response()` construction, including the one in HTTPAdapter.build_response, or in tests/mocks. In requests, `self.raw = None` is set later in __init__, so it either raises AttributeError (if raw not yet defined) or, if defined as None, raises AttributeError 'NoneType has no attribute reason'. Impact: every request crashes, and the later assignment of reason in the adapter becomes redundant.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1574,
+      "output_tokens": 281,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3452,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "91fc2c2a353fa582"
+  },
+  "raw": {
+    "id": "msg_011CgLR8ei3pPgAnpP8JmkAc",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/models.py\",\"line\":793,\"severity\":\"high\",\"category\":\"null_or_missing_value\",\"description\":\"Response.__init__ now reads self.raw.reason, but self.raw is not set at that point in __init__ and defaults to None. Adapter.build_response sets resp.raw after construction. Also, Response() created directly has raw=None.\",\"rationale\":\"Trigger: any `Response()` construction, including the one in HTTPAdapter.build_response, or in tests/mocks. In requests, `self.raw = None` is set later in __init__, so it either raises AttributeError (if raw not yet defined) or, if defined as None, raises AttributeError 'NoneType has no attribute reason'. Impact: every request crashes, and the later assignment of reason in the adapter becomes redundant.\",\"confidence\":0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1574,
+      "output_tokens": 281,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

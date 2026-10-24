@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 213,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The shortcut is inverted: it fires when the exponent is below log_base(max/multiplier), i.e. when the computed wait is still below max, yet it returns max. The comparison should be `>=`.",
+        "rationale": "Trigger: wait_exponential(multiplier=1, max=60) on attempt 1. exponent=0 < log2(60)\u22485.9, so it returns 60 instead of 1. Early attempts then always wait max, and later attempts that should be capped fall through to normal computation. Backoff behavior is broken for every normal use.",
+        "confidence": 0.93
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1812,
+      "output_tokens": 235,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3217,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a7694e2c1dc3fa55"
+  },
+  "raw": {
+    "id": "msg_011CgLV26642Ga7Vkg8RPwDq",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":213,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The shortcut is inverted: it fires when the exponent is below log_base(max/multiplier), i.e. when the computed wait is still below max, yet it returns max. The comparison should be `>=`.\",\"rationale\":\"Trigger: wait_exponential(multiplier=1, max=60) on attempt 1. exponent=0 < log2(60)\u22485.9, so it returns 60 instead of 1. Early attempts then always wait max, and later attempts that should be capped fall through to normal computation. Backoff behavior is broken for every normal use.\",\"confidence\":0.93}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1812,
+      "output_tokens": 235,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

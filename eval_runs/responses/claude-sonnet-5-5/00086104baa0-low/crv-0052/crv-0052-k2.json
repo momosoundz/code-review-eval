@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 275,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "The attribute `self.initial` is removed and replaced with `self.multiplier`, so any code that reads `wait_exponential_jitter.initial` now raises AttributeError.",
+        "rationale": "Trigger: existing user code or subclass reading `.initial` on a wait_exponential_jitter instance. Mechanism: the attribute is no longer set anywhere. Impact: AttributeError at runtime, even though the parameter is only being deprecated, not removed.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2204,
+      "output_tokens": 209,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 2672,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "c4faf964942bc565"
+  },
+  "raw": {
+    "id": "msg_011CgLTZ7SnLzRqgcdBx8xs2",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":275,\"severity\":\"medium\",\"category\":\"wrong_condition\",\"description\":\"The attribute `self.initial` is removed and replaced with `self.multiplier`, so any code that reads `wait_exponential_jitter.initial` now raises AttributeError.\",\"rationale\":\"Trigger: existing user code or subclass reading `.initial` on a wait_exponential_jitter instance. Mechanism: the attribute is no longer set anywhere. Impact: AttributeError at runtime, even though the parameter is only being deprecated, not removed.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2204,
+      "output_tokens": 209,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

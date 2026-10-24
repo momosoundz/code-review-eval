@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1319,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The new code includes every Argument in the help output. Arguments whose `hidden` attribute is set are not filtered out, and `Argument` has no `hidden` handling in this `get_help_record`. A hidden argument therefore shows up in the Positional arguments section.",
+        "rationale": "Trigger: a command declares `click.Argument(..., help=...)` or any documented argument alongside a hidden one. Mechanism: the fallback `(arg.make_metavar(ctx), \"\")` is applied to any argument whose `get_help_record` returns None, with no hidden check. Impact: help output lists arguments the author meant to hide. Confidence is moderate because Argument's hidden support is not shown in the diff.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1963,
+      "output_tokens": 286,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3447,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "ffc7865a3c0b0a6c"
+  },
+  "raw": {
+    "id": "msg_011CgMeDMEyQ5N4rzZ4TFnGS",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1319,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The new code includes every Argument in the help output. Arguments whose `hidden` attribute is set are not filtered out, and `Argument` has no `hidden` handling in this `get_help_record`. A hidden argument therefore shows up in the Positional arguments section.\",\"rationale\":\"Trigger: a command declares `click.Argument(..., help=...)` or any documented argument alongside a hidden one. Mechanism: the fallback `(arg.make_metavar(ctx), \\\"\\\")` is applied to any argument whose `get_help_record` returns None, with no hidden check. Impact: help output lists arguments the author meant to hide. Confidence is moderate because Argument's hidden support is not shown in the diff.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1963,
+      "output_tokens": 286,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 213,
+        "severity": "medium",
+        "category": "wrong_operator",
+        "description": "The short-circuit returns max(max(0, self.min), self.max), but the original computation is max(max(0, min), min(result, max)). The new code should be equivalent only if result >= max; it is, but the early return uses max(...) of min and max, which matches the original when min > max. This is fine, however the guard can misfire when exponent equals the log boundary because of floating point.",
+        "rationale": "Trigger: multiplier=1, max=8, exp_base=2, attempt_number=4. exponent=3 and math.log(8,2) can evaluate to 2.0794/0.693 = 3.0000000000000004 or 2.9999999999999996 depending on the values; if the log rounds below the true value, exponent > log is true even though result equals max exactly, which is harmless. If the log rounds low for exponent below the real boundary, the early return gives max while the true result is slightly less than max, so the wait is too long by a tiny amount. Impact is a minor deviation only.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1838,
+      "output_tokens": 369,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4766,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "1411fba03c0901df"
+  },
+  "raw": {
+    "id": "msg_011CgMeHiGNveWJMgWRSuw1M",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":213,\"severity\":\"medium\",\"category\":\"wrong_operator\",\"description\":\"The short-circuit returns max(max(0, self.min), self.max), but the original computation is max(max(0, min), min(result, max)). The new code should be equivalent only if result >= max; it is, but the early return uses max(...) of min and max, which matches the original when min > max. This is fine, however the guard can misfire when exponent equals the log boundary because of floating point.\",\"rationale\":\"Trigger: multiplier=1, max=8, exp_base=2, attempt_number=4. exponent=3 and math.log(8,2) can evaluate to 2.0794/0.693 = 3.0000000000000004 or 2.9999999999999996 depending on the values; if the log rounds below the true value, exponent > log is true even though result equals max exactly, which is harmless. If the log rounds low for exponent below the real boundary, the early return gives max while the true result is slightly less than max, so the wait is too long by a tiny amount. Impact is a minor deviation only.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1838,
+      "output_tokens": 369,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

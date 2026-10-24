@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 213,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The fast-path returns `max(max(0, self.min), self.max)`, which is effectively self.max, when the exponent is below log(max/multiplier). That is the regime where the result is below max, and the normal computation is multiplier*exp_base**exponent. The early return therefore yields the maximum wait for small attempt numbers, and the condition looks inverted: it should apply when the exponent is above the log, where the result would be clamped to max anyway.",
+        "rationale": "Trigger: default wait_exponential(multiplier=1, max=10, exp_base=2) on attempt 1. The exponent is 0, which is less than log2(10)=3.3, so it returns 10 seconds instead of 1. Impact: the exponential backoff is skipped and every early retry waits the max, which gives wrong delays on the common path.",
+        "confidence": 0.93
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1695,
+      "output_tokens": 321,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3286,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "9b6bc2ac461b1171"
+  },
+  "raw": {
+    "id": "msg_011CgLQj67qps424sAan5oUD",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":213,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The fast-path returns `max(max(0, self.min), self.max)`, which is effectively self.max, when the exponent is below log(max/multiplier). That is the regime where the result is below max, and the normal computation is multiplier*exp_base**exponent. The early return therefore yields the maximum wait for small attempt numbers, and the condition looks inverted: it should apply when the exponent is above the log, where the result would be clamped to max anyway.\",\"rationale\":\"Trigger: default wait_exponential(multiplier=1, max=10, exp_base=2) on attempt 1. The exponent is 0, which is less than log2(10)=3.3, so it returns 10 seconds instead of 1. Impact: the exponential backoff is skipped and every early retry waits the max, which gives wrong delays on the common path.\",\"confidence\":0.93}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1695,
+      "output_tokens": 321,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

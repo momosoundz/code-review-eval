@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 258,
+        "severity": "medium",
+        "category": "wrong_literal_or_default",
+        "description": "The new `min` parameter defaults to 1, not 0, so every existing `wait_exponential_jitter` that does not pass `min` now has a wait floor of 1 second.",
+        "rationale": "Trigger: `wait_exponential_jitter(initial=0.1, jitter=0)` or any config whose computed wait is under 1s. The final `max(max(0, self.min), ...)` clamps the result up to 1s, where before it returned the computed value (e.g. 0.1s). This silently lengthens waits and breaks backward compatibility. A default of 0 would preserve the old behaviour.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2150,
+      "output_tokens": 256,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3480,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "124d353adf043099"
+  },
+  "raw": {
+    "id": "msg_011CgLVAf4efoBitYCHvya5W",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":258,\"severity\":\"medium\",\"category\":\"wrong_literal_or_default\",\"description\":\"The new `min` parameter defaults to 1, not 0, so every existing `wait_exponential_jitter` that does not pass `min` now has a wait floor of 1 second.\",\"rationale\":\"Trigger: `wait_exponential_jitter(initial=0.1, jitter=0)` or any config whose computed wait is under 1s. The final `max(max(0, self.min), ...)` clamps the result up to 1s, where before it returned the computed value (e.g. 0.1s). This silently lengthens waits and breaks backward compatibility. A default of 0 would preserve the old behaviour.\",\"confidence\":0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2150,
+      "output_tokens": 256,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

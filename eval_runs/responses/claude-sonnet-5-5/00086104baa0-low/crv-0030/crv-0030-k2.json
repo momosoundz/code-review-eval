@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 906,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The check was changed from `isinstance(filename, str)` to `isinstance(filename, os.PathLike)`, so plain `str` filenames are no longer wrapped in a tuple.",
+        "rationale": "Trigger: `click.edit(filename=\"file.txt\")`, which is the common documented usage. A str is not an os.PathLike, so it is passed to `edit_files` as an iterable of characters. The editor is then launched with one argument per character of the filename and opens the wrong files. The check should be `isinstance(filename, (str, os.PathLike))`.",
+        "confidence": 0.93
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2535,
+      "output_tokens": 240,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 2214,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "a0594e58304ba7e8"
+  },
+  "raw": {
+    "id": "msg_011CgLR2h61Gh5WkPhu9kYJh",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/termui.py\",\"line\":906,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The check was changed from `isinstance(filename, str)` to `isinstance(filename, os.PathLike)`, so plain `str` filenames are no longer wrapped in a tuple.\",\"rationale\":\"Trigger: `click.edit(filename=\\\"file.txt\\\")`, which is the common documented usage. A str is not an os.PathLike, so it is passed to `edit_files` as an iterable of characters. The editor is then launched with one argument per character of the filename and opens the wrong files. The check should be `isinstance(filename, (str, os.PathLike))`.\",\"confidence\":0.93}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2535,
+      "output_tokens": 240,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

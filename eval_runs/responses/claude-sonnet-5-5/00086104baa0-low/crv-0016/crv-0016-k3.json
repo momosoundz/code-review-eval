@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 112,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "In async retry_any.__ror__, the flatten check tests isinstance(other, retry_all), but it should test retry_any. If `other` is a retry_all, its retries are spliced into a retry_any, which changes the semantics from AND to OR.",
+        "rationale": "Trigger: `retry_all(a, b) | async_retry_any(c)`. The result is retry_any(a, b, c), which retries when a OR b OR c. The correct result is retry_any(retry_all(a, b), c). Impact: silent wrong retry decisions. The same bug is in the async retry_all.__rand__ at line 134, which checks retry_all and is correct. The sync version at tenacity/retry.py line 280 correctly checks retry_any.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2615,
+      "output_tokens": 301,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3234,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "2a6e05b6ea9f513c"
+  },
+  "raw": {
+    "id": "msg_011CgLQoxAkSs5xG8RcxKcyV",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/asyncio/retry.py\",\"line\":112,\"severity\":\"medium\",\"category\":\"wrong_condition\",\"description\":\"In async retry_any.__ror__, the flatten check tests isinstance(other, retry_all), but it should test retry_any. If `other` is a retry_all, its retries are spliced into a retry_any, which changes the semantics from AND to OR.\",\"rationale\":\"Trigger: `retry_all(a, b) | async_retry_any(c)`. The result is retry_any(a, b, c), which retries when a OR b OR c. The correct result is retry_any(retry_all(a, b), c). Impact: silent wrong retry decisions. The same bug is in the async retry_all.__rand__ at line 134, which checks retry_all and is correct. The sync version at tenacity/retry.py line 280 correctly checks retry_any.\",\"confidence\":0.85}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2615,
+      "output_tokens": 301,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

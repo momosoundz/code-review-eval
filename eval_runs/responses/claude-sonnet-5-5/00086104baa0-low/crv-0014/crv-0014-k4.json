@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 378,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "The sync wrapper sets `copy._local.statistics = self._local.statistics` rather than the shared `stats` dict. `self._local.statistics` is only reassigned on the next line, so the copy gets whatever `self._local.statistics` held before, not the dict that was just cleared.",
+        "rationale": "Trigger: any call to a function decorated with @retry. `copy._local.statistics` is bound to the old `self._local.statistics`, which is either a different dict or absent in this thread. The copy's retry state (attempt_number, etc.) then never lands in `wrapped_f.statistics`, so that dict stays empty after `stats.clear()`. Users reading `f.statistics` see `{}`. If the thread-local has no `statistics` attribute yet, this raises AttributeError. The async version correctly uses `stats`.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2371,
+      "output_tokens": 333,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3743,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "9d8434df28d15f00"
+  },
+  "raw": {
+    "id": "msg_011CgLQnKcYAmdny5nEtDFSu",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":378,\"severity\":\"high\",\"category\":\"wrong_variable_or_argument\",\"description\":\"The sync wrapper sets `copy._local.statistics = self._local.statistics` rather than the shared `stats` dict. `self._local.statistics` is only reassigned on the next line, so the copy gets whatever `self._local.statistics` held before, not the dict that was just cleared.\",\"rationale\":\"Trigger: any call to a function decorated with @retry. `copy._local.statistics` is bound to the old `self._local.statistics`, which is either a different dict or absent in this thread. The copy's retry state (attempt_number, etc.) then never lands in `wrapped_f.statistics`, so that dict stays empty after `stats.clear()`. Users reading `f.statistics` see `{}`. If the thread-local has no `statistics` attribute yet, this raises AttributeError. The async version correctly uses `stats`.\",\"confidence\":0.85}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2371,
+      "output_tokens": 333,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

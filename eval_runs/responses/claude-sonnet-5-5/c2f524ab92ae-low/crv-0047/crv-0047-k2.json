@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3576,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The removed `already_bracketed` check means a metavar that is already wrapped in brackets now gets wrapped a second time when the argument is optional.",
+        "rationale": "Trigger: an optional argument whose type's get_metavar already returns a bracketed string, for example a custom ParamType, or a Choice-style metavar that is already bracketed. Mechanism: the guard that skipped re-bracketing is gone, so `[x]` becomes `[[x]]`. Impact: usage and help text shows doubled brackets. Confidence is moderate because the removal may be intentional.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1511,
+      "output_tokens": 241,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3190,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "4d5ad745af65283e"
+  },
+  "raw": {
+    "id": "msg_011CgLVcqsGEk7hN9ZEA7oog",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":3576,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The removed `already_bracketed` check means a metavar that is already wrapped in brackets now gets wrapped a second time when the argument is optional.\",\"rationale\":\"Trigger: an optional argument whose type's get_metavar already returns a bracketed string, for example a custom ParamType, or a Choice-style metavar that is already bracketed. Mechanism: the guard that skipped re-bracketing is gone, so `[x]` becomes `[[x]]`. Impact: usage and help text shows doubled brackets. Confidence is moderate because the removal may be intentional.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1511,
+      "output_tokens": 241,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "All concurrent or nested invocations of the same wrapped function now share and clear a single statistics dict. Previously each call got its own copy's statistics.",
+        "rationale": "Trigger: two threads (or recursive calls) invoke the same decorated function at once. Each call runs stats.clear() and then writes into the same dict. One call resets the other's attempt_number and start_time mid-run, so the statistics are corrupted. If the retry logic reads the stats (for example attempt_number for stop conditions), retry behavior can be wrong as well.",
+        "confidence": 0.6
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 218,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "Async wrapper clears and shares one statistics dict across all concurrent calls of the same decorated coroutine.",
+        "rationale": "Trigger: asyncio.gather of several calls to the same retry-decorated coroutine. Each call does stats.clear() and all of them write into the same dict, so attempt_number is reset or interleaved between tasks. The result is wrong statistics, and possibly wrong stop or wait decisions that depend on attempt_number.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2366,
+      "output_tokens": 431,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4344,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "3e58b62371b612c9"
+  },
+  "raw": {
+    "id": "msg_011CgLQk4JyZSDqp5BddVYMe",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":377,\"severity\":\"medium\",\"category\":\"concurrency\",\"description\":\"All concurrent or nested invocations of the same wrapped function now share and clear a single statistics dict. Previously each call got its own copy's statistics.\",\"rationale\":\"Trigger: two threads (or recursive calls) invoke the same decorated function at once. Each call runs stats.clear() and then writes into the same dict. One call resets the other's attempt_number and start_time mid-run, so the statistics are corrupted. If the retry logic reads the stats (for example attempt_number for stop conditions), retry behavior can be wrong as well.\",\"confidence\":0.6},{\"file\":\"tenacity/asyncio/__init__.py\",\"line\":218,\"severity\":\"medium\",\"category\":\"concurrency\",\"description\":\"Async wrapper clears and shares one statistics dict across all concurrent calls of the same decorated coroutine.\",\"rationale\":\"Trigger: asyncio.gather of several calls to the same retry-decorated coroutine. Each call does stats.clear() and all of them write into the same dict, so attempt_number is reset or interleaved between tasks. The result is wrong statistics, and possibly wrong stop or wait decisions that depend on attempt_number.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2366,
+      "output_tokens": 431,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1319,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "The list of arguments includes hidden arguments. The old code relied on get_help_record, which for Argument returned None only when help is None. Hidden arguments are not filtered here, so they appear in the help section.",
+        "rationale": "Trigger: a command has an Argument with hidden=True (supported in click 8.2+) and at least one documented argument. Mechanism: the new code does not check param.hidden. Impact: hidden arguments show up in the Positional arguments help, leaking them. The confidence is moderate because Argument.get_help_record here has no hidden check, so the old behavior also showed them.",
+        "confidence": 0.3
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2076,
+      "output_tokens": 248,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3587,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "d803a266ca7f31ab"
+  },
+  "raw": {
+    "id": "msg_011CgMeL52rARYArE3rrcq8Y",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1319,\"severity\":\"medium\",\"category\":\"wrong_condition\",\"description\":\"The list of arguments includes hidden arguments. The old code relied on get_help_record, which for Argument returned None only when help is None. Hidden arguments are not filtered here, so they appear in the help section.\",\"rationale\":\"Trigger: a command has an Argument with hidden=True (supported in click 8.2+) and at least one documented argument. Mechanism: the new code does not check param.hidden. Impact: hidden arguments show up in the Positional arguments help, leaking them. The confidence is moderate because Argument.get_help_record here has no hidden check, so the old behavior also showed them.\",\"confidence\":0.3}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2076,
+      "output_tokens": 248,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

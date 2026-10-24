@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 99,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "When ANSI is stripped, the code calls `.strip()` on the whole prompt text, which also removes legitimate leading/trailing whitespace. The prompt text normally ends with a separator such as a trailing space (e.g. \"Name: \").",
+        "rationale": "Trigger: any prompt on a non-tty or non-color stream (piped output, CliRunner, redirected stdout). The prompt is built with a trailing space suffix. After `.strip()`, `input(\"Name:\")` shows \"Name:\" with no space, so the user's typed text runs against the prompt. This differs from the colored path and from echo behavior, which preserves the whitespace.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1842,
+      "output_tokens": 270,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3084,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "a0f3d287ca00c1b5"
+  },
+  "raw": {
+    "id": "msg_011CgLR6AdHXsU2wPPyELHUe",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/termui.py\",\"line\":99,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"When ANSI is stripped, the code calls `.strip()` on the whole prompt text, which also removes legitimate leading/trailing whitespace. The prompt text normally ends with a separator such as a trailing space (e.g. \\\"Name: \\\").\",\"rationale\":\"Trigger: any prompt on a non-tty or non-color stream (piped output, CliRunner, redirected stdout). The prompt is built with a trailing space suffix. After `.strip()`, `input(\\\"Name:\\\")` shows \\\"Name:\\\" with no space, so the user's typed text runs against the prompt. This differs from the colored path and from echo behavior, which preserves the whitespace.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1842,
+      "output_tokens": 270,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 258,
+        "severity": "medium",
+        "category": "wrong_literal_or_default",
+        "description": "The new `min` parameter defaults to 1, so existing callers of wait_exponential_jitter now get a minimum wait of 1 second without opting in. Previously the floor was 0.",
+        "rationale": "Trigger: wait_exponential_jitter(initial=0.1, max=10), or any config with initial below 1 and the default min. The return value is now max(1, ...), so waits that used to be around 0.1s become 1s. Retry timing changes silently, and tests that expect short waits may slow down or fail.",
+        "confidence": 0.7
+      },
+      {
+        "file": "tenacity/wait.py",
+        "line": 273,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "The new `min` floor is applied after the `max` cap. If min is greater than max, the result exceeds max.",
+        "rationale": "Trigger: min=5 and max=2. The expression max(max(0, 5), min(result, 2)) returns 5, which breaks the documented maximum wait.",
+        "confidence": 0.4
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2020,
+      "output_tokens": 365,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3732,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "1182a1436f18c412"
+  },
+  "raw": {
+    "id": "msg_011CgLQqzdtCsuVhcZ5vZmci",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":258,\"severity\":\"medium\",\"category\":\"wrong_literal_or_default\",\"description\":\"The new `min` parameter defaults to 1, so existing callers of wait_exponential_jitter now get a minimum wait of 1 second without opting in. Previously the floor was 0.\",\"rationale\":\"Trigger: wait_exponential_jitter(initial=0.1, max=10), or any config with initial below 1 and the default min. The return value is now max(1, ...), so waits that used to be around 0.1s become 1s. Retry timing changes silently, and tests that expect short waits may slow down or fail.\",\"confidence\":0.7},{\"file\":\"tenacity/wait.py\",\"line\":273,\"severity\":\"low\",\"category\":\"logic_other\",\"description\":\"The new `min` floor is applied after the `max` cap. If min is greater than max, the result exceeds max.\",\"rationale\":\"Trigger: min=5 and max=2. The expression max(max(0, 5), min(result, 2)) returns 5, which breaks the documented maximum wait.\",\"confidence\":0.4}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2020,
+      "output_tokens": 365,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

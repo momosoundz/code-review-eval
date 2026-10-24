@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 304,
+        "severity": "high",
+        "category": "error_handling",
+        "description": "When the CA bundle path is missing or does not exist, the code now emits a warning instead of raising OSError. Execution then continues with an invalid cert_loc.",
+        "rationale": "Trigger: verify=True and the CA bundle file is absent (for example a stripped install). Mechanism: the OSError is replaced by warnings.warn, so cert_loc is still set as the CA location. Impact: the failure surfaces later as an obscure SSL error, or the connection proceeds without the intended verification configuration, instead of a clear immediate error. This change is unrelated to the commit title.",
+        "confidence": 0.72
+      },
+      {
+        "file": "src/requests/adapters.py",
+        "line": 301,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "extract_zipped_paths is no longer applied to DEFAULT_CA_BUNDLE_PATH. The call was not unused: it handles a bundle located inside a zip archive (zipapp or zipimport).",
+        "rationale": "Trigger: requests is run from a zipped package, so certs.where() returns a path inside the zip. Mechanism: without extraction, os.path.exists on that path is False. Impact: TLS verification fails for those users, either through the changed warning path or later with an SSL error.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1879,
+      "output_tokens": 455,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4728,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "c36073f1ad756e56"
+  },
+  "raw": {
+    "id": "msg_011CgLVYDdJxBc5zRwQXrhyq",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":304,\"severity\":\"high\",\"category\":\"error_handling\",\"description\":\"When the CA bundle path is missing or does not exist, the code now emits a warning instead of raising OSError. Execution then continues with an invalid cert_loc.\",\"rationale\":\"Trigger: verify=True and the CA bundle file is absent (for example a stripped install). Mechanism: the OSError is replaced by warnings.warn, so cert_loc is still set as the CA location. Impact: the failure surfaces later as an obscure SSL error, or the connection proceeds without the intended verification configuration, instead of a clear immediate error. This change is unrelated to the commit title.\",\"confidence\":0.72},{\"file\":\"src/requests/adapters.py\",\"line\":301,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"extract_zipped_paths is no longer applied to DEFAULT_CA_BUNDLE_PATH. The call was not unused: it handles a bundle located inside a zip archive (zipapp or zipimport).\",\"rationale\":\"Trigger: requests is run from a zipped package, so certs.where() returns a path inside the zip. Mechanism: without extraction, os.path.exists on that path is False. Impact: TLS verification fails for those users, either through the changed warning path or later with an SSL error.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1879,
+      "output_tokens": 455,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

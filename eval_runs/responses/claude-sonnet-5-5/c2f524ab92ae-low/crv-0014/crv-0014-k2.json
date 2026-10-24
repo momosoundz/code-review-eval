@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 378,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "The sync wrapper assigns `copy._local.statistics = self._local.statistics`, so the copy keeps its own stats dict rather than the shared `stats` dict. The async path assigns `stats` to both. As a result `wrapped_f.statistics` is cleared on each call but never updated during retries.",
+        "rationale": "Trigger: call any function decorated with sync @retry. `stats.clear()` empties the dict that `wrapped_f.statistics` points to. `copy._local.statistics` is set to `self._local.statistics`, which is the previous dict and not `stats`. The retry loop writes attempt_number and other values to that dict, so `wrapped_f.statistics` stays empty. This defeats the purpose of the change, and `fn.statistics` shows `{}` after the call. The same line also hands every call the same prior dict, which breaks isolation between nested or recursive calls.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2497,
+      "output_tokens": 353,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3815,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "831389d6ee1e24ae"
+  },
+  "raw": {
+    "id": "msg_011CgLV57jMLGPczfRvVowqv",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":378,\"severity\":\"high\",\"category\":\"wrong_variable_or_argument\",\"description\":\"The sync wrapper assigns `copy._local.statistics = self._local.statistics`, so the copy keeps its own stats dict rather than the shared `stats` dict. The async path assigns `stats` to both. As a result `wrapped_f.statistics` is cleared on each call but never updated during retries.\",\"rationale\":\"Trigger: call any function decorated with sync @retry. `stats.clear()` empties the dict that `wrapped_f.statistics` points to. `copy._local.statistics` is set to `self._local.statistics`, which is the previous dict and not `stats`. The retry loop writes attempt_number and other values to that dict, so `wrapped_f.statistics` stays empty. This defeats the purpose of the change, and `fn.statistics` shows `{}` after the call. The same line also hands every call the same prior dict, which breaks isolation between nested or recursive calls.\",\"confidence\":0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2497,
+      "output_tokens": 353,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

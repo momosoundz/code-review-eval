@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "The shared statistics dict of the wrapper is cleared and reused on every call, so concurrent or nested calls of the same decorated function share and overwrite one stats dict.",
+        "rationale": "Trigger: the same decorated function runs concurrently (threads) or recursively. The old code created a fresh per-call copy's statistics. Now stats.clear() wipes the in-progress stats of another call, and both calls write into one dict. Impact: corrupted attempt_number and delay_since_first_attempt, which are also read by the retrying logic, and the per-call isolation the comment above promises is broken.",
+        "confidence": 0.6
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 218,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "Async wrapper clears and reuses a single shared statistics dict for all concurrent invocations.",
+        "rationale": "Trigger: asyncio.gather of several calls to the same decorated coroutine function. Each call does stats.clear() and writes into the same dict, so stats from in-flight calls are reset and mixed. Impact: wrong attempt_number and start times, which affects wait and stop decisions that read statistics.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2492,
+      "output_tokens": 437,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4415,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "71abc98a95e33cc0"
+  },
+  "raw": {
+    "id": "msg_011CgLV4D91oNSMDZixETspZ",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":377,\"severity\":\"medium\",\"category\":\"concurrency\",\"description\":\"The shared statistics dict of the wrapper is cleared and reused on every call, so concurrent or nested calls of the same decorated function share and overwrite one stats dict.\",\"rationale\":\"Trigger: the same decorated function runs concurrently (threads) or recursively. The old code created a fresh per-call copy's statistics. Now stats.clear() wipes the in-progress stats of another call, and both calls write into one dict. Impact: corrupted attempt_number and delay_since_first_attempt, which are also read by the retrying logic, and the per-call isolation the comment above promises is broken.\",\"confidence\":0.6},{\"file\":\"tenacity/asyncio/__init__.py\",\"line\":218,\"severity\":\"medium\",\"category\":\"concurrency\",\"description\":\"Async wrapper clears and reuses a single shared statistics dict for all concurrent invocations.\",\"rationale\":\"Trigger: asyncio.gather of several calls to the same decorated coroutine function. Each call does stats.clear() and writes into the same dict, so stats from in-flight calls are reset and mixed. Impact: wrong attempt_number and start times, which affects wait and stop decisions that read statistics.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2492,
+      "output_tokens": 437,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}
