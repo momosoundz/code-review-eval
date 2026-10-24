@@ -51,9 +51,42 @@ The reviewer is one call to the Anthropic Messages API with a JSON schema enforc
 ## Run the eval
 
 ```bash
-make eval RUN=baseline K=5    # calls the model K times per case, stores raw responses, scores
-make score RUN=baseline       # re-scores from the committed responses; no API key needed
-make compare A=baseline B=exp1
+make eval RUN=baseline K=5                 # K reviewer calls per case, raw responses stored, scored
+make score RUN=baseline                    # re-scores from the committed files; never calls the API
+make compare A=baseline-n49 B=exp2a-title-verified-n49
+make report RUN=exp2a-title-verified-n49 BASELINE=baseline-n49   # markdown tables
 ```
 
-`EVAL.md` (written once the baseline and the experiments have run) holds the dataset, the matching rule, the gate and the results.
+A different model, effort or context mode is a different reviewer version:
+
+```bash
+uv run python -m eval.harness.collect --run exp2a --k 5 --split release \
+    --model claude-haiku-5-5 --context-mode hunk_plus_title_verified
+uv run python -m eval.harness.score --run exp2a --online   # judge calls for new pairs only
+```
+
+`python -m eval.harness.compare` exits 0 on `PASS`, 1 on `FAIL`, 2 on `INCONCLUSIVE`, so it can gate a pipeline; call the module directly for that, because `make` reports any failing recipe as 2. Runs with different gold hashes refuse to compare.
+
+## What is where
+
+| | |
+|---|---|
+| `EVAL.md` | what was measured, the results, and where not to trust them |
+| `AGENTS.md` | conventions and invariants for anyone changing the code |
+| `reviewer/` | the reviewer: prompt, schema, one API call, context modes |
+| `eval/harness/` | collect, match, judge, score, compare, report, calibrate |
+| `eval/dataset/` | the cases, `PROTOCOL.md` (how gold was built, labeled, adjudicated), `taxonomy.md` |
+| `eval/labels/` | the human passes, adjudications, pair labels, and `errata.md` with every label change |
+| `eval_runs/` | one directory per run with manifest, per-case scores and summary; raw responses under `responses/` |
+| `scripts/` | the terminal tools the human uses: `review_cases.py`, `adjudicate.py`, `label_pairs.py` |
+
+## Human in the loop
+
+Three tools, all append-only, all resumable:
+
+```bash
+uv run python scripts/review_cases.py --pass 1 --split release   # blind pass over the gold
+uv run python scripts/adjudicate.py --runs baseline-n49,exp2c-sonnet-n49   # alarms on clean cases
+uv run python scripts/label_pairs.py                               # pairs that calibrate the judge
+uv run python -m eval.harness.calibrate --runs baseline-n49,exp2a-title-verified-n49
+```
