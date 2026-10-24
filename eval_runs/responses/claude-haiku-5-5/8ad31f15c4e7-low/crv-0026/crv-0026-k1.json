@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1321,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The guard uses all() where the docstring intends at least one documented argument. For a command with no arguments, all() over an empty list is True, so an empty \"Positional arguments\" heading is written for every such command. When some arguments have help and others do not, all() is False and the whole section is dropped.",
+        "rationale": "Trigger: a command that takes only options, such as @click.command() with a single @click.option, has args == [], so the condition is True. formatter.section() writes its heading unconditionally, so the help output gains an empty \"Positional arguments:\" heading. Second trigger: a command with arguments A (with help) and B (without help). all() is False, so neither argument is listed, although the title says every argument is listed. The fix is any() in place of all(). Impact: users see a spurious empty section on common commands, and partially documented commands lose their positional argument section entirely.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1928,
+      "output_tokens": 940,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 6189,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "aa79ae42ebf57bf8"
+  },
+  "raw": {
+    "id": "msg_011CgLKFQ5j5CwCVdjjLsJiF",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1321,\"severity\":\"high\",\"category\":\"wrong_operator\",\"description\":\"The guard uses all() where the docstring intends at least one documented argument. For a command with no arguments, all() over an empty list is True, so an empty \\\"Positional arguments\\\" heading is written for every such command. When some arguments have help and others do not, all() is False and the whole section is dropped.\",\"rationale\":\"Trigger: a command that takes only options, such as @click.command() with a single @click.option, has args == [], so the condition is True. formatter.section() writes its heading unconditionally, so the help output gains an empty \\\"Positional arguments:\\\" heading. Second trigger: a command with arguments A (with help) and B (without help). all() is False, so neither argument is listed, although the title says every argument is listed. The fix is any() in place of all(). Impact: users see a spurious empty section on common commands, and partially documented commands lose their positional argument section entirely.\",\"confidence\":0.85}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1928,
+      "output_tokens": 940,
+      "output_tokens_details": {
+        "thinking_tokens": 610
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

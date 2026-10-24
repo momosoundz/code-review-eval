@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3814,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "get_help_record now returns self.help unchanged, which is None when an argument has no help text. The removed call-site fallback `or (arg.make_metavar(ctx), \"\")` no longer covers this, so format_help_text passes a None description to write_dl.",
+        "rationale": "Trigger: a command with one documented Argument and one undocumented Argument, so the guard `any(arg.help is not None ...)` passes. Mechanism: the undocumented argument yields (metavar, None), and write_dl calls text wrapping on the None description, which raises an AttributeError or TypeError. Impact: --help crashes for a common mix of documented and undocumented positional arguments, despite the docstring promising an empty description.",
+        "confidence": 0.7
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2083,
+      "output_tokens": 714,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4721,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "d0fc230e5badf91b"
+  },
+  "raw": {
+    "id": "msg_011CgLKCq5YgQz6QG6Lh2dTR",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":3814,\"severity\":\"high\",\"category\":\"null_or_missing_value\",\"description\":\"get_help_record now returns self.help unchanged, which is None when an argument has no help text. The removed call-site fallback `or (arg.make_metavar(ctx), \\\"\\\")` no longer covers this, so format_help_text passes a None description to write_dl.\",\"rationale\":\"Trigger: a command with one documented Argument and one undocumented Argument, so the guard `any(arg.help is not None ...)` passes. Mechanism: the undocumented argument yields (metavar, None), and write_dl calls text wrapping on the None description, which raises an AttributeError or TypeError. Impact: --help crashes for a common mix of documented and undocumented positional arguments, despite the docstring promising an empty description.\",\"confidence\":0.7}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2083,
+      "output_tokens": 714,
+      "output_tokens_details": {
+        "thinking_tokens": 427
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

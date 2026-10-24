@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_utils.py",
+        "line": 15,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing Sentinel.__reduce_ex__ leaves the enum on its default pickling path, which rebuilds members from their object() value and so no longer round-trips UNSET or FLAG_NEEDS_VALUE by identity.",
+        "rationale": "Under the trigger of pickling a value that holds UNSET or FLAG_NEEDS_VALUE, such as a parameter default or context object sent to a subprocess, the default enum reduce serializes the member's _value_ (a bare object()) and calls Sentinel(value) on load, which raises ValueError because no member matches the new object; the removed getattr-based reduce avoided this by resolving the member by name. The impact is that pickling or unpickling such objects fails, or at best yields a sentinel that no longer compares identical to UNSET.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1945,
+      "output_tokens": 1015,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5694,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_only",
+    "input_sha256": "8a3cd15243ee2240"
+  },
+  "raw": {
+    "id": "msg_011CgLKisU1VZ7JCBPibqnKT",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/_utils.py\",\"line\":15,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"Removing Sentinel.__reduce_ex__ leaves the enum on its default pickling path, which rebuilds members from their object() value and so no longer round-trips UNSET or FLAG_NEEDS_VALUE by identity.\",\"rationale\":\"Under the trigger of pickling a value that holds UNSET or FLAG_NEEDS_VALUE, such as a parameter default or context object sent to a subprocess, the default enum reduce serializes the member's _value_ (a bare object()) and calls Sentinel(value) on load, which raises ValueError because no member matches the new object; the removed getattr-based reduce avoided this by resolving the member by name. The impact is that pickling or unpickling such objects fails, or at best yields a sentinel that no longer compares identical to UNSET.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1945,
+      "output_tokens": 1015,
+      "output_tokens_details": {
+        "thinking_tokens": 699
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

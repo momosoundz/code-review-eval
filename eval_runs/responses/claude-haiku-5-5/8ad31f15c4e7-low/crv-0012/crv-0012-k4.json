@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The fast-path condition is inverted. It returns the maximum wait whenever exponent is below log(max/multiplier, exp_base), which is exactly when the exponential value is still under max, so early attempts wait `max` instead of `multiplier * exp_base**exponent`.",
+        "rationale": "Trigger: wait_exponential(multiplier=1, max=100, exp_base=2) on attempt 1 gives exponent 0, and 0 < log2(100) \u2248 6.64 holds, so the function returns 100. The intended value is 1 * 2**0 = 1. The early return should apply only when exponent >= the threshold, where the computed value would reach or exceed max. Impact: every retry before the cap is reached sleeps for the full max, so backoff is wrong for the common case and the retry timing is silently incorrect.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1761,
+      "output_tokens": 891,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5453,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "6f2b6d20cdd2e656"
+  },
+  "raw": {
+    "id": "msg_011CgLJnz8LdSwdFL3c7yiTd",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":211,\"severity\":\"high\",\"category\":\"wrong_operator\",\"description\":\"The fast-path condition is inverted. It returns the maximum wait whenever exponent is below log(max/multiplier, exp_base), which is exactly when the exponential value is still under max, so early attempts wait `max` instead of `multiplier * exp_base**exponent`.\",\"rationale\":\"Trigger: wait_exponential(multiplier=1, max=100, exp_base=2) on attempt 1 gives exponent 0, and 0 < log2(100) \u2248 6.64 holds, so the function returns 100. The intended value is 1 * 2**0 = 1. The early return should apply only when exponent >= the threshold, where the computed value would reach or exceed max. Impact: every retry before the cap is reached sleeps for the full max, so backoff is wrong for the common case and the retry timing is silently incorrect.\",\"confidence\":0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1761,
+      "output_tokens": 891,
+      "output_tokens_details": {
+        "thinking_tokens": 565
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

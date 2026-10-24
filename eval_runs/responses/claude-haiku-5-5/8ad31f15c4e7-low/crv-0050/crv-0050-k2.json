@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/utils.py",
+        "line": 544,
+        "severity": "medium",
+        "category": "null_or_missing_value",
+        "description": "A bare parameter with no '=' (e.g. Content-Type: text/html; charset) is now stored with the boolean value True, so get_encoding_from_headers calls .strip() on a bool and raises AttributeError.",
+        "rationale": "Trigger: a response whose Content-Type contains a bare 'charset' token without '='. The new code at line 520 sets params['charset']=True, and line 544 then calls True.strip(...), raising AttributeError. Previously such a token was skipped and the function fell back to ISO-8859-1 for text types. Impact: requests that read the encoding (e.g. response.text) crash on malformed but seen-in-the-wild headers instead of degrading gracefully.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2109,
+      "output_tokens": 709,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4724,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_only",
+    "input_sha256": "1afc750f3de9d94b"
+  },
+  "raw": {
+    "id": "msg_011CgLKp5s29p4aZWTavb2Ww",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/utils.py\",\"line\":544,\"severity\":\"medium\",\"category\":\"null_or_missing_value\",\"description\":\"A bare parameter with no '=' (e.g. Content-Type: text/html; charset) is now stored with the boolean value True, so get_encoding_from_headers calls .strip() on a bool and raises AttributeError.\",\"rationale\":\"Trigger: a response whose Content-Type contains a bare 'charset' token without '='. The new code at line 520 sets params['charset']=True, and line 544 then calls True.strip(...), raising AttributeError. Previously such a token was skipped and the function fell back to ISO-8859-1 for text types. Impact: requests that read the encoding (e.g. response.text) crash on malformed but seen-in-the-wild headers instead of degrading gracefully.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2109,
+      "output_tokens": 709,
+      "output_tokens_details": {
+        "thinking_tokens": 421
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

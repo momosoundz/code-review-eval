@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/sessions.py",
+        "line": 671,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "The new `params` argument of `Session.get` is accepted but never forwarded; the call to `self.request` passes only `**kwargs`, so `params` is silently dropped.",
+        "rationale": "Trigger: calling `session.get(url, params={\"q\": \"x\"})`. The `params` value binds to the new named parameter and is not in `kwargs`, so `self.request(\"GET\", url, **kwargs)` runs without it. Impact: the request is sent without the query string, so the server returns wrong or unfiltered results with no error raised.",
+        "confidence": 0.95
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1857,
+      "output_tokens": 399,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 2458,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "e65ceeac0dc24ad8"
+  },
+  "raw": {
+    "id": "msg_011CgLKYvPM9mERoQskE8Wzc",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/sessions.py\",\"line\":671,\"severity\":\"high\",\"category\":\"wrong_variable_or_argument\",\"description\":\"The new `params` argument of `Session.get` is accepted but never forwarded; the call to `self.request` passes only `**kwargs`, so `params` is silently dropped.\",\"rationale\":\"Trigger: calling `session.get(url, params={\\\"q\\\": \\\"x\\\"})`. The `params` value binds to the new named parameter and is not in `kwargs`, so `self.request(\\\"GET\\\", url, **kwargs)` runs without it. Impact: the request is sent without the query string, so the server returns wrong or unfiltered results with no error raised.\",\"confidence\":0.95}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1857,
+      "output_tokens": 399,
+      "output_tokens_details": {
+        "thinking_tokens": 159
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

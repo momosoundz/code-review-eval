@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/sessions.py",
+        "line": 671,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "The new `params` argument of Session.get is accepted but never forwarded; the call still passes only `**kwargs` to self.request, so the query parameters are silently discarded.",
+        "rationale": "Trigger: session.get(url, params={'q': 'x'}). The method binds `params` as a named parameter, so it is removed from kwargs and not included in the self.request call at line 671. Mechanism: the request is sent without the query string. Impact: callers get a response for the wrong resource or unfiltered results with no error, which is a silent wrong result on a common API.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1857,
+      "output_tokens": 443,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3095,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "e65ceeac0dc24ad8"
+  },
+  "raw": {
+    "id": "msg_011CgLKYh3fDfW7TtVrTBiPn",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/sessions.py\",\"line\":671,\"severity\":\"high\",\"category\":\"wrong_variable_or_argument\",\"description\":\"The new `params` argument of Session.get is accepted but never forwarded; the call still passes only `**kwargs` to self.request, so the query parameters are silently discarded.\",\"rationale\":\"Trigger: session.get(url, params={'q': 'x'}). The method binds `params` as a named parameter, so it is removed from kwargs and not included in the self.request call at line 671. Mechanism: the request is sent without the query string. Impact: callers get a response for the wrong resource or unfiltered results with no error, which is a silent wrong result on a common API.\",\"confidence\":0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1857,
+      "output_tokens": 443,
+      "output_tokens_details": {
+        "thinking_tokens": 202
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

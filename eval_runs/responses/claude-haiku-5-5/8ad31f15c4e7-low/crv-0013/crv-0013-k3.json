@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The statistics dict is now cleared in place and shared by every call, so a re-entrant or overlapping call to the same decorated function resets the statistics of the call still in progress.",
+        "rationale": "Trigger: a decorated function that calls itself recursively, or is invoked again while an earlier call is still retrying. Mechanism: the inner call runs stats.clear() on the same dict the outer call is writing to, and the outer copy's _local.statistics points at that same dict. The previous code gave each call its own dict, which the comment at this site explicitly preserved. Impact: the outer call's wrapped_f.statistics (for example attempt_number) is reset or overwritten mid-run, so callers read wrong values.",
+        "confidence": 0.5
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 218,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "The async wrapper clears and reuses one shared statistics dict, so concurrent awaits of the same decorated coroutine write into the same dict.",
+        "rationale": "Trigger: two asyncio tasks await the same decorated async function at the same time. Mechanism: the second call's stats.clear() wipes the dict the first call is updating, and both copies write to that single dict. Previously each call got a fresh dict, so the calls were isolated. Impact: statistics read through wrapped.statistics for either in-flight call show values belonging to the other call, or reset values.",
+        "confidence": 0.45
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2441,
+      "output_tokens": 1384,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 7640,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "e4008bc15b7e6de1"
+  },
+  "raw": {
+    "id": "msg_011CgLJpzGpzPiFoPUa6TLSA",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":377,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The statistics dict is now cleared in place and shared by every call, so a re-entrant or overlapping call to the same decorated function resets the statistics of the call still in progress.\",\"rationale\":\"Trigger: a decorated function that calls itself recursively, or is invoked again while an earlier call is still retrying. Mechanism: the inner call runs stats.clear() on the same dict the outer call is writing to, and the outer copy's _local.statistics points at that same dict. The previous code gave each call its own dict, which the comment at this site explicitly preserved. Impact: the outer call's wrapped_f.statistics (for example attempt_number) is reset or overwritten mid-run, so callers read wrong values.\",\"confidence\":0.5},{\"file\":\"tenacity/asyncio/__init__.py\",\"line\":218,\"severity\":\"medium\",\"category\":\"concurrency\",\"description\":\"The async wrapper clears and reuses one shared statistics dict, so concurrent awaits of the same decorated coroutine write into the same dict.\",\"rationale\":\"Trigger: two asyncio tasks await the same decorated async function at the same time. Mechanism: the second call's stats.clear() wipes the dict the first call is updating, and both copies write to that single dict. Previously each call got a fresh dict, so the calls were isolated. Impact: statistics read through wrapped.statistics for either in-flight call show values belonging to the other call, or reset values.\",\"confidence\":0.45}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2441,
+      "output_tokens": 1384,
+      "output_tokens_details": {
+        "thinking_tokens": 867
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

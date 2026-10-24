@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "The wrapper now reuses one shared statistics dict across all calls to the same decorated function and clears it on each call, instead of giving each call its own dict. Concurrent or re-entrant calls on different threads then clear and overwrite each other's statistics.",
+        "rationale": "Trigger: two threads call the same @retry-decorated function at the same time, or the function calls itself recursively. Each call runs stats.clear() on the same dict and the copy writes attempt counts into it, so one call's statistics are reset or mixed with another's. Impact: retry statistics read by callers are silently wrong, and the original per-call copy design that guarded against this is lost.",
+        "confidence": 0.6
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 218,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "The async wrapper shares one statistics dict across all invocations of the same decorated coroutine function and clears it on each call, so overlapping calls corrupt each other's statistics.",
+        "rationale": "Trigger: asyncio.gather or overlapping tasks invoke the same decorated coroutine function, or it recurses. stats.clear() on the shared dict wipes the statistics that another in-flight call is updating, and the copy writes into the same dict. Impact: the statistics observed by each coroutine are silently wrong, where the previous code kept a separate dict per call.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2446,
+      "output_tokens": 1834,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 9130,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "18530cd0f24673fb"
+  },
+  "raw": {
+    "id": "msg_011CgLJuhhKozAqi3uitAvdb",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":377,\"severity\":\"medium\",\"category\":\"concurrency\",\"description\":\"The wrapper now reuses one shared statistics dict across all calls to the same decorated function and clears it on each call, instead of giving each call its own dict. Concurrent or re-entrant calls on different threads then clear and overwrite each other's statistics.\",\"rationale\":\"Trigger: two threads call the same @retry-decorated function at the same time, or the function calls itself recursively. Each call runs stats.clear() on the same dict and the copy writes attempt counts into it, so one call's statistics are reset or mixed with another's. Impact: retry statistics read by callers are silently wrong, and the original per-call copy design that guarded against this is lost.\",\"confidence\":0.6},{\"file\":\"tenacity/asyncio/__init__.py\",\"line\":218,\"severity\":\"medium\",\"category\":\"concurrency\",\"description\":\"The async wrapper shares one statistics dict across all invocations of the same decorated coroutine function and clears it on each call, so overlapping calls corrupt each other's statistics.\",\"rationale\":\"Trigger: asyncio.gather or overlapping tasks invoke the same decorated coroutine function, or it recurses. stats.clear() on the shared dict wipes the statistics that another in-flight call is updating, and the copy writes into the same dict. Impact: the statistics observed by each coroutine are silently wrong, where the previous code kept a separate dict per call.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2446,
+      "output_tokens": 1834,
+      "output_tokens_details": {
+        "thinking_tokens": 1333
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

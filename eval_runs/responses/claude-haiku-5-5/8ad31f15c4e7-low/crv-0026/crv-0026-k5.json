@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1321,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The condition `all(arg.help is not None for arg in args)` is vacuously true when a command has no positional arguments, so the 'Positional arguments' heading is now emitted for every such command.",
+        "rationale": "Trigger: any command with no Argument parameters, such as a plain option-only command. args is empty, so all() returns True and formatter.section(...) runs with an empty records list. formatter.section writes the heading unconditionally, so the help output gains an empty 'Positional arguments:' header. The old code only opened the section when there were records. This affects a very common path and changes help output for most commands.",
+        "confidence": 0.85
+      },
+      {
+        "file": "src/click/core.py",
+        "line": 1321,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "Using all() instead of any() hides the whole positional section when only some arguments have help, even though the docstring says the section is written if at least one argument is documented.",
+        "rationale": "Trigger: a command with two arguments, one with help='the source' and one with no help. all() returns False, so the section is skipped and the documented argument disappears from the help output. Before this change, the documented argument was listed. The mechanism contradicts the docstring's stated intent, and the impact is that help text the author wrote is silently dropped.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1928,
+      "output_tokens": 1160,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 7059,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "aa79ae42ebf57bf8"
+  },
+  "raw": {
+    "id": "msg_011CgLKHPFfda4wn6JgRekaM",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1321,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The condition `all(arg.help is not None for arg in args)` is vacuously true when a command has no positional arguments, so the 'Positional arguments' heading is now emitted for every such command.\",\"rationale\":\"Trigger: any command with no Argument parameters, such as a plain option-only command. args is empty, so all() returns True and formatter.section(...) runs with an empty records list. formatter.section writes the heading unconditionally, so the help output gains an empty 'Positional arguments:' header. The old code only opened the section when there were records. This affects a very common path and changes help output for most commands.\",\"confidence\":0.85},{\"file\":\"src/click/core.py\",\"line\":1321,\"severity\":\"medium\",\"category\":\"wrong_condition\",\"description\":\"Using all() instead of any() hides the whole positional section when only some arguments have help, even though the docstring says the section is written if at least one argument is documented.\",\"rationale\":\"Trigger: a command with two arguments, one with help='the source' and one with no help. all() returns False, so the section is skipped and the documented argument disappears from the help output. Before this change, the documented argument was listed. The mechanism contradicts the docstring's stated intent, and the impact is that help text the author wrote is silently dropped.\",\"confidence\":0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1928,
+      "output_tokens": 1160,
+      "output_tokens_details": {
+        "thinking_tokens": 708
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

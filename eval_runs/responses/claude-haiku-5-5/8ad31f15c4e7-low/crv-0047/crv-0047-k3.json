@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3576,
+        "severity": "low",
+        "category": "wrong_condition",
+        "description": "Removing the already_bracketed guard means an optional option whose metavar is already bracketed, such as metavar=\"[PATH]\", is now wrapped again and rendered as \"[[PATH]]\" in help output.",
+        "rationale": "Trigger: an optional option declared with a custom metavar that already has brackets, such as metavar=\"[PATH]\". Mechanism: the old code skipped adding brackets when the metavar was already bracketed; the new condition `if not self.required:` always adds them, producing nested brackets. Impact: the usage/help text shows \"[[PATH]]\" where it previously showed \"[PATH]\", a visible regression for users with such metavars. Whether this is intended is unclear from the diff.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1511,
+      "output_tokens": 784,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4205,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_only",
+    "input_sha256": "4d5ad745af65283e"
+  },
+  "raw": {
+    "id": "msg_011CgLKjqrJDa4npTdtdprj7",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":3576,\"severity\":\"low\",\"category\":\"wrong_condition\",\"description\":\"Removing the already_bracketed guard means an optional option whose metavar is already bracketed, such as metavar=\\\"[PATH]\\\", is now wrapped again and rendered as \\\"[[PATH]]\\\" in help output.\",\"rationale\":\"Trigger: an optional option declared with a custom metavar that already has brackets, such as metavar=\\\"[PATH]\\\". Mechanism: the old code skipped adding brackets when the metavar was already bracketed; the new condition `if not self.required:` always adds them, producing nested brackets. Impact: the usage/help text shows \\\"[[PATH]]\\\" where it previously showed \\\"[PATH]\\\", a visible regression for users with such metavars. Whether this is intended is unclear from the diff.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1511,
+      "output_tokens": 784,
+      "output_tokens_details": {
+        "thinking_tokens": 489
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

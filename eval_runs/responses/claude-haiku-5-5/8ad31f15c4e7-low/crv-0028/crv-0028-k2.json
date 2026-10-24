@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3395,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The separator condition was inverted to `not any_prefix_is_slash` when moving the code into get_help_spec. The original code used `\"; \"` for slash-prefixed options and `\" / \"` otherwise, so the new code swaps them for every option.",
+        "rationale": "Trigger: any option with secondary spellings and no slash prefix, such as `--shout/--no-shout`. Originally any_prefix_is_slash is False, so the separator was \" / \". The new expression evaluates to \"; \", so get_help_record now returns \"--shout; --no-shout\" instead of \"--shout / --no-shout\". Impact: the help output for the common boolean-flag case changes, and existing help-output tests for those options would fail. The intended behavior change in the commit title is about hidden options, not separators.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2119,
+      "output_tokens": 1143,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 6104,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "c11acb20851eff4a"
+  },
+  "raw": {
+    "id": "msg_011CgLKKDniHoxx1x7SiSDFF",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":3395,\"severity\":\"high\",\"category\":\"wrong_operator\",\"description\":\"The separator condition was inverted to `not any_prefix_is_slash` when moving the code into get_help_spec. The original code used `\\\"; \\\"` for slash-prefixed options and `\\\" / \\\"` otherwise, so the new code swaps them for every option.\",\"rationale\":\"Trigger: any option with secondary spellings and no slash prefix, such as `--shout/--no-shout`. Originally any_prefix_is_slash is False, so the separator was \\\" / \\\". The new expression evaluates to \\\"; \\\", so get_help_record now returns \\\"--shout; --no-shout\\\" instead of \\\"--shout / --no-shout\\\". Impact: the help output for the common boolean-flag case changes, and existing help-output tests for those options would fail. The intended behavior change in the commit title is about hidden options, not separators.\",\"confidence\":0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2119,
+      "output_tokens": 1143,
+      "output_tokens_details": {
+        "thinking_tokens": 827
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

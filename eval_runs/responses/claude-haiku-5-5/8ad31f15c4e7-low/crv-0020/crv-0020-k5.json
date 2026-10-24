@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 226,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "__aexit__ discards the real exception arguments and forwards None, None, None to __exit__, so an exception raised inside an `async with` block is recorded as a successful attempt instead of a failure.",
+        "rationale": "Trigger: `async with AttemptManager(retry_state) as attempt: raise ValueError()` inside an async retry loop. Mechanism: __aexit__ receives exc_type and exc_value but passes None, None, None to self.__exit__, which takes the no-exception branch and calls retry_state.set_result(None), then returns None so the exception propagates or is treated as success depending on the caller. Impact: the failed attempt is never recorded as an exception, so the retry policy does not retry, and the caller gets a silent wrong result (None) instead of the error or a retry.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1620,
+      "output_tokens": 736,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4398,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "b5e64bacd038012e"
+  },
+  "raw": {
+    "id": "msg_011CgLK7UNTgvrKXJnzfeBGg",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":226,\"severity\":\"high\",\"category\":\"wrong_variable_or_argument\",\"description\":\"__aexit__ discards the real exception arguments and forwards None, None, None to __exit__, so an exception raised inside an `async with` block is recorded as a successful attempt instead of a failure.\",\"rationale\":\"Trigger: `async with AttemptManager(retry_state) as attempt: raise ValueError()` inside an async retry loop. Mechanism: __aexit__ receives exc_type and exc_value but passes None, None, None to self.__exit__, which takes the no-exception branch and calls retry_state.set_result(None), then returns None so the exception propagates or is treated as success depending on the caller. Impact: the failed attempt is never recorded as an exception, so the retry policy does not retry, and the caller gets a silent wrong result (None) instead of the error or a retry.\",\"confidence\":0.85}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1620,
+      "output_tokens": 736,
+      "output_tokens_details": {
+        "thinking_tokens": 418
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

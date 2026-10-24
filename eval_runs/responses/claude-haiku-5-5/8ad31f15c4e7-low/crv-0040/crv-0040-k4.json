@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/sessions.py",
+        "line": 671,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "`Session.get` now accepts a `params` argument but never forwards it: the call `self.request(\"GET\", url, **kwargs)` omits `params`, so it is silently dropped.",
+        "rationale": "Trigger: `session.get(url, params={\"q\": \"x\"})`. The new `params` parameter is bound to the local name and not included in `kwargs`, so `self.request` receives no params and the query string is never built. Impact: every GET that passes `params` is sent without its query string, returning wrong results with no error. The fix is to pass `params=params` to `self.request`.",
+        "confidence": 0.95
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1857,
+      "output_tokens": 410,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3983,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "e65ceeac0dc24ad8"
+  },
+  "raw": {
+    "id": "msg_011CgLKZ6q8xtHAUywtkkjAk",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/sessions.py\",\"line\":671,\"severity\":\"high\",\"category\":\"wrong_variable_or_argument\",\"description\":\"`Session.get` now accepts a `params` argument but never forwards it: the call `self.request(\\\"GET\\\", url, **kwargs)` omits `params`, so it is silently dropped.\",\"rationale\":\"Trigger: `session.get(url, params={\\\"q\\\": \\\"x\\\"})`. The new `params` parameter is bound to the local name and not included in `kwargs`, so `self.request` receives no params and the query string is never built. Impact: every GET that passes `params` is sent without its query string, returning wrong results with no error. The fix is to pass `params=params` to `self.request`.\",\"confidence\":0.95}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1857,
+      "output_tokens": 410,
+      "output_tokens_details": {
+        "thinking_tokens": 159
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

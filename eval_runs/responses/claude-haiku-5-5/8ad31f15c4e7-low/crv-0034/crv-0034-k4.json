@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 99,
+        "severity": "low",
+        "category": "wrong_literal_or_default",
+        "description": "When ANSI stripping applies, the prompt text is also stripped of surrounding whitespace, so a prompt such as \"Name: \" becomes \"Name:\". When stripping does not apply, the trailing space is kept, so the two paths produce different prompt text.",
+        "rationale": "Trigger: prompt() or confirm() is called with a trailing-space prompt on a non-TTY stream, where should_strip_ansi is true. Mechanism: text.strip() removes the trailing space before passing the prompt to input(). Impact: the user's input appears directly after the colon, and the prompt differs from the colored-TTY output. The intended change only needed to remove ANSI codes, not whitespace.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1917,
+      "output_tokens": 691,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3903,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "8287594154203d2e"
+  },
+  "raw": {
+    "id": "msg_011CgLKThofK4kMqAnR1XnHZ",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/termui.py\",\"line\":99,\"severity\":\"low\",\"category\":\"wrong_literal_or_default\",\"description\":\"When ANSI stripping applies, the prompt text is also stripped of surrounding whitespace, so a prompt such as \\\"Name: \\\" becomes \\\"Name:\\\". When stripping does not apply, the trailing space is kept, so the two paths produce different prompt text.\",\"rationale\":\"Trigger: prompt() or confirm() is called with a trailing-space prompt on a non-TTY stream, where should_strip_ansi is true. Mechanism: text.strip() removes the trailing space before passing the prompt to input(). Impact: the user's input appears directly after the colon, and the prompt differs from the colored-TTY output. The intended change only needed to remove ANSI codes, not whitespace.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1917,
+      "output_tokens": 691,
+      "output_tokens_details": {
+        "thinking_tokens": 404
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

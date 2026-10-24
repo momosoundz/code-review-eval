@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_utils.py",
+        "line": 18,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing the custom __reduce_ex__ means Sentinel members now pickle via the default Enum reduction, which serializes the object() value rather than the member name.",
+        "rationale": "Trigger: pickling an object that holds UNSET or FLAG_NEEDS_VALUE, then unpickling it. Mechanism: the default Enum reduce stores the member's value, which is a bare object(); on load the fresh object is passed to Sentinel(...) and does not match any member, so it raises ValueError. Impact: round-tripping click objects containing these sentinels through pickle crashes, where the removed code had reconstructed the singleton by name.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1945,
+      "output_tokens": 1012,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5925,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_only",
+    "input_sha256": "8a3cd15243ee2240"
+  },
+  "raw": {
+    "id": "msg_011CgLKh8b2qCRm9TGxG1QpD",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/_utils.py\",\"line\":18,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"Removing the custom __reduce_ex__ means Sentinel members now pickle via the default Enum reduction, which serializes the object() value rather than the member name.\",\"rationale\":\"Trigger: pickling an object that holds UNSET or FLAG_NEEDS_VALUE, then unpickling it. Mechanism: the default Enum reduce stores the member's value, which is a bare object(); on load the fresh object is passed to Sentinel(...) and does not match any member, so it raises ValueError. Impact: round-tripping click objects containing these sentinels through pickle crashes, where the removed code had reconstructed the singleton by name.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1945,
+      "output_tokens": 1012,
+      "output_tokens_details": {
+        "thinking_tokens": 748
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

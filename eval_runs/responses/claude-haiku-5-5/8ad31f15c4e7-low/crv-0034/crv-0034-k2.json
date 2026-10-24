@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 99,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "When ANSI stripping applies, the prompt text is also stripped of leading and trailing whitespace, so a prompt such as \"Name: \" is passed to input() as \"Name:\" and loses its separating space.",
+        "rationale": "Trigger: prompt(\"Name: \") or confirm(...) runs with a stream that does not support color, for example when stdout is piped, so should_strip_ansi returns true. Mechanism: strip_ansi(text).strip() removes the trailing space from the prompt before func(text) writes it. Impact: the user sees \"Name:\" with the typed input running directly against the colon, a visible formatting regression on a common non-TTY path. The intended change only needed ANSI removal, not whitespace trimming.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1917,
+      "output_tokens": 645,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4168,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "8287594154203d2e"
+  },
+  "raw": {
+    "id": "msg_011CgLKT6iHS666H7brL5Kc3",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/termui.py\",\"line\":99,\"severity\":\"low\",\"category\":\"logic_other\",\"description\":\"When ANSI stripping applies, the prompt text is also stripped of leading and trailing whitespace, so a prompt such as \\\"Name: \\\" is passed to input() as \\\"Name:\\\" and loses its separating space.\",\"rationale\":\"Trigger: prompt(\\\"Name: \\\") or confirm(...) runs with a stream that does not support color, for example when stdout is piped, so should_strip_ansi returns true. Mechanism: strip_ansi(text).strip() removes the trailing space from the prompt before func(text) writes it. Impact: the user sees \\\"Name:\\\" with the typed input running directly against the colon, a visible formatting regression on a common non-TTY path. The intended change only needed ANSI removal, not whitespace trimming.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1917,
+      "output_tokens": 645,
+      "output_tokens_details": {
+        "thinking_tokens": 349
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

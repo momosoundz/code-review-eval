@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_utils.py",
+        "line": 20,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing the custom __reduce_ex__ means Sentinel members fall back to Enum's default pickling, which reconstructs them from their value. The values are bare object() instances, which cannot be pickled, so pickling UNSET or FLAG_NEEDS_VALUE now raises TypeError.",
+        "rationale": "Trigger: any code path that pickles a Click object holding UNSET or FLAG_NEEDS_VALUE, such as sending a Context or parameter defaults to a multiprocessing worker. Before this change, __reduce_ex__ returned getattr(Sentinel, name), which pickles fine. After it, Enum's default reduce passes the object() value, which pickle rejects. The result is a crash in that code path where it previously worked.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1945,
+      "output_tokens": 1105,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 6143,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_only",
+    "input_sha256": "8a3cd15243ee2240"
+  },
+  "raw": {
+    "id": "msg_011CgLKiRBhppqrF4F6wFyrv",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/_utils.py\",\"line\":20,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"Removing the custom __reduce_ex__ means Sentinel members fall back to Enum's default pickling, which reconstructs them from their value. The values are bare object() instances, which cannot be pickled, so pickling UNSET or FLAG_NEEDS_VALUE now raises TypeError.\",\"rationale\":\"Trigger: any code path that pickles a Click object holding UNSET or FLAG_NEEDS_VALUE, such as sending a Context or parameter defaults to a multiprocessing worker. Before this change, __reduce_ex__ returned getattr(Sentinel, name), which pickles fine. After it, Enum's default reduce passes the object() value, which pickle rejects. The result is a crash in that code path where it previously worked.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1945,
+      "output_tokens": 1105,
+      "output_tokens_details": {
+        "thinking_tokens": 803
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

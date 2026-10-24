@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3576,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "Removing the already_bracketed guard means an optional option whose metavar is already bracketed (e.g. metavar=\"[FOO]\") is now wrapped again, rendering \"[[FOO]]\" in the usage line.",
+        "rationale": "Trigger: an optional option declared with metavar=\"[FOO]\" (not required). Before, already_bracketed was true so the metavar was left as \"[FOO]\". After this change, the condition is only not self.required, so var becomes \"[[FOO]]\". Impact: the usage/help output shows doubled brackets for such options, a visible regression for users who relied on the previous behavior.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1511,
+      "output_tokens": 575,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3781,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_only",
+    "input_sha256": "4d5ad745af65283e"
+  },
+  "raw": {
+    "id": "msg_011CgLKjaAyab52Vpu1AbCKy",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":3576,\"severity\":\"low\",\"category\":\"logic_other\",\"description\":\"Removing the already_bracketed guard means an optional option whose metavar is already bracketed (e.g. metavar=\\\"[FOO]\\\") is now wrapped again, rendering \\\"[[FOO]]\\\" in the usage line.\",\"rationale\":\"Trigger: an optional option declared with metavar=\\\"[FOO]\\\" (not required). Before, already_bracketed was true so the metavar was left as \\\"[FOO]\\\". After this change, the condition is only not self.required, so var becomes \\\"[[FOO]]\\\". Impact: the usage/help output shows doubled brackets for such options, a visible regression for users who relied on the previous behavior.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1511,
+      "output_tokens": 575,
+      "output_tokens_details": {
+        "thinking_tokens": 313
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

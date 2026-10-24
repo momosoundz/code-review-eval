@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 906,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The single-file check was changed to `isinstance(filename, os.PathLike)`, so a plain `str` filename is no longer wrapped in a tuple.",
+        "rationale": "Trigger: calling `click.edit(filename=\"notes.txt\")` with a str. A str is not an os.PathLike, so the wrap at line 907 is skipped and `filename` is passed to `ed.edit_files` as a bare string, which iterates per character. Mechanism: the editor is invoked with each character as a separate filename (e.g. \"n\", \"o\", \"t\"...) instead of the one file. Impact: the user's editor opens wrong or nonexistent paths, and the intended file is never edited, a regression for the common str case.",
+        "confidence": 0.92
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2599,
+      "output_tokens": 611,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3550,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "8b83891775f8229a"
+  },
+  "raw": {
+    "id": "msg_011CgLKNfnipdwuN1XUbNTxW",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/termui.py\",\"line\":906,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The single-file check was changed to `isinstance(filename, os.PathLike)`, so a plain `str` filename is no longer wrapped in a tuple.\",\"rationale\":\"Trigger: calling `click.edit(filename=\\\"notes.txt\\\")` with a str. A str is not an os.PathLike, so the wrap at line 907 is skipped and `filename` is passed to `ed.edit_files` as a bare string, which iterates per character. Mechanism: the editor is invoked with each character as a separate filename (e.g. \\\"n\\\", \\\"o\\\", \\\"t\\\"...) instead of the one file. Impact: the user's editor opens wrong or nonexistent paths, and the intended file is never edited, a regression for the common str case.\",\"confidence\":0.92}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2599,
+      "output_tokens": 611,
+      "output_tokens_details": {
+        "thinking_tokens": 318
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

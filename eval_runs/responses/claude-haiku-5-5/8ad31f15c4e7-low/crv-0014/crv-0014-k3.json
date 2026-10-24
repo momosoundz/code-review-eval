@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "high",
+        "category": "concurrency",
+        "description": "The wrapper now clears and reuses one statistics dict shared by every call. Concurrent or nested calls to the same decorated function therefore clear and overwrite each other's statistics, so the values read from the wrapper can belong to a different call.",
+        "rationale": "Trigger: two threads call the same @retry-decorated function at once, or a retried function recurses into itself. Mechanism: each call runs stats.clear() on the single shared dict, and copy's begin() clears it again mid-run, so attempt_number and related fields from one call are overwritten by another. Impact: users reading wrapped_f.statistics or the retry state see silently wrong statistics. The original code gave each call its own dict by rebinding, which avoided this.",
+        "confidence": 0.6
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 218,
+        "severity": "high",
+        "category": "concurrency",
+        "description": "The async wrapper clears and reuses one statistics dict shared across all calls, so overlapping coroutines or nested invocations of the same decorated function overwrite each other's statistics.",
+        "rationale": "Trigger: the same @retry-decorated coroutine function is awaited concurrently (e.g., via asyncio.gather) or recurses. Mechanism: stats.clear() runs on the shared dict for each invocation, and the copy's begin() clears it again while another invocation is still running, so statistics mix values from different calls. Impact: the statistics users read from the wrapper are silently wrong under concurrency. The original per-call rebinding avoided this.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2446,
+      "output_tokens": 1956,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 9521,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "18530cd0f24673fb"
+  },
+  "raw": {
+    "id": "msg_011CgLJtDnmMhsmHPxqaQndS",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":377,\"severity\":\"high\",\"category\":\"concurrency\",\"description\":\"The wrapper now clears and reuses one statistics dict shared by every call. Concurrent or nested calls to the same decorated function therefore clear and overwrite each other's statistics, so the values read from the wrapper can belong to a different call.\",\"rationale\":\"Trigger: two threads call the same @retry-decorated function at once, or a retried function recurses into itself. Mechanism: each call runs stats.clear() on the single shared dict, and copy's begin() clears it again mid-run, so attempt_number and related fields from one call are overwritten by another. Impact: users reading wrapped_f.statistics or the retry state see silently wrong statistics. The original code gave each call its own dict by rebinding, which avoided this.\",\"confidence\":0.6},{\"file\":\"tenacity/asyncio/__init__.py\",\"line\":218,\"severity\":\"high\",\"category\":\"concurrency\",\"description\":\"The async wrapper clears and reuses one statistics dict shared across all calls, so overlapping coroutines or nested invocations of the same decorated function overwrite each other's statistics.\",\"rationale\":\"Trigger: the same @retry-decorated coroutine function is awaited concurrently (e.g., via asyncio.gather) or recurses. Mechanism: stats.clear() runs on the shared dict for each invocation, and the copy's begin() clears it again while another invocation is still running, so statistics mix values from different calls. Impact: the statistics users read from the wrapper are silently wrong under concurrency. The original per-call rebinding avoided this.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2446,
+      "output_tokens": 1956,
+      "output_tokens_details": {
+        "thinking_tokens": 1404
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

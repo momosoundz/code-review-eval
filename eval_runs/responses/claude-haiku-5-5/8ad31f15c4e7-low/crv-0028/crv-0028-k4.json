@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3395,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The separator condition was inverted to `not any_prefix_is_slash`, so the help left column now uses \"; \" for ordinary options and \" / \" for slash-prefixed options, the reverse of the original behavior.",
+        "rationale": "Trigger: any option whose prefixes are not slash-style, such as `--verbose` with `-v`. Original code joined groups with \" / \" when any_prefix_is_slash was False and \"; \" when it was True. The new line 3395 uses \"; \" when any_prefix_is_slash is False, so the rendered help for common options changes from `-v / --verbose` to `-v; --verbose`, and slash options are rendered with the wrong separator. The title only announces exposing the spec without the hidden check, not changing the separator, so this is an unintended regression that every help page shows.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2119,
+      "output_tokens": 719,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4089,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "c11acb20851eff4a"
+  },
+  "raw": {
+    "id": "msg_011CgLKKzvKp5XfHwTR9V45N",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":3395,\"severity\":\"high\",\"category\":\"wrong_operator\",\"description\":\"The separator condition was inverted to `not any_prefix_is_slash`, so the help left column now uses \\\"; \\\" for ordinary options and \\\" / \\\" for slash-prefixed options, the reverse of the original behavior.\",\"rationale\":\"Trigger: any option whose prefixes are not slash-style, such as `--verbose` with `-v`. Original code joined groups with \\\" / \\\" when any_prefix_is_slash was False and \\\"; \\\" when it was True. The new line 3395 uses \\\"; \\\" when any_prefix_is_slash is False, so the rendered help for common options changes from `-v / --verbose` to `-v; --verbose`, and slash options are rendered with the wrong separator. The title only announces exposing the spec without the hidden check, not changing the separator, so this is an unintended regression that every help page shows.\",\"confidence\":0.85}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2119,
+      "output_tokens": 719,
+      "output_tokens_details": {
+        "thinking_tokens": 398
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

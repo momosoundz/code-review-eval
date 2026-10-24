@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 304,
+        "severity": "medium",
+        "category": "error_handling",
+        "description": "The missing-CA-bundle check now emits a warning instead of raising OSError, so a nonexistent cert_loc is allowed to continue into the TLS setup.",
+        "rationale": "Trigger: verify=True (default) with DEFAULT_CA_BUNDLE_PATH pointing to a file that does not exist on disk, such as a zipped install where certifi is no longer extracted. Mechanism: the code warns and proceeds with the nonexistent path instead of raising. Impact: the request fails later with a less clear error from the SSL/urllib3 layer, and the user sees only a warning first.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1828,
+      "output_tokens": 992,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 6568,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "fa21dba4d2ba7388"
+  },
+  "raw": {
+    "id": "msg_011CgLKbTwCNEf3a3wWPahtR",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":304,\"severity\":\"medium\",\"category\":\"error_handling\",\"description\":\"The missing-CA-bundle check now emits a warning instead of raising OSError, so a nonexistent cert_loc is allowed to continue into the TLS setup.\",\"rationale\":\"Trigger: verify=True (default) with DEFAULT_CA_BUNDLE_PATH pointing to a file that does not exist on disk, such as a zipped install where certifi is no longer extracted. Mechanism: the code warns and proceeds with the nonexistent path instead of raising. Impact: the request fails later with a less clear error from the SSL/urllib3 layer, and the user sees only a warning first.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1828,
+      "output_tokens": 992,
+      "output_tokens_details": {
+        "thinking_tokens": 739
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

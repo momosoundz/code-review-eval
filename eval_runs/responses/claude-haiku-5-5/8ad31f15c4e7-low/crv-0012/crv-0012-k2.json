@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The early-return condition is inverted. `exponent < log(max/multiplier, exp_base)` holds exactly when `multiplier * exp_base**exponent < max`, i.e. when the exponential result is still below the cap, so the code returns the maximum wait in the cases where it should compute the normal value.",
+        "rationale": "Trigger: WaitExponential(multiplier=1, max=100, exp_base=2) on the first attempt, so exponent=0 and log2(100)\u22486.64, making 0 < 6.64 true. The code then returns max(0, min, 100) = 100 instead of the correct 1. Mechanism: the shortcut fires for small attempts, where the result is far below max, and skips the computation. Impact: every early retry waits the full max delay, and backoff is effectively disabled for the common case, silently changing retry timing.",
+        "confidence": 0.93
+      },
+      {
+        "file": "tenacity/wait.py",
+        "line": 213,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "When the shortcut fires it returns `max(max(0, self.min), self.max)`, which is the cap, not the clamped exponential value. The intended shortcut should return the cap only when the exponential value has already exceeded it, and otherwise the result must still respect the minimum bound.",
+        "rationale": "Trigger: any configuration where the exponent is past the threshold, such as attempt 20 with multiplier=1, max=100, exp_base=2. The return value is max(min, max), which is the same as the original clamp result only in that case. The problem is that the branch's trigger is inverted (see the line 211 finding), so the returned value is wrong for the early attempts. Impact: incorrect wait durations.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1761,
+      "output_tokens": 959,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5969,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "6f2b6d20cdd2e656"
+  },
+  "raw": {
+    "id": "msg_011CgLJnDaCheuV5DNReEEXM",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":211,\"severity\":\"high\",\"category\":\"wrong_operator\",\"description\":\"The early-return condition is inverted. `exponent < log(max/multiplier, exp_base)` holds exactly when `multiplier * exp_base**exponent < max`, i.e. when the exponential result is still below the cap, so the code returns the maximum wait in the cases where it should compute the normal value.\",\"rationale\":\"Trigger: WaitExponential(multiplier=1, max=100, exp_base=2) on the first attempt, so exponent=0 and log2(100)\u22486.64, making 0 < 6.64 true. The code then returns max(0, min, 100) = 100 instead of the correct 1. Mechanism: the shortcut fires for small attempts, where the result is far below max, and skips the computation. Impact: every early retry waits the full max delay, and backoff is effectively disabled for the common case, silently changing retry timing.\",\"confidence\":0.93},{\"file\":\"tenacity/wait.py\",\"line\":213,\"severity\":\"high\",\"category\":\"wrong_variable_or_argument\",\"description\":\"When the shortcut fires it returns `max(max(0, self.min), self.max)`, which is the cap, not the clamped exponential value. The intended shortcut should return the cap only when the exponential value has already exceeded it, and otherwise the result must still respect the minimum bound.\",\"rationale\":\"Trigger: any configuration where the exponent is past the threshold, such as attempt 20 with multiplier=1, max=100, exp_base=2. The return value is max(min, max), which is the same as the original clamp result only in that case. The problem is that the branch's trigger is inverted (see the line 211 finding), so the returned value is wrong for the early attempts. Impact: incorrect wait durations.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1761,
+      "output_tokens": 959,
+      "output_tokens_details": {
+        "thinking_tokens": 351
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 244,
+        "severity": "high",
+        "category": "logic_other",
+        "description": "Changing the regex check from match() to fullmatch() silently alters which exceptions match a pattern. Patterns that previously matched a prefix of the message no longer match.",
+        "rationale": "Trigger: retry_if_exception_message(match=\"Connection\") is used and the raised exception's str is \"Connection refused: host:80\". Before, re.match finds a prefix match and the exception is retried. Now fullmatch requires the whole string to match, so _check returns False and the exception is not retried. Impact: retries stop silently for existing users who relied on prefix matching, and the errors propagate immediately. The commit title only announces accepting empty messages, so this behavior change is unannounced.",
+        "confidence": 0.7
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1798,
+      "output_tokens": 680,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4359,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "86f46a271c196ea0"
+  },
+  "raw": {
+    "id": "msg_011CgLKA4e3MMLFXxC5aNG9h",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/retry.py\",\"line\":244,\"severity\":\"high\",\"category\":\"logic_other\",\"description\":\"Changing the regex check from match() to fullmatch() silently alters which exceptions match a pattern. Patterns that previously matched a prefix of the message no longer match.\",\"rationale\":\"Trigger: retry_if_exception_message(match=\\\"Connection\\\") is used and the raised exception's str is \\\"Connection refused: host:80\\\". Before, re.match finds a prefix match and the exception is retried. Now fullmatch requires the whole string to match, so _check returns False and the exception is not retried. Impact: retries stop silently for existing users who relied on prefix matching, and the errors propagate immediately. The commit title only announces accepting empty messages, so this behavior change is unannounced.\",\"confidence\":0.7}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1798,
+      "output_tokens": 680,
+      "output_tokens_details": {
+        "thinking_tokens": 403
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 226,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "__aexit__ discards the exception it receives and calls self.__exit__(None, None, None), so the attempt is never recorded as failed.",
+        "rationale": "Trigger: `async for attempt in AsyncRetrying(...): async with attempt: raise ValueError()`. Mechanism: __aexit__ passes None for exc_type and exc_value, so the sync __exit__ takes the success branch, calls set_result(None), and returns None. Impact: the failure is recorded as success, the retry loop does not retry, and the ValueError escapes immediately instead of being retried as the sync `with attempt:` path does.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1620,
+      "output_tokens": 868,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4652,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "b5e64bacd038012e"
+  },
+  "raw": {
+    "id": "msg_011CgLK78SQ9Ct1Z3YFXxbhw",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\": [{\"file\": \"tenacity/__init__.py\", \"line\": 226, \"severity\": \"high\", \"category\": \"wrong_variable_or_argument\", \"description\": \"__aexit__ discards the exception it receives and calls self.__exit__(None, None, None), so the attempt is never recorded as failed.\", \"rationale\": \"Trigger: `async for attempt in AsyncRetrying(...): async with attempt: raise ValueError()`. Mechanism: __aexit__ passes None for exc_type and exc_value, so the sync __exit__ takes the success branch, calls set_result(None), and returns None. Impact: the failure is recorded as success, the retry loop does not retry, and the ValueError escapes immediately instead of being retried as the sync `with attempt:` path does.\", \"confidence\": 0.85}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1620,
+      "output_tokens": 868,
+      "output_tokens_details": {
+        "thinking_tokens": 598
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

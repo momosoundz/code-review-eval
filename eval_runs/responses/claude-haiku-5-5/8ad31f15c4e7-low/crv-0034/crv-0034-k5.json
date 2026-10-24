@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 99,
+        "severity": "low",
+        "category": "wrong_literal_or_default",
+        "description": "The added `.strip()` removes the trailing space from the prompt text, so the prompt no longer ends with the separator `\": \"` that `prompt()` adds before the cursor.",
+        "rationale": "Trigger: `prompt()` runs with a non-tty stream and color not forced, so the new branch executes. `prompt()` builds the text as `f\"{text}: \"`, so the trailing space is stripped and `input()` displays `Name:` with the cursor directly after the colon. Impact: the user-visible prompt formatting changes for every stripped prompt, and typed input runs into the colon. Only `strip_ansi` was needed to fulfil the commit's intent.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1917,
+      "output_tokens": 685,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4966,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "8287594154203d2e"
+  },
+  "raw": {
+    "id": "msg_011CgLKTzUX8pyGbLj46dGvj",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/termui.py\",\"line\":99,\"severity\":\"low\",\"category\":\"wrong_literal_or_default\",\"description\":\"The added `.strip()` removes the trailing space from the prompt text, so the prompt no longer ends with the separator `\\\": \\\"` that `prompt()` adds before the cursor.\",\"rationale\":\"Trigger: `prompt()` runs with a non-tty stream and color not forced, so the new branch executes. `prompt()` builds the text as `f\\\"{text}: \\\"`, so the trailing space is stripped and `input()` displays `Name:` with the cursor directly after the colon. Impact: the user-visible prompt formatting changes for every stripped prompt, and typed input runs into the colon. Only `strip_ansi` was needed to fulfil the commit's intent.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1917,
+      "output_tokens": 685,
+      "output_tokens_details": {
+        "thinking_tokens": 407
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

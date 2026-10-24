@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1188,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The rewrite drops the removal of param.secondary_opts from the help option names, so names reserved only as a secondary option no longer get excluded.",
+        "rationale": "Trigger: a command has a flag declared as a secondary option matching the help name, such as click.option('--x/--help'), so '--help' appears in that param's secondary_opts and not in its opts. The old code removed '--help' from the candidates via difference_update(param.secondary_opts). The new loop only iterates param.opts, so '--help' stays a help option and collides with the user's parameter, which can cause a parser conflict or the help option shadowing the user's flag. The impact is that the user's secondary flag stops working or the help option is wrongly registered.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1773,
+      "output_tokens": 580,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4186,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "4205b6dc9a7e8267"
+  },
+  "raw": {
+    "id": "msg_011CgLKQRnAJvTrLZryefryj",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1188,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The rewrite drops the removal of param.secondary_opts from the help option names, so names reserved only as a secondary option no longer get excluded.\",\"rationale\":\"Trigger: a command has a flag declared as a secondary option matching the help name, such as click.option('--x/--help'), so '--help' appears in that param's secondary_opts and not in its opts. The old code removed '--help' from the candidates via difference_update(param.secondary_opts). The new loop only iterates param.opts, so '--help' stays a help option and collides with the user's parameter, which can cause a parser conflict or the help option shadowing the user's flag. The impact is that the user's secondary flag stops working or the help option is wrongly registered.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1773,
+      "output_tokens": 580,
+      "output_tokens_details": {
+        "thinking_tokens": 296
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

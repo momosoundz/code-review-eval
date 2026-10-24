@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/utils.py",
+        "line": 544,
+        "severity": "medium",
+        "category": "null_or_missing_value",
+        "description": "A Content-Type parameter with no '=' (for example 'text/html; charset') is now stored as the boolean True. get_encoding_from_headers then calls .strip() on that value and raises AttributeError.",
+        "rationale": "Trigger: a response whose Content-Type is 'text/html; charset' with no value. _parse_content_type_header now sets params['charset'] = True instead of skipping the token. Mechanism: the 'charset' in params check passes and True.strip(...) raises AttributeError. Impact: accessing response.encoding or response.text raises an exception on such a malformed header, where the previous code silently fell back to ISO-8859-1.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2109,
+      "output_tokens": 566,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3774,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_only",
+    "input_sha256": "1afc750f3de9d94b"
+  },
+  "raw": {
+    "id": "msg_011CgLKq15KaBfQDJwQ3Lcti",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/utils.py\",\"line\":544,\"severity\":\"medium\",\"category\":\"null_or_missing_value\",\"description\":\"A Content-Type parameter with no '=' (for example 'text/html; charset') is now stored as the boolean True. get_encoding_from_headers then calls .strip() on that value and raises AttributeError.\",\"rationale\":\"Trigger: a response whose Content-Type is 'text/html; charset' with no value. _parse_content_type_header now sets params['charset'] = True instead of skipping the token. Mechanism: the 'charset' in params check passes and True.strip(...) raises AttributeError. Impact: accessing response.encoding or response.text raises an exception on such a malformed header, where the previous code silently fell back to ISO-8859-1.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2109,
+      "output_tokens": 566,
+      "output_tokens_details": {
+        "thinking_tokens": 294
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

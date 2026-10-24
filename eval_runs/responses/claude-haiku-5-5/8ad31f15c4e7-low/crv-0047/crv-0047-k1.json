@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3576,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "Removing the already_bracketed guard means an optional option whose metavar is already bracketed, such as metavar=\"[FILE]\", is now wrapped again and rendered as \"[[FILE]]\" in help output.",
+        "rationale": "Trigger: an optional option declared with a user metavar that already starts with \"[\" and ends with \"]\". Mechanism: line 3576 now unconditionally wraps var in brackets when not required, so the previous skip no longer applies. Impact: the usage line shows doubled brackets, a visible help-text regression for existing CLIs.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1511,
+      "output_tokens": 650,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3749,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_only",
+    "input_sha256": "4d5ad745af65283e"
+  },
+  "raw": {
+    "id": "msg_011CgLKjHeo6kCACWAjQivtB",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":3576,\"severity\":\"low\",\"category\":\"logic_other\",\"description\":\"Removing the already_bracketed guard means an optional option whose metavar is already bracketed, such as metavar=\\\"[FILE]\\\", is now wrapped again and rendered as \\\"[[FILE]]\\\" in help output.\",\"rationale\":\"Trigger: an optional option declared with a user metavar that already starts with \\\"[\\\" and ends with \\\"]\\\". Mechanism: line 3576 now unconditionally wraps var in brackets when not required, so the previous skip no longer applies. Impact: the usage line shows doubled brackets, a visible help-text regression for existing CLIs.\",\"confidence\":0.55}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1511,
+      "output_tokens": 650,
+      "output_tokens_details": {
+        "thinking_tokens": 408
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

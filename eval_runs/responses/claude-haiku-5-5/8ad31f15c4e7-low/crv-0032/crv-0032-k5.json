@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1188,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The loop no longer removes names listed in param.secondary_opts from the help option names, unlike the removed code that did. A secondary option that matches a configured help name is now offered as a help name too.",
+        "rationale": "Trigger: a command sets help_option_names to include \"-h\" and has a boolean flag declared as \"--verbose/-h\", so \"-h\" is in that flag's secondary_opts. The old code subtracted secondary_opts, so \"-h\" was dropped from the help names. The new loop only pops param.opts, so \"-h\" stays as a help name and collides with the flag's secondary option. Impact: the same token both toggles the flag and triggers help, so the parser's behavior for it is ambiguous or changes from before the commit.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1773,
+      "output_tokens": 708,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4692,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "4205b6dc9a7e8267"
+  },
+  "raw": {
+    "id": "msg_011CgLKRMgsjvjDuP3tnGTt3",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1188,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The loop no longer removes names listed in param.secondary_opts from the help option names, unlike the removed code that did. A secondary option that matches a configured help name is now offered as a help name too.\",\"rationale\":\"Trigger: a command sets help_option_names to include \\\"-h\\\" and has a boolean flag declared as \\\"--verbose/-h\\\", so \\\"-h\\\" is in that flag's secondary_opts. The old code subtracted secondary_opts, so \\\"-h\\\" was dropped from the help names. The new loop only pops param.opts, so \\\"-h\\\" stays as a help name and collides with the flag's secondary option. Impact: the same token both toggles the flag and triggers help, so the parser's behavior for it is ambiguous or changes from before the commit.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1773,
+      "output_tokens": 708,
+      "output_tokens_details": {
+        "thinking_tokens": 410
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

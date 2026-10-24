@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1188,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The loop now removes only param.opts and no longer removes param.secondary_opts, which the old code removed. A help name that is a secondary option of another parameter stays in the help option names.",
+        "rationale": "Trigger: a flag declared as @click.option('--color/--help') or similar, where a secondary option equals a help option name such as --help. The old code's difference_update(param.secondary_opts) reserved that name, so the help option was not created with it. The new loop skips secondary_opts, so --help is returned as a help name even though the flag already claims it. Impact: the help option and the flag both register the same name, so parsing --help may trigger the wrong parameter or fail with a conflict, which is a regression from the previous behavior.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1773,
+      "output_tokens": 614,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4363,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "4205b6dc9a7e8267"
+  },
+  "raw": {
+    "id": "msg_011CgLKQjtag8MJAHaEB2CHx",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1188,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The loop now removes only param.opts and no longer removes param.secondary_opts, which the old code removed. A help name that is a secondary option of another parameter stays in the help option names.\",\"rationale\":\"Trigger: a flag declared as @click.option('--color/--help') or similar, where a secondary option equals a help option name such as --help. The old code's difference_update(param.secondary_opts) reserved that name, so the help option was not created with it. The new loop skips secondary_opts, so --help is returned as a help name even though the flag already claims it. Impact: the help option and the flag both register the same name, so parsing --help may trigger the wrong parameter or fail with a conflict, which is a regression from the previous behavior.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1773,
+      "output_tokens": 614,
+      "output_tokens_details": {
+        "thinking_tokens": 330
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

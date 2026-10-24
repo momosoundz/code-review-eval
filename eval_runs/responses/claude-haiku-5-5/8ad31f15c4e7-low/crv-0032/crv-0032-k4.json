@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1189,
+        "severity": "medium",
+        "category": "wrong_variable_or_argument",
+        "description": "The loop now removes only param.opts from the help option names and no longer removes param.secondary_opts, which the original code did.",
+        "rationale": "Trigger: help_option_names contains a name that is a secondary option of another parameter, such as '--no-verbose' for a boolean flag '--verbose/--no-verbose', and that flag is defined on the command. The original code dropped that name from the help names, but the new loop keeps it. The help option then claims a name the flag already uses, so the parser can route '--no-verbose' to the wrong option or raise a conflict. The user sees the flag misbehave or a startup error.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1773,
+      "output_tokens": 610,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4035,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "4205b6dc9a7e8267"
+  },
+  "raw": {
+    "id": "msg_011CgLKR4PaENSsFKSrRbvbg",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1189,\"severity\":\"medium\",\"category\":\"wrong_variable_or_argument\",\"description\":\"The loop now removes only param.opts from the help option names and no longer removes param.secondary_opts, which the original code did.\",\"rationale\":\"Trigger: help_option_names contains a name that is a secondary option of another parameter, such as '--no-verbose' for a boolean flag '--verbose/--no-verbose', and that flag is defined on the command. The original code dropped that name from the help names, but the new loop keeps it. The help option then claims a name the flag already uses, so the parser can route '--no-verbose' to the wrong option or raise a conflict. The user sees the flag misbehave or a startup error.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1773,
+      "output_tokens": 610,
+      "output_tokens_details": {
+        "thinking_tokens": 353
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

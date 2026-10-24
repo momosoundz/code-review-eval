@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 304,
+        "severity": "low",
+        "category": "error_handling",
+        "description": "The missing-CA-bundle check now emits a warning instead of raising OSError, so a nonexistent verify path or certifi path no longer fails fast with the intended clear error.",
+        "rationale": "Trigger: a caller passes verify='/nonexistent/ca.pem' (or the bundle path is missing). Before, cert_loc failed os.path.exists and OSError was raised with a clear message. Now warnings.warn is called and execution continues with a bad path, so the failure surfaces later from the TLS layer with a less clear error, or the warning is silently ignored. The commit title only announces removing the extraction call, not changing this error path to a warning, so the change is not covered by the stated intent.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1828,
+      "output_tokens": 1123,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 6962,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "fa21dba4d2ba7388"
+  },
+  "raw": {
+    "id": "msg_011CgLKbwVu6QJoF9By4CXQN",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":304,\"severity\":\"low\",\"category\":\"error_handling\",\"description\":\"The missing-CA-bundle check now emits a warning instead of raising OSError, so a nonexistent verify path or certifi path no longer fails fast with the intended clear error.\",\"rationale\":\"Trigger: a caller passes verify='/nonexistent/ca.pem' (or the bundle path is missing). Before, cert_loc failed os.path.exists and OSError was raised with a clear message. Now warnings.warn is called and execution continues with a bad path, so the failure surfaces later from the TLS layer with a less clear error, or the warning is silently ignored. The commit title only announces removing the extraction call, not changing this error path to a warning, so the change is not covered by the stated intent.\",\"confidence\":0.55}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1828,
+      "output_tokens": 1123,
+      "output_tokens_details": {
+        "thinking_tokens": 843
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}
