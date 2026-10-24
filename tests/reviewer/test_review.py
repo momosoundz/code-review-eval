@@ -5,7 +5,14 @@ from typing import Any
 import pytest
 
 from reviewer import review
-from reviewer.review import InvalidFindingsError, normalize_findings, prompt_id, run_review
+from reviewer.review import (
+    InvalidFindingsError,
+    ReviewOptions,
+    normalize_findings,
+    prompt_id,
+    run_review,
+    user_message,
+)
 from tests.conftest import SAMPLE_DIFF as SAMPLE
 
 
@@ -93,6 +100,13 @@ def test_payload_without_findings_list_is_invalid() -> None:
         normalize_findings({"items": []}, numbered)
 
 
+@pytest.mark.parametrize("payload", [[], None, "findings", 3])
+def test_payload_that_is_not_an_object_is_invalid(payload: Any) -> None:
+    numbered = review.number_diff(SAMPLE)
+    with pytest.raises(InvalidFindingsError, match="object"):
+        normalize_findings(payload, numbered)
+
+
 def test_empty_findings_is_valid() -> None:
     numbered = review.number_diff(SAMPLE)
     assert normalize_findings({"findings": []}, numbered) == ([], [])
@@ -164,3 +178,73 @@ def test_normalize_keeps_dotfile_directories() -> None:
     assert review._normalize_path("./.github/ci.yml") == ".github/ci.yml"
     assert review._normalize_path("b/.env.example") == ".env.example"
     assert review._normalize_path("app/orders.py") == "app/orders.py"
+
+
+def test_user_message_adds_the_title_only_in_title_mode() -> None:
+    assert user_message("DIFF", "hunk_only", "Accept empty message") == "DIFF"
+    assert user_message("DIFF", "hunk_plus_title", None) == "DIFF"
+    with_title = user_message("DIFF", "hunk_plus_title", "Accept empty message")
+    assert with_title.startswith("Commit title: Accept empty message") and with_title.endswith(
+        "DIFF"
+    )
+
+
+def test_context_mode_changes_prompt_id() -> None:
+    assert prompt_id("hunk_only") != prompt_id("hunk_plus_title")
+
+
+def test_template_text_is_part_of_prompt_id(monkeypatch: pytest.MonkeyPatch) -> None:
+    before = prompt_id("hunk_plus_title")
+    monkeypatch.setitem(review.TEMPLATES, "hunk_plus_title", "Title: {title}\n{diff}")
+    assert prompt_id("hunk_plus_title") != before
+
+
+def test_title_mode_without_title_is_recorded_as_hunk_only(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(review, "_create_message", lambda **kw: FakeResponse(good_payload()))
+    result = run_review(
+        SAMPLE, tmp_path / "f.json", options=ReviewOptions(context_mode="hunk_plus_title")
+    )
+    assert result.context_used == "hunk_only" and result.prompt_id == prompt_id("hunk_plus_title")
+
+
+def test_cli_threads_context_mode_and_title(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    calls: list[dict[str, Any]] = []
+
+    def fake_create(**kwargs: Any) -> FakeResponse:
+        calls.append(kwargs)
+        return FakeResponse(good_payload())
+
+    monkeypatch.setattr(review, "_create_message", fake_create)
+    patch = tmp_path / "d.patch"
+    patch.write_text(SAMPLE)
+    out = tmp_path / "f.json"
+    argv = [
+        "--diff",
+        str(patch),
+        "--out",
+        str(out),
+        "--context-mode",
+        "hunk_plus_title",
+        "--title",
+        "Drop the  tenant\ncheck",
+    ]
+    assert review.main(argv) == 0
+    content = calls[0]["messages"][0]["content"]
+    assert content.startswith("Commit title: Drop the tenant check")
+    written = json.loads(out.read_text())
+    assert written["context_used"] == "hunk_plus_title"
+    assert written["prompt_id"] == prompt_id("hunk_plus_title")
+
+
+def test_verified_title_mode_adds_the_check_instruction() -> None:
+    text = user_message("DIFF", "hunk_plus_title_verified", "Flatten chained operators")
+    assert text.startswith("Commit title: Flatten chained operators")
+    assert "operator by operator" in text and text.endswith("DIFF")
+    assert prompt_id("hunk_plus_title_verified") not in (
+        prompt_id("hunk_only"),
+        prompt_id("hunk_plus_title"),
+    )

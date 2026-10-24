@@ -15,6 +15,7 @@ from typing import Any
 from reviewer import llm
 from reviewer.config import (
     CONTEXT_MODE,
+    CONTEXT_MODES,
     EFFORT,
     MAX_OUTPUT_TOKENS,
     MODEL,
@@ -43,6 +44,8 @@ class ReviewResult:
     elapsed_ms: int
     model: str
     prompt_id: str
+    context_used: str
+    input_sha256: str
 
 
 def load_prompt() -> str:
@@ -56,9 +59,20 @@ def load_schema() -> dict[str, Any]:
 
 
 def prompt_id(context_mode: str = CONTEXT_MODE) -> str:
-    """Hash of prompt, schema and context mode: one id per reviewer version."""
-    blob = load_prompt() + json.dumps(load_schema(), sort_keys=True) + context_mode
+    """Hash of prompt, schema, context mode and its message template: one id per reviewer."""
+    blob = (
+        load_prompt()
+        + json.dumps(load_schema(), sort_keys=True)
+        + context_mode
+        + TEMPLATES[context_mode]
+    )
     return hashlib.sha256(blob.encode()).hexdigest()[:12]
+
+
+def input_sha256(numbered_diff: str, context_mode: str, title: str | None) -> str:
+    """Hash of everything the model saw for one review: system prompt and user message."""
+    blob = load_prompt() + "\n" + user_message(numbered_diff, context_mode, title)
+    return hashlib.sha256(blob.encode()).hexdigest()[:16]
 
 
 def _create_message(**kwargs: Any) -> Any:
@@ -97,13 +111,16 @@ def _check_finding(raw: dict[str, Any], numbered: NumberedDiff) -> dict[str, Any
 
 
 def normalize_findings(
-    payload: dict[str, Any], numbered: NumberedDiff
+    payload: Any, numbered: NumberedDiff
 ) -> tuple[list[dict[str, Any]], list[str]]:
     """Validate each finding against the diff; return the valid ones and why the rest were dropped.
 
     Raises:
-        InvalidFindingsError: When the payload has no ``findings`` list at all.
+        InvalidFindingsError: When the payload is not an object with a ``findings`` list.
     """
+    if not isinstance(payload, dict):
+        msg = f"payload is not a JSON object: {type(payload).__name__}"
+        raise InvalidFindingsError(msg)
     findings = payload.get("findings")
     if not isinstance(findings, list):
         msg = "payload has no 'findings' list"
@@ -118,7 +135,7 @@ def normalize_findings(
     return kept, dropped
 
 
-def _parse_payload(response: Any) -> dict[str, Any]:
+def _parse_payload(response: Any) -> Any:
     if response.stop_reason == "refusal":
         msg = "model refused the request"
         raise InvalidFindingsError(msg)
@@ -151,23 +168,59 @@ def _usage(response: Any) -> dict[str, int]:
     }
 
 
+TEMPLATES = {
+    "hunk_only": "{diff}",
+    "hunk_plus_title": (
+        "Commit title: {title}\n"
+        "A behavior change that the title announces is intended and is not a defect by "
+        "itself; judge whether the implementation of that intent is correct.\n\n{diff}"
+    ),
+    "hunk_plus_title_verified": (
+        "Commit title: {title}\n"
+        "The title states what the author meant to do. Do not take it as evidence that the "
+        "code does it. Check the implementation against the title operator by operator and "
+        "branch by branch: a change that the title announces is not a defect, but an "
+        "implementation that does something other than what the title says is, even when "
+        "it looks like part of the same refactor.\n\n{diff}"
+    ),
+}
+
+
+def effective_context(context_mode: str, title: str | None) -> str:
+    """The mode actually applied: a title mode without a title degrades to ``hunk_only``."""
+    return context_mode if title or context_mode == "hunk_only" else "hunk_only"
+
+
+def user_message(numbered_diff: str, context_mode: str, title: str | None) -> str:
+    """What the model receives, built from the template of the effective context mode."""
+    mode = effective_context(context_mode, title)
+    return TEMPLATES[mode].format(diff=numbered_diff, title=title or "")
+
+
 def review_diff(
-    diff_text: str, model: str = MODEL, effort: str = EFFORT, context_mode: str = CONTEXT_MODE
+    diff_text: str,
+    model: str = MODEL,
+    effort: str = EFFORT,
+    context_mode: str = CONTEXT_MODE,
+    title: str | None = None,
 ) -> tuple[ReviewResult, dict[str, Any]]:
     """Review ``diff_text`` with one model call; return the result and the raw API envelope.
 
     A refusal or invalid JSON yields ``no_output=True`` with an empty findings list, so the
     caller scores it as a miss instead of a clean review. A finding that cites a file or line
     outside the diff is dropped and recorded in ``dropped``; the rest of the review stands.
+    ``context_mode`` selects what accompanies the diff; it is part of ``prompt_id``.
     """
     numbered = number_diff(diff_text)
     version = prompt_id(context_mode)
+    used = effective_context(context_mode, title)
+    digest = input_sha256(numbered.text, context_mode, title)
     started = time.monotonic()
     response = _create_message(
         model=model,
         max_tokens=MAX_OUTPUT_TOKENS,
         system=load_prompt(),
-        messages=[{"role": "user", "content": numbered.text}],
+        messages=[{"role": "user", "content": user_message(numbered.text, context_mode, title)}],
         output_config={
             "effort": effort,
             "format": {"type": "json_schema", "schema": load_schema()},
@@ -178,25 +231,46 @@ def review_diff(
     usage = _usage(response)
     try:
         findings, dropped = normalize_findings(_parse_payload(response), numbered)
-        result = ReviewResult(findings, False, None, dropped, usage, elapsed_ms, model, version)
+        result = ReviewResult(
+            findings, False, None, dropped, usage, elapsed_ms, model, version, used, digest
+        )
     except InvalidFindingsError as exc:
-        result = ReviewResult([], True, str(exc), [], usage, elapsed_ms, model, version)
+        result = ReviewResult(
+            [], True, str(exc), [], usage, elapsed_ms, model, version, used, digest
+        )
     return result, raw
+
+
+@dataclass(frozen=True)
+class ReviewOptions:
+    """What varies between reviewer versions: model, effort, context mode, and the title."""
+
+    model: str = MODEL
+    effort: str = EFFORT
+    context_mode: str = CONTEXT_MODE
+    title: str | None = None
 
 
 def run_review(
     diff_text: str,
     out_path: Path,
     raw_out: Path | None = None,
-    model: str = MODEL,
-    effort: str = EFFORT,
+    options: ReviewOptions | None = None,
 ) -> ReviewResult:
     """Review ``diff_text``, write ``out_path`` and, when given, the raw envelope to ``raw_out``."""
-    result, raw = review_diff(diff_text, model, effort)
+    opts = options or ReviewOptions()
+    result, raw = review_diff(diff_text, opts.model, opts.effort, opts.context_mode, opts.title)
     if raw_out is not None:
         raw_out.write_text(json.dumps(raw, indent=2))
     out_path.write_text(json.dumps(asdict(result), indent=2) + "\n")
     return result
+
+
+def clean_title(title: str | None) -> str | None:
+    """One line, whitespace collapsed, capped at 200 characters; None stays None."""
+    if title is None:
+        return None
+    return " ".join(title.split())[:200] or None
 
 
 def git_diff(repo: Path, base: str, head: str) -> str:
@@ -221,6 +295,8 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser.add_argument("--raw-out", type=Path, default=None)
     parser.add_argument("--model", default=MODEL)
     parser.add_argument("--effort", default=EFFORT)
+    parser.add_argument("--context-mode", default=CONTEXT_MODE, choices=CONTEXT_MODES)
+    parser.add_argument("--title", default=None, help="commit title, used in hunk_plus_title mode")
     return parser.parse_args(argv)
 
 
@@ -229,7 +305,8 @@ def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv)
     diff_text = args.diff.read_text() if args.diff else git_diff(args.repo, args.base, args.head)
     try:
-        result = run_review(diff_text, args.out, args.raw_out, args.model, args.effort)
+        options = ReviewOptions(args.model, args.effort, args.context_mode, clean_title(args.title))
+        result = run_review(diff_text, args.out, args.raw_out, options)
     except DiffTooLargeError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1

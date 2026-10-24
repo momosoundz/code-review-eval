@@ -7,7 +7,12 @@ EFFORT = "low"
 MAX_OUTPUT_TOKENS = 8_000
 MAX_DIFF_CHARS = 48_000
 SEVERITIES = ("high", "medium", "low")
-# How the reviewer sees the diff. Changing it is a new reviewer version: it enters prompt_id.
+# What accompanies the diff. Changing it is a new reviewer version: it enters prompt_id.
+# hunk_only: the numbered diff. hunk_plus_title: the commit title first, with one line saying
+# an announced behavior change is intended.
+# hunk_plus_title_verified: the title, plus an instruction to check that the implementation
+# does what the title says, operator by operator, before trusting it.
+CONTEXT_MODES = ("hunk_only", "hunk_plus_title", "hunk_plus_title_verified")
 CONTEXT_MODE = "hunk_only"
 PROMPT_PATH = Path(__file__).with_name("prompt.md")
 SCHEMA_PATH = Path(__file__).with_name("schema.json")
