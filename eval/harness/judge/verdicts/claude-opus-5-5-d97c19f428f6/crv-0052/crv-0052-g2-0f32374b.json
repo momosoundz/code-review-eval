@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0052",
+  "gold_id": "crv-0052-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the default value 1 doubles as the 'not supplied' sentinel in `initial != 1`, so an explicit initial=1 or multiplier=1 is indistinguishable from the default\n- failure path: wait_exponential_jitter(initial=5, multiplier=1) raises no ValueError although both were given and line 273 overrides the explicit multiplier with 5; wait_exponential_jitter(initial=1) emits no DeprecationWarning\n\nReviewer finding\n- description: The deprecation logic uses the default value 1 as a sentinel for 'not specified'. Passing initial=1 explicitly emits no warning, and combining initial=1 with multiplier=5 is silently accepted instead of raising the 'both specified' error.\n- rationale: Trigger: wait_exponential_jitter(initial=1, multiplier=5). Neither condition on lines 262 or 267 fires, so multiplier=5 is used without error. Conversely, wait_exponential_jitter(initial=5, multiplier=1) passes explicit values but the mutual-exclusion check is skipped (multiplier==1), and the user's explicit multiplier=1 is silently overridden by initial. Callers get a wait they did not ask for.\n",
+  "critique": "The finding names the same root cause: the default 1 is used as the 'not supplied' sentinel. It also gives the same failure cases. Explicit initial=1 produces no warning, and initial=5, multiplier=1 skips the mutual-exclusion error while overriding the explicit multiplier.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 932,
+    "output_tokens": 112
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0052",
+  "gold_id": "crv-0052-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the default value 1 doubles as the 'not supplied' sentinel in `initial != 1`, so an explicit initial=1 or multiplier=1 is indistinguishable from the default\n- failure path: wait_exponential_jitter(initial=5, multiplier=1) raises no ValueError although both were given and line 273 overrides the explicit multiplier with 5; wait_exponential_jitter(initial=1) emits no DeprecationWarning\n\nReviewer finding\n- description: Detecting whether `initial` was passed by comparing against the default value 1 means an explicit `initial=1` is never seen as passed. It is never warned about as deprecated, and `initial=1` combined with `multiplier=5` does not raise.\n- rationale: Trigger: `wait_exponential_jitter(initial=1, multiplier=5)`. The condition `initial != 1` is False, so no error or warning is raised and `multiplier` 5 is silently used. The conflict goes undetected. Callers who pass `initial=1` also get no deprecation warning. A sentinel default such as None would avoid this.\n",
+  "critique": "The finding names the same root cause as the label: the `initial != 1` comparison uses the default value as a 'not supplied' sentinel. It also gives the same consequences, namely no deprecation warning for explicit `initial=1` and an undetected conflict when both arguments are passed. Its example (initial=1, multiplier=5) is the mirror case of the label's (initial=5, multiplier=1), but the mechanism is the same sentinel ambiguity.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 888,
+    "output_tokens": 164
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0052",
+  "gold_id": "crv-0052-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the constructor stores only self.multiplier and no longer sets self.initial, with no alias for the removed attribute\n- failure path: code that reads wait.initial on a wait_exponential_jitter instance raises AttributeError, and code that assigns wait.initial = 2 is silently ignored because __call__ reads self.multiplier, so the configured wait never changes\n\nReviewer finding\n- description: The `initial` attribute is replaced by `multiplier` with no backward-compatible alias. Code that reads or assigns `wait.initial` after construction now fails or has no effect.\n- rationale: Trigger: existing code reads `w.initial` or sets `w.initial = x` on a wait_exponential_jitter instance. Mechanism: `__init__` only sets `self.multiplier`, so reading raises AttributeError, and assigning creates an unused attribute because `__call__` uses `self.multiplier`. Impact: a crash on read, or the wait time silently ignores the assignment.\n",
+  "critique": "The finding identifies the same mechanism. __init__ sets only self.multiplier and drops self.initial with no alias, so reading raises AttributeError and an assignment is ignored because __call__ uses self.multiplier.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 853,
+    "output_tokens": 88
+  }
+}

@@ -1,4 +1,35 @@
 {
   "case_id": "crv-0057",
-  "expected_findings": []
+  "expected_findings": [
+    {
+      "gold_id": "crv-0057-g1",
+      "file": "tenacity/__init__.py",
+      "spans": [
+        [
+          193,
+          193
+        ]
+      ],
+      "category": "wrong_condition",
+      "severity": "medium",
+      "root_cause": "the implicit __context__ of a TryAgain is treated as the cause of the retry, although a bare TryAgain raised inside an unrelated except block carries that block's exception as context",
+      "failure_path": "a caller does `try: raise OSError('outer') except OSError: f()` where f is retried with reraise=True and raises bare TryAgain; after the attempts are exhausted the caller receives OSError('outer') instead of TryAgain, so `except TryAgain` handlers no longer run and the reported failure is an unrelated exception",
+      "needs_context_beyond_diff": false
+    },
+    {
+      "gold_id": "crv-0057-g2",
+      "file": "tenacity/__init__.py",
+      "spans": [
+        [
+          195,
+          195
+        ]
+      ],
+      "category": "error_handling",
+      "severity": "low",
+      "root_cause": "`raise cause ... from None` sets __suppress_context__ and clears the re-raised exception's own __cause__",
+      "failure_path": "the retried function raises ValueError from KeyError, catches it and raises TryAgain; with reraise=True the ValueError that reaches the caller has lost its KeyError cause, so the root cause disappears from the traceback",
+      "needs_context_beyond_diff": false
+    }
+  ]
 }

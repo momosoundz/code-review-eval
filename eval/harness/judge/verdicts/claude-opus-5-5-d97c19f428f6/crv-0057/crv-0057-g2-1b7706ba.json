@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0057",
+  "gold_id": "crv-0057-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: `raise cause ... from None` sets __suppress_context__ and clears the re-raised exception's own __cause__\n- failure path: the retried function raises ValueError from KeyError, catches it and raises TryAgain; with reraise=True the ValueError that reaches the caller has lost its KeyError cause, so the root cause disappears from the traceback\n\nReviewer finding\n- description: The reraise path raises the cause with `from None`, which sets `__suppress_context__` and clears the cause on the underlying exception. The code also takes `__context__` as a fallback, so it can pick up an unrelated implicit context.\n- rationale: Trigger: a user raises TryAgain inside an except block (cause set via `from` or context set implicitly), and retries are exhausted with reraise=True. `raise cause ... from None` mutates the cause exception, setting `__cause__` to None and `__suppress_context__` to True, so any chain the original exception had is hidden in the traceback. Using `__context__` can also surface an unrelated exception that happened to be active when TryAgain was raised, instead of the TryAgain itself.\n",
+  "critique": "The finding names the same faulty operation, `raise cause ... from None`. It describes the same failure: the re-raised underlying exception has its `__cause__` cleared and context suppressed, so its original chain (here ValueError from KeyError) disappears from the traceback. The extra point about the `__context__` fallback is additional, but the core mechanism matches.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 892,
+    "output_tokens": 131
+  }
+}

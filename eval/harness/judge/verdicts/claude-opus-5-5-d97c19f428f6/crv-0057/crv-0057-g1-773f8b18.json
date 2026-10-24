@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0057",
+  "gold_id": "crv-0057-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the implicit __context__ of a TryAgain is treated as the cause of the retry, although a bare TryAgain raised inside an unrelated except block carries that block's exception as context\n- failure path: a caller does `try: raise OSError('outer') except OSError: f()` where f is retried with reraise=True and raises bare TryAgain; after the attempts are exhausted the caller receives OSError('outer') instead of TryAgain, so `except TryAgain` handlers no longer run and the reported failure is an unrelated exception\n\nReviewer finding\n- description: The fallback to `exc.__context__` can surface an unrelated exception that was merely being handled when TryAgain was raised, not the exception that caused the retry.\n- rationale: Trigger: the retried function is called from inside an unrelated `except` block, and the function raises a bare `TryAgain()` without its own failure. Python sets TryAgain's `__context__` to the outer handled exception, so `cause` is that outer exception. Mechanism: the new branch raises `cause` instead of TryAgain, so the caller sees the outer exception as if the retried operation had failed with it. Impact: the wrong exception type and message reach the operator, which misdirects debugging.\n",
+  "critique": "The finding names the same mechanism as the label. Falling back to TryAgain's implicit __context__ picks up an unrelated outer exception when a bare TryAgain is raised inside an except block, so that outer exception is reraised instead of TryAgain. It does not mention the broken `except TryAgain` handlers, but the faulty operation and the trigger are identical.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 928,
+    "output_tokens": 134
+  }
+}

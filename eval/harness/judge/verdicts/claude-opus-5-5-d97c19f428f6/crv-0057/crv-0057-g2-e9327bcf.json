@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0057",
+  "gold_id": "crv-0057-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: `raise cause ... from None` sets __suppress_context__ and clears the re-raised exception's own __cause__\n- failure path: the retried function raises ValueError from KeyError, catches it and raises TryAgain; with reraise=True the ValueError that reaches the caller has lost its KeyError cause, so the root cause disappears from the traceback\n\nReviewer finding\n- description: When the last attempt raised TryAgain with a __cause__ or __context__, reraise now raises that inner exception instead of TryAgain, and does so with 'from None', which hides the link back to the TryAgain.\n- rationale: Trigger: a Retrying with reraise=True whose function does 'except ValueError: raise TryAgain' on its final attempt. Mechanism: the new branch raises the ValueError instead of TryAgain, and 'from None' suppresses the chain. Impact: callers that catch TryAgain no longer see it, and the traceback no longer shows that the retry sentinel was raised.\n",
+  "critique": "The label is about `from None` wiping the re-raised exception's own `__cause__`, so the ValueError loses its original KeyError cause. The finding does mention `from None`, but its concern is that the TryAgain link is hidden and that the behavior change breaks callers catching TryAgain. It never says the inner exception's own cause chain is cleared.",
+  "verdict": "no_match",
+  "usage": {
+    "input_tokens": 854,
+    "output_tokens": 130
+  }
+}

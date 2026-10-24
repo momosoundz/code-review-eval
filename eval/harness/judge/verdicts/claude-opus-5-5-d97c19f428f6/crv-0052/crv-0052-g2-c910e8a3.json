@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0052",
+  "gold_id": "crv-0052-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the default value 1 doubles as the 'not supplied' sentinel in `initial != 1`, so an explicit initial=1 or multiplier=1 is indistinguishable from the default\n- failure path: wait_exponential_jitter(initial=5, multiplier=1) raises no ValueError although both were given and line 273 overrides the explicit multiplier with 5; wait_exponential_jitter(initial=1) emits no DeprecationWarning\n\nReviewer finding\n- description: The deprecation shim detects whether `initial` was supplied by comparing it to the default value 1. An explicit `initial=1` is therefore indistinguishable from the default, so it never warns and never conflicts with `multiplier`.\n- rationale: Trigger: `wait_exponential_jitter(initial=1, multiplier=5)`. Both checks on lines 262 and 267 see `initial == 1`, so no ValueError or DeprecationWarning is raised. The caller's explicit `initial=1` is silently dropped and `multiplier=5` is used. Similarly, `initial=1` alone never produces the deprecation warning.\n",
+  "critique": "The finding names the same root cause: using the default value 1 as a 'not supplied' sentinel in the `initial != 1` comparison, so an explicit initial=1 cannot be told apart from the default. It gives the missing DeprecationWarning for initial=1 and the missing conflict error as consequences. Its trigger is the mirror case (initial=1, multiplier=5) rather than initial=5, multiplier=1, but the faulty operation is the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 897,
+    "output_tokens": 164
+  }
+}

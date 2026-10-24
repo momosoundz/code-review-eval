@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0057",
+  "gold_id": "crv-0057-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: `raise cause ... from None` sets __suppress_context__ and clears the re-raised exception's own __cause__\n- failure path: the retried function raises ValueError from KeyError, catches it and raises TryAgain; with reraise=True the ValueError that reaches the caller has lost its KeyError cause, so the root cause disappears from the traceback\n\nReviewer finding\n- description: RetryError.reraise now replaces a TryAgain failure with its __cause__ or __context__. This changes what reraise=True callers receive, and `from None` discards the chain.\n- rationale: Trigger: the user's function raises TryAgain and retries run out with reraise=True. TryAgain is a deliberate retry signal, not an opaque sentinel. Raising its __context__ instead can surface an unrelated exception that happened to be handled earlier. The exception type callers catch silently changes, and `from None` sets __suppress_context__ on the cause, hiding any original chain from the traceback.\n",
+  "critique": "The finding's main complaint is that TryAgain is swapped for its __cause__/__context__. It does mention that `from None` hides the original chain, but it describes only __suppress_context__ hiding context. It never says the re-raised exception's own __cause__ (the KeyError) gets cleared, so the specific mechanism of losing the root cause is only partly covered. Still, \"`from None` discards the chain\" and \"hiding any original chain from the traceback\" point at the same faulty operation (`raise cause from None` on the unwrapped cause) and the same outcome (the original chain vanishes from the traceback).",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 849,
+    "output_tokens": 215
+  }
+}

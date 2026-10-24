@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0057",
+  "gold_id": "crv-0057-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the implicit __context__ of a TryAgain is treated as the cause of the retry, although a bare TryAgain raised inside an unrelated except block carries that block's exception as context\n- failure path: a caller does `try: raise OSError('outer') except OSError: f()` where f is retried with reraise=True and raises bare TryAgain; after the attempts are exhausted the caller receives OSError('outer') instead of TryAgain, so `except TryAgain` handlers no longer run and the reported failure is an unrelated exception\n\nReviewer finding\n- description: The fallback to `exc.__context__` treats any implicitly chained exception as the retry's underlying cause, so reraise can surface an unrelated exception that was being handled when TryAgain was raised.\n- rationale: Trigger: a retried function raises a bare TryAgain (no explicit cause) while called from inside an unrelated `except` block, so TryAgain.__context__ is that unrelated exception. Mechanism: when retries are exhausted, the new branch sees a non-None cause and raises it instead of the TryAgain. Impact: the caller receives an unrelated exception from outer code rather than the retry outcome, which misleads debugging and can change caller error handling.\n",
+  "critique": "The finding names the same mechanism as the label: falling back to TryAgain.__context__, so a bare TryAgain raised inside an unrelated except block makes reraise surface the unrelated exception. It also gives the same trigger and the same impact, a changed exception type reaching the caller's error handling.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 931,
+    "output_tokens": 112
+  }
+}

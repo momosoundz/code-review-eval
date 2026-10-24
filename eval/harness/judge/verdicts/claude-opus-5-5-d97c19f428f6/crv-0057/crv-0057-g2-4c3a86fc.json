@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0057",
+  "gold_id": "crv-0057-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: `raise cause ... from None` sets __suppress_context__ and clears the re-raised exception's own __cause__\n- failure path: the retried function raises ValueError from KeyError, catches it and raises TryAgain; with reraise=True the ValueError that reaches the caller has lost its KeyError cause, so the root cause disappears from the traceback\n\nReviewer finding\n- description: reraise() now silently replaces a TryAgain exception with its __cause__/__context__, and raises it with `from None`. This drops the exception chain and changes what callers observe.\n- rationale: Trigger: a retry function raises TryAgain, optionally inside an except block, and retries are exhausted with reraise=True. Mechanism: TryAgain is swapped for its cause, and `from None` sets __suppress_context__ on that cause, which hides any context chain it already had. Impact: callers that catch TryAgain no longer see it, and the traceback loses earlier chained exceptions. Also, __context__ can be an unrelated exception that was merely being handled at the time, so a misleading error may be raised.\n",
+  "critique": "Both point to the same operation: `raise cause from None` in reraise sets suppression on the re-raised cause and wipes out that exception's own earlier chain, so the root cause drops out of the traceback. The finding says \"context chain\" rather than naming `__cause__`, and it adds other concerns, but its core mechanism and impact match the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 884,
+    "output_tokens": 301
+  }
+}

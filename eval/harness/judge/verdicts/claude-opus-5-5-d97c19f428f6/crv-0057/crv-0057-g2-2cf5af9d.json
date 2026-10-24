@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0057",
+  "gold_id": "crv-0057-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: `raise cause ... from None` sets __suppress_context__ and clears the re-raised exception's own __cause__\n- failure path: the retried function raises ValueError from KeyError, catches it and raises TryAgain; with reraise=True the ValueError that reaches the caller has lost its KeyError cause, so the root cause disappears from the traceback\n\nReviewer finding\n- description: When reraise is set and the final attempt raised TryAgain inside an except block, the code now raises the original underlying exception instead of TryAgain, and does so with 'from None', which overwrites that exception's __cause__ and suppresses its context.\n- rationale: Trigger: a function catches ValueError and raises TryAgain inside the except block, with stop_after_attempt(2) and reraise=True. Mechanism: exc.__context__ is the ValueError, so line 195 raises that ValueError with 'from None', changing its __cause__ and __suppress_context__ on the user's object. Impact: callers that catch TryAgain no longer see it, and the exception type and traceback chain they receive change silently, which is a public behavior change not implied by the diff.\n",
+  "critique": "The finding names the same mechanism: re-raising the underlying exception with 'from None' overwrites its __cause__ and suppresses its context, so the traceback chain is altered. It also discusses the TryAgain type change, but the core defect, loss of the original exception's cause through 'from None', is identified.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 899,
+    "output_tokens": 113
+  }
+}

@@ -1,4 +1,39 @@
 {
   "case_id": "crv-0052",
-  "expected_findings": []
+  "expected_findings": [
+    {
+      "gold_id": "crv-0052-g1",
+      "file": "tenacity/wait.py",
+      "spans": [
+        [
+          275,
+          275
+        ]
+      ],
+      "category": "null_or_missing_value",
+      "severity": "medium",
+      "root_cause": "the constructor stores only self.multiplier and no longer sets self.initial, with no alias for the removed attribute",
+      "failure_path": "code that reads wait.initial on a wait_exponential_jitter instance raises AttributeError, and code that assigns wait.initial = 2 is silently ignored because __call__ reads self.multiplier, so the configured wait never changes",
+      "needs_context_beyond_diff": false
+    },
+    {
+      "gold_id": "crv-0052-g2",
+      "file": "tenacity/wait.py",
+      "spans": [
+        [
+          262,
+          262
+        ],
+        [
+          267,
+          267
+        ]
+      ],
+      "category": "wrong_condition",
+      "severity": "low",
+      "root_cause": "the default value 1 doubles as the 'not supplied' sentinel in `initial != 1`, so an explicit initial=1 or multiplier=1 is indistinguishable from the default",
+      "failure_path": "wait_exponential_jitter(initial=5, multiplier=1) raises no ValueError although both were given and line 273 overrides the explicit multiplier with 5; wait_exponential_jitter(initial=1) emits no DeprecationWarning",
+      "needs_context_beyond_diff": false
+    }
+  ]
 }

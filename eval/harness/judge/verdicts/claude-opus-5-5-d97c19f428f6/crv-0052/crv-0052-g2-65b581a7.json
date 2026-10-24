@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0052",
+  "gold_id": "crv-0052-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the default value 1 doubles as the 'not supplied' sentinel in `initial != 1`, so an explicit initial=1 or multiplier=1 is indistinguishable from the default\n- failure path: wait_exponential_jitter(initial=5, multiplier=1) raises no ValueError although both were given and line 273 overrides the explicit multiplier with 5; wait_exponential_jitter(initial=1) emits no DeprecationWarning\n\nReviewer finding\n- description: Sentinel check compares against the default value 1 instead of detecting whether the argument was actually passed. Explicit `initial=1` is treated as unspecified, so no deprecation warning is emitted for it. Combining `initial=1` with `multiplier=5` is also silently accepted rather than raising the 'both specified' ValueError.\n- rationale: Trigger: wait_exponential_jitter(initial=1, multiplier=5). The `initial != 1` check is False, so neither the error nor the warning fires, and multiplier=5 is silently used. Impact: the conflicting arguments go undetected and users passing initial=1 never see the deprecation warning.\n",
+  "critique": "The finding names the same root cause: the default value 1 is used as the 'not supplied' sentinel in `initial != 1`, so an explicit 1 cannot be told apart from the default. It reports the same results: no deprecation warning for initial=1, and no 'both specified' error. Its trigger example uses the mirrored case (initial=1, multiplier=5) rather than the label's (initial=5, multiplier=1), but the mechanism is identical.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 904,
+    "output_tokens": 162
+  }
+}

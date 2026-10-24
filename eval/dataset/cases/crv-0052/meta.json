@@ -1,14 +1,14 @@
 {
   "family_id": "fam-032",
   "split": "release",
-  "source": "clean",
+  "source": "discovered",
   "provenance": {
     "repo": "jd/tenacity",
     "commit": "1106b9a",
     "paths": [
       "production code only"
     ],
-    "note": "merged commit as is; added to reach 20 clean cases for the false-alarm floor",
+    "note": "merged commit as is; added to reach 20 clean cases for the false-alarm floor; adjudication 2026-10-24 (rules v1): reviewer alarms adjudicated as defects by the human; clean -> discovered",
     "commit_title": "feat: deprecate `initial` in favor of `multiplier` in `wait_exponential_jitter` (#629)"
   },
   "status": "active"

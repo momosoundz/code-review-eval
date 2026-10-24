@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0052",
+  "gold_id": "crv-0052-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the constructor stores only self.multiplier and no longer sets self.initial, with no alias for the removed attribute\n- failure path: code that reads wait.initial on a wait_exponential_jitter instance raises AttributeError, and code that assigns wait.initial = 2 is silently ignored because __call__ reads self.multiplier, so the configured wait never changes\n\nReviewer finding\n- description: The `initial` attribute is replaced by `multiplier`, so any code that reads or sets `.initial` on an existing instance breaks. The old `initial` parameter is also coerced with no `to_seconds` conversion, so a timedelta passed as `initial` would be used directly.\n- rationale: Trigger: `wait_exponential_jitter(initial=timedelta(seconds=2))`, or code that accesses `w.initial`. The `initial` type was `time_unit_type`, but the new code assigns it to `multiplier`, which is multiplied as a float. Impact: a TypeError when computing the wait, or an AttributeError on `.initial`.\n",
+  "critique": "The finding states that the `initial` attribute was replaced by `multiplier`, so code that reads or sets `.initial` breaks with an AttributeError. That is the labeled mechanism: the constructor no longer sets self.initial and provides no alias. The extra timedelta point is additional, but the main defect matches.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 873,
+    "output_tokens": 117
+  }
+}

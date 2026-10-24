@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0057",
+  "gold_id": "crv-0057-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: `raise cause ... from None` sets __suppress_context__ and clears the re-raised exception's own __cause__\n- failure path: the retried function raises ValueError from KeyError, catches it and raises TryAgain; with reraise=True the ValueError that reaches the caller has lost its KeyError cause, so the root cause disappears from the traceback\n\nReviewer finding\n- description: Re-raising the cause with `from None` overwrites the cause's own `__cause__` and sets `__suppress_context__`, so the original exception's chain is discarded.\n- rationale: Trigger: the retried function raises ValueError explicitly `from` a KeyError, then raises TryAgain in an except block. Mechanism: `raise cause from None` sets ValueError.__cause__ to None and suppresses context, so the KeyError link is removed from the exception that gets re-raised. Impact: the operator's traceback loses the root-cause chain that the user's code originally attached, making the failure harder to diagnose.\n",
+  "critique": "The finding names the same operation, `raise cause from None`, and the same mechanism: it clears the re-raised exception's own __cause__ and sets __suppress_context__. It also gives the same trigger, ValueError raised from KeyError followed by TryAgain, so the KeyError root cause disappears from the traceback.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 855,
+    "output_tokens": 119
+  }
+}

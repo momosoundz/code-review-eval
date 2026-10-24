@@ -1,14 +1,14 @@
 {
   "family_id": "fam-037",
   "split": "release",
-  "source": "clean",
+  "source": "discovered",
   "provenance": {
     "repo": "jd/tenacity",
     "commit": "e5179bd",
     "paths": [
       "production code only"
     ],
-    "note": "merged commit as is; clean controls batch 2, pre-registered in eval/labels/clean-batch-2.md; pending blind pass 1d",
+    "note": "merged commit as is; clean controls batch 2, pre-registered in eval/labels/clean-batch-2.md; pending blind pass 1d; adjudication 2026-10-24 (rules v1): all five arms alarmed; adjudicated as defects by the human; clean -> discovered",
     "commit_title": "fix: reraise underlying exception when TryAgain wraps a cause (#640)"
   },
   "status": "active"

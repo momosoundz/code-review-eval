@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0057",
+  "gold_id": "crv-0057-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the implicit __context__ of a TryAgain is treated as the cause of the retry, although a bare TryAgain raised inside an unrelated except block carries that block's exception as context\n- failure path: a caller does `try: raise OSError('outer') except OSError: f()` where f is retried with reraise=True and raises bare TryAgain; after the attempts are exhausted the caller receives OSError('outer') instead of TryAgain, so `except TryAgain` handlers no longer run and the reported failure is an unrelated exception\n\nReviewer finding\n- description: When the last attempt raised TryAgain with a __cause__ or __context__, reraise now raises that inner exception instead of TryAgain, and does so with 'from None', which hides the link back to the TryAgain.\n- rationale: Trigger: a Retrying with reraise=True whose function does 'except ValueError: raise TryAgain' on its final attempt. Mechanism: the new branch raises the ValueError instead of TryAgain, and 'from None' suppresses the chain. Impact: callers that catch TryAgain no longer see it, and the traceback no longer shows that the retry sentinel was raised.\n",
+  "critique": "The finding identifies the same faulty operation as the label: on reraise, the code substitutes TryAgain's __cause__/__context__ for the TryAgain itself, so `except TryAgain` handlers stop working. Its example uses a related inner exception rather than an unrelated outer except block, but the mechanism it flags explicitly includes __context__ and covers the labeled failure.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 911,
+    "output_tokens": 494
+  }
+}
