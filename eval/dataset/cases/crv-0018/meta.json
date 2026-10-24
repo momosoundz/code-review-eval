@@ -1,0 +1,17 @@
+{
+  "family_id": "fam-010",
+  "split": "release",
+  "source": "seeded",
+  "provenance": {
+    "repo": "jd/tenacity",
+    "commit": "3233040",
+    "paths": [
+      "production code only"
+    ],
+    "seeded_by": "codex",
+    "assigned_category": "wrong_literal_or_default",
+    "rationale_for_realism": "One second is a familiar retry interval and could be mistaken for the intended compatibility default.",
+    "commit_title": "feat: add `min` param and `timedelta` support to `wait_exponential_jitter` (#628)"
+  },
+  "status": "active"
+}

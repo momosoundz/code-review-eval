@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-019",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "psf/requests",
+    "commit": "84d10f0b",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is",
+    "commit_title": "Move Request.headers back to Mapping (#7441)"
+  },
+  "status": "active"
+}

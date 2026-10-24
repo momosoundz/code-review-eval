@@ -1,0 +1,47 @@
+{
+  "case_id": "crv-0048",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0048-g1",
+      "file": "src/click/termui.py",
+      "spans": [
+        [
+          678,
+          678
+        ]
+      ],
+      "also": [
+        {
+          "file": "src/click/termui.py",
+          "spans": [
+            [
+              684,
+              684
+            ]
+          ]
+        }
+      ],
+      "category": "wrong_condition",
+      "severity": "medium",
+      "root_cause": "style() tests fg and bg for truthiness instead of `is not None`, so the 256-color index 0 is skipped",
+      "failure_path": "click.style('x', fg=0) or bg=0, meaning black, applies no color at all and the text renders in the terminal default; the caller sees no error",
+      "needs_context_beyond_diff": false
+    },
+    {
+      "gold_id": "crv-0048-g2",
+      "file": "src/click/termui.py",
+      "spans": [
+        [
+          573,
+          580
+        ]
+      ],
+      "also": [],
+      "category": "input_validation",
+      "severity": "low",
+      "root_cause": "_interpret_color no longer checks the 0..255 range, rejects bools or validates tuple length, and an unknown name raises KeyError instead of ValueError",
+      "failure_path": "style('x', fg=300) emits an escape with an out-of-range index instead of raising ValueError; fg=True is now accepted where it used to raise, formatting as palette index 1; an unknown color name surfaces as TypeError from the caller's except clause instead of a ValueError naming the color",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

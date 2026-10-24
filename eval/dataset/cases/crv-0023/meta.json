@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-013",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "pallets/click",
+    "commit": "05f6fd0",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is",
+    "commit_title": "Always return a help record for an `Argument`"
+  },
+  "status": "active"
+}

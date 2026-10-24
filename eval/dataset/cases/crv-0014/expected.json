@@ -1,0 +1,47 @@
+{
+  "case_id": "crv-0014",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0014-g1",
+      "file": "tenacity/__init__.py",
+      "spans": [
+        [
+          378,
+          378
+        ]
+      ],
+      "also": [],
+      "category": "wrong_variable_or_argument",
+      "severity": "medium",
+      "root_cause": "The copied retry instance receives the original instance\u2019s statistics dictionary instead of the wrapper\u2019s shared dictionary.",
+      "failure_path": "When the wrapped function runs, updates go to the original retry object\u2019s statistics while decorators still expose the separate wrapper dictionary, so the observed statistics remain empty or stale.",
+      "needs_context_beyond_diff": false
+    },
+    {
+      "gold_id": "crv-0014-g2",
+      "file": "tenacity/__init__.py",
+      "spans": [
+        [
+          376,
+          379
+        ]
+      ],
+      "also": [
+        {
+          "file": "tenacity/asyncio/__init__.py",
+          "spans": [
+            [
+              217,
+              219
+            ]
+          ]
+        }
+      ],
+      "category": "concurrency",
+      "severity": "medium",
+      "root_cause": "the wrapper now clears and reuses one statistics dict for every call instead of giving each call its own, so concurrent or nested calls of the same decorated function write into the same dict",
+      "failure_path": "two threads (or two concurrent awaits of the async wrapper) call the same decorated function; the second call's stats.clear() wipes the first call's start_time and attempt_number, and both read a merged, wrong statistics view afterwards",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

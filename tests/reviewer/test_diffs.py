@@ -46,3 +46,22 @@ def test_numbered_diff_is_frozen() -> None:
     assert isinstance(numbered, NumberedDiff)
     with pytest.raises(AttributeError):
         numbered.text = "x"  # ty: ignore[invalid-assignment]
+
+
+def test_changed_lines_are_added_lines_and_the_line_after_a_removal() -> None:
+    numbered = number_diff(SAMPLE)
+    assert numbered.changed_lines["app/orders.py"] == {41, 42}
+    assert numbered.changed_lines["app/util.py"] == {1, 2}
+
+
+def test_removal_at_the_end_of_a_hunk_marks_the_last_surviving_line() -> None:
+    diff = """\
+diff --git a/a.py b/a.py
+--- a/a.py
++++ b/a.py
+@@ -1,3 +1,2 @@
+ x = 1
+ y = 2
+-check(x, y)
+"""
+    assert number_diff(diff).changed_lines["a.py"] == {2}

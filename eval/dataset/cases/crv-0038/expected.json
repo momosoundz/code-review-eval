@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0038",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0038-g1",
+      "file": "src/requests/models.py",
+      "spans": [
+        [
+          793,
+          793
+        ]
+      ],
+      "also": [],
+      "category": "null_or_missing_value",
+      "severity": "high",
+      "root_cause": "Response.__init__ reads self.raw.reason to initialize reason, but raw has no underlying response object yet at construction time, so the attribute access dereferences None.",
+      "failure_path": "Any call that builds a Response, such as every adapter.send or a plain Response(), raises AttributeError ('NoneType' object has no attribute 'reason') before the object is populated, so no request can complete.",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0030",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0030-g1",
+      "file": "src/click/termui.py",
+      "spans": [
+        [
+          906,
+          906
+        ]
+      ],
+      "also": [],
+      "category": "input_validation",
+      "severity": "medium",
+      "root_cause": "The shape check before Editor.edit_files tests only for os.PathLike and no longer wraps a plain str, so a string filename is passed on as an iterable and consumed character by character when building the editor command.",
+      "failure_path": "click.edit(filename=\"notes.txt\") launches the editor with the nine single-character files n, o, t, e, s, ., t, x, t instead of notes.txt; saving creates stray files in the working directory and the intended file is never opened.",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

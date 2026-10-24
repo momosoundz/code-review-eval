@@ -1,0 +1,17 @@
+{
+  "family_id": "fam-022",
+  "split": "release",
+  "source": "seeded",
+  "provenance": {
+    "repo": "psf/requests",
+    "commit": "e331a288",
+    "paths": [
+      "production code only"
+    ],
+    "seeded_by": "claude-agent",
+    "assigned_category": "error_handling",
+    "rationale_for_realism": "While removing the zip-extraction fallback a developer may soften the check to a warning believing certifi now guarantees a bundle, overlooking the user-supplied verify path case.",
+    "commit_title": "Remove unused extraction call (#7292)"
+  },
+  "status": "active"
+}

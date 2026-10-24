@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-009",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "jd/tenacity",
+    "commit": "44eaefb",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is",
+    "commit_title": "refactor: flatten chained | and & into single retry_any/retry_all (#609)"
+  },
+  "status": "active"
+}

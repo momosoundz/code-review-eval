@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0020",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0020-g1",
+      "file": "tenacity/__init__.py",
+      "spans": [
+        [
+          226,
+          226
+        ]
+      ],
+      "also": [],
+      "category": "error_handling",
+      "severity": "high",
+      "root_cause": "__aexit__ delegates to __exit__ with None for the exception type, value and traceback instead of forwarding the arguments it received",
+      "failure_path": "an exception raised inside `async with attempt:` reaches __aexit__, which calls __exit__ with (None, None, None); __exit__ takes its success branch, records no failed outcome and returns None, so the exception propagates out of the async with and past the retry loop: the attempt is never recorded as failed and no retry happens",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

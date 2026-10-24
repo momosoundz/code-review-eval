@@ -5,7 +5,9 @@ down any suspected defect. Phase 2 reveals the gold and asks the checklist. Ever
 appended to ``eval/labels/review-<pass>.jsonl`` so a run can be resumed and audited.
 
 Usage:
-    uv run python scripts/review_cases.py --pass 1 [--split dev] [--only crv-0003]
+    uv run python scripts/review_cases.py --pass 1 [--split dev] [--only crv-0003,crv-0004]
+    A pass label such as ``1b`` writes to its own file; use it to re-validate cases whose gold
+    changed after a pass, without touching the original pass file.
 """
 
 from __future__ import annotations
@@ -98,16 +100,17 @@ def already_done(path: Path) -> set[str]:
 def main(argv: list[str] | None = None) -> int:
     """Walk the cases in a seeded random order and append one JSON line per reviewed case."""
     parser = argparse.ArgumentParser()
-    parser.add_argument("--pass", dest="pass_no", type=int, required=True, choices=(1, 2))
+    parser.add_argument("--pass", dest="pass_no", required=True, help="1, 2, or a label like 1b")
     parser.add_argument("--split", default=None)
-    parser.add_argument("--only", default=None)
+    parser.add_argument("--only", default=None, help="comma-separated case ids")
     parser.add_argument("--reviewer", default="miguel")
     args = parser.parse_args(argv)
 
     cases = [c for c in load_dataset() if c.active and (not args.split or c.split == args.split)]
     if args.only:
-        cases = [c for c in cases if c.case_id == args.only]
-    random.Random(args.pass_no * 1000 + len(cases)).shuffle(cases)
+        wanted = set(args.only.split(","))
+        cases = [c for c in cases if c.case_id in wanted]
+    random.Random(f"{args.pass_no}-{len(cases)}").shuffle(cases)
     out = LABELS_DIR / f"review-pass{args.pass_no}.jsonl"
     done = already_done(out)
     todo = [c for c in cases if c.case_id not in done]

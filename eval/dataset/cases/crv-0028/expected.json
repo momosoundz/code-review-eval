@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0028",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0028-g1",
+      "file": "src/click/core.py",
+      "spans": [
+        [
+          3395,
+          3395
+        ]
+      ],
+      "also": [],
+      "category": "wrong_operator",
+      "severity": "low",
+      "root_cause": "The separator selection negates any_prefix_is_slash, picking ' / ' exactly when an option spelling already starts with a slash and '; ' otherwise.",
+      "failure_path": "An option declared as --shout/--no-shout renders in --help as '--shout; --no-shout', and a Windows-style /debug;/no-debug option renders as '/debug / /no-debug', where the slash separator is indistinguishable from the slash prefix of the names.",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

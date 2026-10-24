@@ -1,0 +1,31 @@
+{
+  "case_id": "crv-0050",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0050-g1",
+      "file": "src/requests/utils.py",
+      "spans": [
+        [
+          519,
+          524
+        ]
+      ],
+      "also": [
+        {
+          "file": "src/requests/utils.py",
+          "spans": [
+            [
+              544,
+              544
+            ]
+          ]
+        }
+      ],
+      "category": "wrong_literal_or_default",
+      "severity": "medium",
+      "root_cause": "a Content-Type parameter without an equals sign is stored with the value True instead of being skipped",
+      "failure_path": "the header `text/html; charset` yields params['charset'] == True; get_encoding_from_headers (shown below the change) returns params['charset'].strip(...) which raises AttributeError on a bool, so reading response.text for such a response fails instead of falling back to ISO-8859-1",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

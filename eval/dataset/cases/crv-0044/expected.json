@@ -1,0 +1,40 @@
+{
+  "case_id": "crv-0044",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0044-g1",
+      "file": "tenacity/__init__.py",
+      "spans": [
+        [
+          95,
+          95
+        ]
+      ],
+      "also": [
+        {
+          "file": "tenacity/__init__.py",
+          "spans": [
+            [
+              789,
+              789
+            ]
+          ]
+        },
+        {
+          "file": "tenacity/__init__.py",
+          "spans": [
+            [
+              804,
+              804
+            ]
+          ]
+        }
+      ],
+      "category": "logic_other",
+      "severity": "medium",
+      "root_cause": "tornado availability is snapshotted into a module constant at import time while the decorator still dereferences the live tornado global",
+      "failure_path": "a test suite sets tenacity.tornado = None to exercise the non-tornado path; _HAS_TORNADO is still True, so retry() evaluates tornado.gen.is_coroutine_function and raises AttributeError: 'NoneType' object has no attribute 'gen'; setting tenacity.tornado = None is the documented way downstream test suites exercise the non-tornado path (tenacity #696), so the inconsistency is reachable in supported usage",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

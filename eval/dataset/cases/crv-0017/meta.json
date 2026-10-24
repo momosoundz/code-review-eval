@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-010",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "jd/tenacity",
+    "commit": "3233040",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is",
+    "commit_title": "feat: add `min` param and `timedelta` support to `wait_exponential_jitter` (#628)"
+  },
+  "status": "active"
+}

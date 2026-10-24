@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-031",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "jd/tenacity",
+    "commit": "39eb157",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is; added to reach 20 clean cases for the false-alarm floor",
+    "commit_title": "feat: add enabled parameter to disable retrying (#604)"
+  },
+  "status": "active"
+}

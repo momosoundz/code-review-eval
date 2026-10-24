@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0047",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0047-g1",
+      "file": "src/click/core.py",
+      "spans": [
+        [
+          3576,
+          3577
+        ]
+      ],
+      "also": [],
+      "category": "wrong_condition",
+      "severity": "low",
+      "root_cause": "an optional argument's metavar is wrapped in brackets without checking whether the type already bracketed it",
+      "failure_path": "an optional Choice argument renders in the usage line as [[foo|bar|baz]] with two pairs of brackets instead of [foo|bar|baz]",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

@@ -8,7 +8,8 @@
     "paths": [
       "src/"
     ],
-    "note": "seeded: default=0.0 removed from best_score"
+    "note": "seeded: default=0.0 removed from best_score",
+    "commit_title": "feat: log the best retrieval score against the abstention threshold"
   },
   "status": "active"
 }

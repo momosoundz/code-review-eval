@@ -1,0 +1,37 @@
+diff --git a/tenacity/__init__.py b/tenacity/__init__.py
+index 530b63a..51925ef 100644
+--- a/tenacity/__init__.py
++++ b/tenacity/__init__.py
+@@ -89,10 +89,10 @@ try:
+ except ImportError:
+     tornado = None  # type: ignore[assignment]
+ 
+-
+-def _has_tornado() -> bool:
+-    return tornado is not None
+-
++# mypy resolves `tornado` to the module (it only ever sees the `try` branch),
++# so testing the module object for truthiness reads as an always-true check.
++# Keep the availability answer in a plain bool instead.
++_HAS_TORNADO = tornado is not None
+ 
+ if t.TYPE_CHECKING:
+     if sys.version_info >= (3, 11):
+@@ -789,7 +786,7 @@ def retry(*dargs: t.Any, **dkw: t.Any) -> t.Any:
+         ):
+             r = AsyncRetrying(*dargs, **dkw)
+         elif (
+-            _has_tornado()
++            _HAS_TORNADO
+             and hasattr(tornado.gen, "is_coroutine_function")
+             and tornado.gen.is_coroutine_function(f)
+         ):
+@@ -804,7 +801,7 @@ def retry(*dargs: t.Any, **dkw: t.Any) -> t.Any:
+ 
+ from tenacity.asyncio import AsyncRetrying  # noqa: E402
+ 
+-if _has_tornado():
++if _HAS_TORNADO:
+     from tenacity.tornadoweb import TornadoRetrying
+ 
+ 

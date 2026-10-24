@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0016",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0016-g1",
+      "file": "tenacity/asyncio/retry.py",
+      "spans": [
+        [
+          112,
+          112
+        ]
+      ],
+      "also": [],
+      "category": "wrong_condition",
+      "severity": "high",
+      "root_cause": "The OR composition checks for retry_all when deciding whether to flatten an existing retry_any.",
+      "failure_path": "with `(A & B) | C`, the retry_all on the left is spliced into the retry_any as if it were a plain list of predicates, so the combination behaves as `A | B | C`: a retry fires when only A holds although the author required A and B together; no error is raised and the extra retries are silent",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

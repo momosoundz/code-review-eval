@@ -1,0 +1,18 @@
+{
+  "family_id": "fam-008",
+  "split": "release",
+  "source": "seeded",
+  "provenance": {
+    "repo": "jd/tenacity",
+    "commit": "4213bad",
+    "paths": [
+      "production code only"
+    ],
+    "seeded_by": "codex",
+    "assigned_category": "wrong_variable_or_argument",
+    "rationale_for_realism": "The nearby self and copy objects both expose local statistics, making the wrong source easy to select during a refactor.",
+    "discovered": "baseline K=5 flagged the shared statistics dict in 5/5 runs; adjudicated against tenacity 4213bad^ (per-call dict before, one shared dict after); real regression introduced by the merged commit",
+    "commit_title": "Keep statistics visible when @retry is further wrapped (fixes #519) (#653)"
+  },
+  "status": "active"
+}

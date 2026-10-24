@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-034",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "pallets/click",
+    "commit": "71f2baf",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is; added to reach 20 clean cases for the false-alarm floor",
+    "commit_title": "Strip all ANSI sequences"
+  },
+  "status": "active"
+}

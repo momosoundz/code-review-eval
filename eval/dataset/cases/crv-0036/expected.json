@@ -1,0 +1,31 @@
+{
+  "case_id": "crv-0036",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0036-g1",
+      "file": "src/requests/_types.py",
+      "spans": [
+        [
+          112,
+          112
+        ]
+      ],
+      "also": [
+        {
+          "file": "src/requests/models.py",
+          "spans": [
+            [
+              313,
+              313
+            ]
+          ]
+        }
+      ],
+      "category": "input_validation",
+      "severity": "low",
+      "root_cause": "The HeadersType alias and Request.headers annotation are widened from Mapping[str, str | bytes] to Mapping[str, object], so the static check that header values are text or bytes before they reach the wire is removed.",
+      "failure_path": "A caller passes headers={\"X-Count\": 3} or a list-valued header; the type checker accepts it and the non-string value reaches header preparation at runtime, where it is rejected (or serialized unexpectedly) instead of being caught at the API boundary.",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

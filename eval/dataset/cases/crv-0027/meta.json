@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-015",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "pallets/click",
+    "commit": "271effb",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is",
+    "commit_title": "Add `Option.get_help_spec` to return the option's help left part"
+  },
+  "status": "active"
+}

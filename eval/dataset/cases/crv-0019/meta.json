@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-011",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "jd/tenacity",
+    "commit": "124e3a6",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is",
+    "commit_title": "feat: add async context manager support to AttemptManager (#605)"
+  },
+  "status": "active"
+}

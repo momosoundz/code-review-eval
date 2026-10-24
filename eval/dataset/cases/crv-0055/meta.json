@@ -1,0 +1,16 @@
+{
+  "family_id": "fam-035",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "psf/requests",
+    "commit": "fd628095",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is; added to reach 20 clean cases for the false-alarm floor",
+    "commit_title": "Preserve leading slashes in request path_url (#7315)"
+  },
+  "status": "deprecated",
+  "deprecated_reason": "blind pass 1c could not confirm the diff is clean: removing the '//' collapse hands urllib3 a network-path target, which only urllib3 >= 2.7 handles, and the commit keeps urllib3>=1.26,<3 (pyproject.toml at fd628095); the safety of the change is not inferable from the diff or the pinned dependency, so the case cannot serve as a clean control"
+}

@@ -1,0 +1,18 @@
+{
+  "family_id": "fam-011",
+  "split": "release",
+  "source": "seeded",
+  "provenance": {
+    "repo": "jd/tenacity",
+    "commit": "124e3a6",
+    "paths": [
+      "production code only"
+    ],
+    "seeded_by": "codex",
+    "assigned_category": "error_handling",
+    "rationale_for_realism": "Returning self is a common context-manager convention and looks natural when adding asynchronous entry support.",
+    "note": "re-seeded after pass-1 review: Codex designed the defect, the edit was applied by the Claude agent because the Codex sandbox could not write",
+    "commit_title": "feat: add async context manager support to AttemptManager (#605)"
+  },
+  "status": "active"
+}

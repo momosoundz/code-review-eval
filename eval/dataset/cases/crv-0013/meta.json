@@ -1,0 +1,16 @@
+{
+  "family_id": "fam-008",
+  "split": "release",
+  "source": "discovered",
+  "provenance": {
+    "repo": "jd/tenacity",
+    "commit": "4213bad",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is",
+    "discovered": "baseline K=5 flagged the shared statistics dict in 5/5 runs; adjudicated against tenacity 4213bad^ (per-call dict before, one shared dict after); real regression introduced by the merged commit",
+    "commit_title": "Keep statistics visible when @retry is further wrapped (fixes #519) (#653)"
+  },
+  "status": "active"
+}

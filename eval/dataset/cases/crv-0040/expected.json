@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0040",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0040-g1",
+      "file": "src/requests/sessions.py",
+      "spans": [
+        [
+          671,
+          671
+        ]
+      ],
+      "also": [],
+      "category": "wrong_variable_or_argument",
+      "severity": "high",
+      "root_cause": "Session.get accepts the new explicit params argument but the forwarding call self.request(\"GET\", url, **kwargs) omits it, so the value is never passed on.",
+      "failure_path": "session.get(url, {\"q\": \"x\"}) or session.get(url, params={\"q\": \"x\"}) sends a GET with no query string; the server receives the bare URL and the caller gets a response for the wrong resource with no error.",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

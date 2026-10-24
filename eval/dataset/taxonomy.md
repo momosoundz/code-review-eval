@@ -20,4 +20,12 @@ Twelve categories for the defect mechanism, one escape hatch, and one non-gated 
 
 Severity is assigned to the defect, not to the category: `high` for data loss, security boundary bypass, crash on a common path or silent wrong results; `medium` for incorrect behavior under a plausible but less common input; `low` for a limited-impact defect.
 
+Rules that came out of the first human review pass:
+
+- **Wrong result on the main path of a public API.** `high` when the caller gets no signal (a silently wrong return value or decision); `medium` when the failure surfaces, even as a misleading error.
+- **Trigger rarity** lowers severity by at most one level from what the impact alone would give, never to `low` on its own.
+- **Defects reachable only by patching a module global** are `medium` at most, and the gold must cite evidence that the patching is established usage.
+- **Formatting without loss of information** (help text, prompt spacing, log wording) is `low`; formatting that drops information the caller asked for (a requested color not applied, a value not shown) is `medium`.
+- Gold defects of severity `low` are reported in their own recall metric and never count as a miss in the gate metric; a reviewer that stays silent on them is not wrong.
+
 Why this shape: the closest published taxonomy is ByteDance's BitsAI-CR defect dimension (null, boundary, conditions, arguments, business logic, resource leaks, exceptions, concurrency). ManySStuBs4J's fix templates (operator, operand, literal, condition, argument) cover the single-edit defects we seed. Security is an impact, not a mechanism: a missing tenant check is `input_validation` with impact noted in `failure_path`, the way CR-Bench keeps root cause and impact on separate axes. The taxonomy is versioned through `gold_hash`; changing a label is a new dataset version.

@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0042",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0042-g1",
+      "file": "src/requests/adapters.py",
+      "spans": [
+        [
+          304,
+          304
+        ]
+      ],
+      "also": [],
+      "category": "error_handling",
+      "severity": "medium",
+      "root_cause": "The missing or invalid CA bundle path check in cert_verify emits warnings.warn instead of raising OSError, so the failure no longer stops the request.",
+      "failure_path": "A user passes verify=\"/etc/ssl/missing.pem\" (or certifi returns an empty path); only a warning is emitted and execution continues to configure the connection with a nonexistent bundle, producing a later, misleading SSL or TypeError at connect time instead of the clear OSError.",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

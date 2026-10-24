@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0049",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0049-g1",
+      "file": "src/requests/models.py",
+      "spans": [
+        [
+          239,
+          240
+        ]
+      ],
+      "also": [],
+      "category": "wrong_condition",
+      "severity": "medium",
+      "root_cause": "_encode_files only treats an object as a file when isinstance(fp, _SupportsRead) succeeds, which a wrapper that exposes read through __getattr__ fails",
+      "failure_path": "on Python 3.12 and later, isinstance against a runtime_checkable Protocol uses inspect.getattr_static and does not see attributes served by __getattr__; a file wrapper that proxies read() that way fails the check, is not read, and its contents never reach the multipart body; before 3.12 the Protocol check used hasattr and the removed `or hasattr(fp, 'read')` was redundant, so the defect only manifests on 3.12+",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

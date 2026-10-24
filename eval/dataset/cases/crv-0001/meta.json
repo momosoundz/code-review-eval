@@ -8,7 +8,8 @@
     "paths": [
       "src/"
     ],
-    "note": "feat: log the best retrieval score against the abstention threshold"
+    "note": "feat: log the best retrieval score against the abstention threshold",
+    "commit_title": "feat: log the best retrieval score against the abstention threshold"
   },
   "status": "active"
 }

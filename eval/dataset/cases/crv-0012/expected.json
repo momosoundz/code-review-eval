@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0012",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0012-g1",
+      "file": "tenacity/wait.py",
+      "spans": [
+        [
+          211,
+          211
+        ]
+      ],
+      "also": [],
+      "category": "boundary",
+      "severity": "high",
+      "root_cause": "The exponential cap check uses the reversed comparison and returns the cap while the computed delay is still below it.",
+      "failure_path": "With a retry attempt whose exponent is below the cap threshold, the wait strategy immediately returns the maximum delay instead of the smaller exponential delay.",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

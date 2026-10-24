@@ -8,7 +8,8 @@
     "paths": [
       "src/"
     ],
-    "note": "seeded: chunk.score replaced by chunks[0].score in the loop"
+    "note": "seeded: chunk.score replaced by chunks[0].score in the loop",
+    "commit_title": "feat: log the page and score of each retrieved chunk in debug mode"
   },
   "status": "active"
 }

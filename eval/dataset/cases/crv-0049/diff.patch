@@ -1,0 +1,26 @@
+diff --git a/src/requests/_types.py b/src/requests/_types.py
+--- a/src/requests/_types.py
++++ b/src/requests/_types.py
+@@ -26,5 +26,5 @@
+ 
+ @runtime_checkable
+ class SupportsRead(Protocol[_T_co]):
+     def read(self, length: int = ..., /) -> _T_co: ...
+ 
+diff --git a/src/requests/models.py b/src/requests/models.py
+index ebeba1e3..c4cc028e 100644
+--- a/src/requests/models.py
++++ b/src/requests/models.py
+@@ -38,3 +38,3 @@
+ from ._internal_utils import to_native_string, unicode_is_ascii
+ from ._types import SupportsRead as _SupportsRead
+ from .auth import HTTPBasicAuth
+@@ -236,7 +236,7 @@ class RequestEncodingMixin:
+ 
+             if isinstance(fp, (str, bytes, bytearray)):
+                 fdata = fp
+-            elif isinstance(fp, _SupportsRead) or hasattr(fp, "read"):
++            elif isinstance(fp, _SupportsRead):  # defensive check for untyped callers
+                 fdata = fp.read()
+             elif fp is None:  # defensive check for untyped callers
+                 continue

@@ -8,7 +8,8 @@
     "paths": [
       "src/"
     ],
-    "note": "feat: fail the eval when hit@5 drops against the committed baseline"
+    "note": "feat: fail the eval when hit@5 drops against the committed baseline",
+    "commit_title": "feat: fail the eval when hit@5 drops against the committed baseline"
   },
   "status": "active"
 }

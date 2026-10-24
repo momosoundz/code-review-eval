@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-012",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "jd/tenacity",
+    "commit": "40fad18",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is",
+    "commit_title": "Accept empty message in retry_if_exception_message (#651)"
+  },
+  "status": "active"
+}

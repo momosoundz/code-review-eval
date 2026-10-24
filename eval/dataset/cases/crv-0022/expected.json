@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0022",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0022-g1",
+      "file": "tenacity/retry.py",
+      "spans": [
+        [
+          244,
+          244
+        ]
+      ],
+      "also": [],
+      "category": "wrong_condition",
+      "severity": "medium",
+      "root_cause": "The exception-message predicate requires the regular expression to match the entire exception message.",
+      "failure_path": "Given an exception message with a matching prefix followed by additional diagnostic text, the retry condition returns false and Tenacity propagates the exception without retrying.",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

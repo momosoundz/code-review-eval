@@ -1,0 +1,56 @@
+diff --git a/tenacity/__init__.py b/tenacity/__init__.py
+index 89eeca6..e466003 100644
+--- a/tenacity/__init__.py
++++ b/tenacity/__init__.py
+@@ -187,10 +187,6 @@ def _first_set(first: t.Any | object, second: t.Any) -> t.Any:
+     return second if first is _unset else first
+ 
+ 
+-def _is_no_wait(wait: object) -> bool:
+-    return wait is None or wait == 0
+-
+-
+ class RetryError(Exception):
+     """Encapsulates the last attempt instance right before giving up."""
+ 
+@@ -273,7 +264,7 @@ class BaseRetrying(ABC):
+     ) -> None:
+         self.sleep = sleep
+         self.stop = stop
+-        self.wait = wait_none() if _is_no_wait(wait) else wait
++        self.wait = wait
+         self.retry = retry
+         self.before = before
+         self.after = after
+@@ -427,7 +418,10 @@ class BaseRetrying(ABC):
+         self.iter_state.retry_run_result = self.retry(retry_state)
+ 
+     def _run_wait(self, retry_state: "RetryCallState") -> None:
+-        retry_state.upcoming_sleep = self.wait(retry_state)
++        if not self.wait:
++            retry_state.upcoming_sleep = 0.0
++        else:
++            retry_state.upcoming_sleep = self.wait(retry_state)
+ 
+     def _run_stop(self, retry_state: "RetryCallState") -> None:
+         self.statistics["delay_since_first_attempt"] = retry_state.seconds_since_start
+diff --git a/tenacity/asyncio/__init__.py b/tenacity/asyncio/__init__.py
+index 27bd2f8..3292a6c 100644
+--- a/tenacity/asyncio/__init__.py
++++ b/tenacity/asyncio/__init__.py
+@@ -152,9 +152,12 @@ class AsyncRetrying(BaseRetrying):
+ 
+     @override
+     async def _run_wait(self, retry_state: "RetryCallState") -> None:  # type: ignore[override]
+-        retry_state.upcoming_sleep = await _utils.wrap_to_async_func(self.wait)(
+-            retry_state
+-        )
++        if not self.wait:
++            retry_state.upcoming_sleep = 0.0
++        else:
++            retry_state.upcoming_sleep = await _utils.wrap_to_async_func(self.wait)(
++                retry_state
++            )
+ 
+     @override
+     async def _run_stop(self, retry_state: "RetryCallState") -> None:  # type: ignore[override]

@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0026",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0026-g1",
+      "file": "src/click/core.py",
+      "spans": [
+        [
+          1321,
+          1321
+        ]
+      ],
+      "also": [],
+      "category": "wrong_condition",
+      "severity": "medium",
+      "root_cause": "The guard uses all(...) instead of any(...) over the arguments' help attributes, so the section is gated on every argument being documented rather than on at least one.",
+      "failure_path": "A command with arguments SRC (help set) and DST (no help) prints no 'Positional arguments' section at all in --help, silently dropping the documented text; conversely a command with zero arguments satisfies all([]) and prints an empty 'Positional arguments' header on every --help.",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

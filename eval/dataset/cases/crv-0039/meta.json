@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-021",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "psf/requests",
+    "commit": "86b378d3",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is",
+    "commit_title": "Align Session.get parameters with requests.get (#7429)"
+  },
+  "status": "active"
+}

@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-033",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "pallets/click",
+    "commit": "f316d5c",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is; added to reach 20 clean cases for the false-alarm floor",
+    "commit_title": "Land the progress bar on its final position"
+  },
+  "status": "active"
+}

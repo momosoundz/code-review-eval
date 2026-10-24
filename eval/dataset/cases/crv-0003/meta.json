@@ -8,7 +8,9 @@
     "paths": [
       "src/"
     ],
-    "note": "fix: retry retrieval only for follow-ups that refer back"
+    "note": "fix: retry retrieval only for follow-ups that refer back",
+    "commit_title": "fix: retry retrieval only for follow-ups that refer back"
   },
-  "status": "active"
+  "status": "deprecated",
+  "deprecated_reason": "its post-change code equals the buggy state that crv-0009 (reverse of 1764ac8) labels as a defect; a diff cannot be clean and contain a known medium defect at once"
 }

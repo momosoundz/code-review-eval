@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0018",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0018-g1",
+      "file": "tenacity/wait.py",
+      "spans": [
+        [
+          258,
+          258
+        ]
+      ],
+      "also": [],
+      "category": "wrong_literal_or_default",
+      "severity": "medium",
+      "root_cause": "The new minimum wait defaults to one second instead of zero.",
+      "failure_path": "With default options, an early exponential result below one second is raised to a one-second delay, slowing retries that previously had no configured floor.",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

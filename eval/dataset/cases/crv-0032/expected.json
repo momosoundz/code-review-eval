@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0032",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0032-g1",
+      "file": "src/click/core.py",
+      "spans": [
+        [
+          1188,
+          1188
+        ]
+      ],
+      "also": [],
+      "category": "logic_other",
+      "severity": "medium",
+      "root_cause": "The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.",
+      "failure_path": "A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

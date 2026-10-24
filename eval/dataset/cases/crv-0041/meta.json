@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-022",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "psf/requests",
+    "commit": "e331a288",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is",
+    "commit_title": "Remove unused extraction call (#7292)"
+  },
+  "status": "active"
+}

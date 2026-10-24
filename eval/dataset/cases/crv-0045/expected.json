@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0045",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0045-g1",
+      "file": "tenacity/retry.py",
+      "spans": [
+        [
+          180,
+          183
+        ]
+      ],
+      "also": [],
+      "category": "logic_other",
+      "severity": "high",
+      "root_cause": "the walk over exc.__cause__ has no cycle guard, so a chain that loops back on itself never reaches None",
+      "failure_path": "an exception raised with `raise e from e`, or two exceptions that cause each other, makes retry_if_exception_cause_type spin forever at full CPU; the stop conditions never run and the caller hangs",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

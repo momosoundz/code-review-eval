@@ -1,0 +1,40 @@
+{
+  "case_id": "crv-0043",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0043-g1",
+      "file": "tenacity/__init__.py",
+      "spans": [
+        [
+          421,
+          424
+        ]
+      ],
+      "also": [
+        {
+          "file": "tenacity/__init__.py",
+          "spans": [
+            [
+              267,
+              267
+            ]
+          ]
+        },
+        {
+          "file": "tenacity/asyncio/__init__.py",
+          "spans": [
+            [
+              155,
+              160
+            ]
+          ]
+        }
+      ],
+      "category": "wrong_condition",
+      "severity": "medium",
+      "root_cause": "_run_wait decides whether to call the wait strategy by truthiness of self.wait instead of checking for the explicit no-wait values None and 0",
+      "failure_path": "a wait strategy object that is falsy, for example a user-defined strategy subclassing list or tuple to hold its parameters, or a strategy class that defines __len__ or __bool__, is never called: `if not self.wait` takes the no-wait branch, every retry sleeps 0 seconds and the configured backoff disappears without any error; under a flaky dependency the client hammers it at full speed",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

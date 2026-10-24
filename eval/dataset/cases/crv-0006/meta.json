@@ -8,7 +8,8 @@
     "paths": [
       "src/"
     ],
-    "note": "seeded: sign flipped in the regression gate"
+    "note": "seeded: sign flipped in the regression gate",
+    "commit_title": "feat: fail the eval when hit@5 drops against the committed baseline"
   },
   "status": "active"
 }

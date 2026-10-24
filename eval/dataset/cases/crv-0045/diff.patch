@@ -1,0 +1,15 @@
+diff --git a/tenacity/retry.py b/tenacity/retry.py
+index b1781da..e59f4c0 100644
+--- a/tenacity/retry.py
++++ b/tenacity/retry.py
+@@ -177,9 +177,7 @@ class retry_if_exception_cause_type(retry_base):
+ 
+         if retry_state.outcome.failed:
+             exc = retry_state.outcome.exception()
+-            seen: set[int] = set()
+-            while exc is not None and id(exc) not in seen:
+-                seen.add(id(exc))
++            while exc is not None:
+                 if isinstance(exc.__cause__, self.exception_cause_types):
+                     return True
+                 exc = exc.__cause__

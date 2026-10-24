@@ -182,3 +182,31 @@ def test_ids_are_validated(tmp_path: Path) -> None:
     write_case(tmp_path, "weird", {"expected_findings": []}, meta(source="clean"))
     with pytest.raises(DatasetError, match="crv-NNNN"):
         load_case(tmp_path / "weird")
+
+
+def test_span_must_touch_a_changed_line(tmp_path: Path) -> None:
+    ctx_only = gold(gold_id="crv-0040-g1", spans=[[45, 45]])
+    write_case(tmp_path, "crv-0040", {"expected_findings": [ctx_only]}, meta())
+    with pytest.raises(DatasetError, match="touches no changed line"):
+        load_case(tmp_path / "crv-0040")
+    removal_only = """\
+diff --git a/app/orders.py b/app/orders.py
+--- a/app/orders.py
++++ b/app/orders.py
+@@ -40,4 +40,3 @@ def get_order(order_id: int, tenant_id: int) -> Order:
+     session = get_session()
+-    check_tenant(order_id, tenant_id)
+     order = session.query(Order).filter_by(id=order_id).one()
+     return order
+"""
+    after_removal = gold(gold_id="crv-0041-g1", spans=[[41, 41]])
+    write_case(
+        tmp_path, "crv-0041", {"expected_findings": [after_removal]}, meta(), diff=removal_only
+    )
+    assert load_case(tmp_path / "crv-0041").expected_findings[0].spans == ((41, 41),)
+
+
+def test_missing_expected_findings_key_is_not_a_clean_case(tmp_path: Path) -> None:
+    write_case(tmp_path, "crv-0001", {}, meta(source="clean"))
+    with pytest.raises(DatasetError, match="expected_findings"):
+        load_case(tmp_path / "crv-0001")

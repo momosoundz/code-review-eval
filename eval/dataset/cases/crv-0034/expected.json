@@ -1,0 +1,21 @@
+{
+  "case_id": "crv-0034",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0034-g1",
+      "file": "src/click/termui.py",
+      "spans": [
+        [
+          99,
+          99
+        ]
+      ],
+      "also": [],
+      "category": "boundary",
+      "severity": "low",
+      "root_cause": "After stripping ANSI codes the prompt text is also passed through str.strip(), which removes the whitespace at the end of the prompt that separates it from the user's typed input.",
+      "failure_path": "click.prompt(\"Name\") builds the prompt 'Name: '; when the stream does not support color (piped output, CliRunner, NO_COLOR) the prompt is shown as 'Name:' with the cursor glued to the colon, while on a color-capable terminal the same call keeps the trailing space, so transcripts differ between the two environments.",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

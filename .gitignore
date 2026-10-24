@@ -6,3 +6,4 @@ __pycache__/
 .env
 findings.json
 .DS_Store
+eval/dataset/incoming/

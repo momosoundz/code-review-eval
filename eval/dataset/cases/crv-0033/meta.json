@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-018",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "pallets/click",
+    "commit": "93ba007",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is",
+    "commit_title": "Strip ANSI from `confirm()` and `prompt()` when the stream don't support them"
+  },
+  "status": "active"
+}

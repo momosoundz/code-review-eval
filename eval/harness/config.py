@@ -19,8 +19,15 @@ PRICES_PER_MTOK = {
 # this many lines of one of the gold spans. Recorded in the manifest; sensitivity shown at 0/3/10.
 LINE_TOLERANCE = 3
 
-# A finding that matches no gold counts as a false positive only at these severities.
-FP_SEVERITIES = ("high", "medium")
+# Severities that count: a gold defect at these severities enters the gate metric, and a
+# finding that matches no gold counts as a false positive only at these severities.
+GATED_SEVERITIES = ("high", "medium")
+
+# The gate metric: per-case recall over gold defects of severity medium or high (a case passes
+# a run when all of them were matched). Low-severity defects have their own recall and never
+# count as a miss here. recall_high would be the better gate but the release set has too few
+# high-severity defects for 20 families; it stays a diagnostic until the set grows.
+GATE_METRIC = "recall_medium_plus"
 
 # Statistics: resamples for the paired bootstrap and the gate margin in recall points.
 BOOTSTRAP_RESAMPLES = 10_000

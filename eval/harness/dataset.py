@@ -11,8 +11,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from eval.harness.config import GATED_SEVERITIES
 from reviewer.config import CATEGORIES, SEVERITIES
-from reviewer.diffs import number_diff
+from reviewer.diffs import NumberedDiff, number_diff
 
 CASES_DIR = Path(__file__).resolve().parents[1] / "dataset" / "cases"
 CASE_ID = re.compile(r"crv-\d{4}")
@@ -69,6 +70,7 @@ class Case:
     split: str
     source: str
     status: str
+    commit_title: str | None = None
 
     @property
     def is_clean(self) -> bool:
@@ -82,8 +84,18 @@ class Case:
 
     @property
     def high_gold(self) -> tuple[GoldFinding, ...]:
-        """Gold findings with severity high; the gate metric is computed over these."""
+        """Gold findings with severity high (diagnostic slice)."""
         return tuple(g for g in self.expected_findings if g.severity == "high")
+
+    @property
+    def gated_gold(self) -> tuple[GoldFinding, ...]:
+        """Gold findings of severity medium or high: the ones the gate metric counts."""
+        return tuple(g for g in self.expected_findings if g.severity in GATED_SEVERITIES)
+
+    @property
+    def low_gold(self) -> tuple[GoldFinding, ...]:
+        """Gold findings of severity low, reported in their own metric."""
+        return tuple(g for g in self.expected_findings if g.severity == "low")
 
 
 def _require(condition: bool, case_id: str, message: str) -> None:
@@ -92,8 +104,9 @@ def _require(condition: bool, case_id: str, message: str) -> None:
 
 
 def _parse_location(
-    raw: dict[str, Any], gold_id: str, case_id: str, valid: dict[str, set[int]]
+    raw: dict[str, Any], gold_id: str, case_id: str, numbered: NumberedDiff, primary: bool = True
 ) -> Location:
+    valid, changed = numbered.valid_lines, numbered.changed_lines
     path = str(raw["file"])
     _require(path in valid, case_id, f"{gold_id} cites {path!r}, not in the diff")
     spans = tuple((int(a), int(b)) for a, b in raw["spans"])
@@ -101,10 +114,14 @@ def _parse_location(
     for start, end in spans:
         inside = start <= end and all(n in valid[path] for n in range(start, end + 1))
         _require(inside, case_id, f"{gold_id} span {start}-{end} is outside the diff hunks")
+        touches = any(n in changed[path] for n in range(start, end + 1))
+        _require(
+            touches or not primary, case_id, f"{gold_id} span {start}-{end} touches no changed line"
+        )
     return path, spans
 
 
-def _parse_gold(raw: dict[str, Any], case_id: str, valid: dict[str, set[int]]) -> GoldFinding:
+def _parse_gold(raw: dict[str, Any], case_id: str, numbered: NumberedDiff) -> GoldFinding:
     gold_id = str(raw["gold_id"])
     _require(bool(GOLD_ID.fullmatch(gold_id)), case_id, f"gold_id {gold_id!r} must be <case_id>-gN")
     _require(
@@ -113,7 +130,10 @@ def _parse_gold(raw: dict[str, Any], case_id: str, valid: dict[str, set[int]]) -
     primary = {"file": raw["file"], "spans": raw["spans"]}
     extra = raw.get("also", [])
     _require(isinstance(extra, list), case_id, f"{gold_id} 'also' must be a list of locations")
-    locations = tuple(_parse_location(loc, gold_id, case_id, valid) for loc in [primary, *extra])
+    locations = (
+        _parse_location(primary, gold_id, case_id, numbered),
+        *(_parse_location(loc, gold_id, case_id, numbered, primary=False) for loc in extra),
+    )
     _require(len(set(locations)) == len(locations), case_id, f"{gold_id} repeats a location")
     _require(raw["category"] in CATEGORIES, case_id, f"{gold_id} has unknown category")
     _require(raw["severity"] in SEVERITIES, case_id, f"{gold_id} has unknown severity")
@@ -135,6 +155,14 @@ def _check_meta(meta: dict[str, Any], case_id: str) -> None:
     if meta.get("status") == "deprecated":
         _require(bool(meta.get("deprecated_reason")), case_id, "deprecated needs deprecated_reason")
     _require(bool(meta.get("family_id")), case_id, "family_id is required")
+    provenance = meta.get("provenance", {})
+    _require(isinstance(provenance, dict), case_id, "provenance must be an object")
+    title = provenance.get("commit_title")
+    _require(
+        title is None or (isinstance(title, str) and "\n" not in title and title.strip() != ""),
+        case_id,
+        "commit_title must be a non-empty single line when present",
+    )
 
 
 def load_case(case_dir: Path) -> Case:
@@ -152,10 +180,16 @@ def load_case(case_dir: Path) -> Case:
     _require(declared == case_id, case_id, f"case_id {declared!r} does not match directory")
     _check_meta(meta, case_id)
     try:
-        valid = number_diff(diff).valid_lines
+        numbered = number_diff(diff)
     except ValueError as exc:
         raise DatasetError(f"{case_id}: {exc}") from exc
-    golds = tuple(_parse_gold(g, case_id, valid) for g in expected.get("expected_findings", []))
+    raw_golds = expected.get("expected_findings")
+    _require(
+        isinstance(raw_golds, list),
+        case_id,
+        "expected.json needs an explicit expected_findings list ([] for a clean case)",
+    )
+    golds = tuple(_parse_gold(g, case_id, numbered) for g in raw_golds)
     ids = [g.gold_id for g in golds]
     _require(len(ids) == len(set(ids)), case_id, "duplicate gold_id")
     _require(meta["source"] != "clean" or not golds, case_id, "a clean case cannot have findings")
@@ -168,6 +202,7 @@ def load_case(case_dir: Path) -> Case:
         split=str(meta["split"]),
         source=str(meta["source"]),
         status=str(meta.get("status", "active")),
+        commit_title=meta.get("provenance", {}).get("commit_title"),
     )
 
 

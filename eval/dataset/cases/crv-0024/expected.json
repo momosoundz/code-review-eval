@@ -1,0 +1,31 @@
+{
+  "case_id": "crv-0024",
+  "expected_findings": [
+    {
+      "gold_id": "crv-0024-g1",
+      "file": "src/click/core.py",
+      "spans": [
+        [
+          3814,
+          3814
+        ]
+      ],
+      "also": [
+        {
+          "file": "src/click/core.py",
+          "spans": [
+            [
+              1323,
+              1323
+            ]
+          ]
+        }
+      ],
+      "category": "null_or_missing_value",
+      "severity": "high",
+      "root_cause": "Argument.get_help_record returns self.help unchanged, so the second element of the tuple is None for an undocumented argument even though format_arguments now feeds every record straight into formatter.write_dl without a fallback.",
+      "failure_path": "A command declares two arguments and sets help on only one; running it with --help makes write_dl measure and wrap a None description and the help command crashes with a TypeError instead of printing usage.",
+      "needs_context_beyond_diff": false
+    }
+  ]
+}

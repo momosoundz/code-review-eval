@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-016",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "pallets/click",
+    "commit": "a1d8785",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is",
+    "commit_title": "Add support of `pathlib.Path` to `edit`"
+  },
+  "status": "active"
+}

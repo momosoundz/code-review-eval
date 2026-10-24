@@ -1,0 +1,14 @@
+{
+  "family_id": "fam-023",
+  "split": "release",
+  "source": "real_reversed",
+  "provenance": {
+    "repo": "jd/tenacity",
+    "fix_commit": "b6201ec",
+    "paths": [
+      "production code only"
+    ],
+    "note": "fix replayed backwards; comment lines explaining the fix removed from the deleted side"
+  },
+  "status": "active"
+}

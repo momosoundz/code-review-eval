@@ -8,7 +8,8 @@
     "paths": [
       "src/"
     ],
-    "note": "seeded: .lower() removed from the regex input"
+    "note": "seeded: .lower() removed from the regex input",
+    "commit_title": "fix: retry retrieval only for follow-ups that refer back"
   },
   "status": "active"
 }

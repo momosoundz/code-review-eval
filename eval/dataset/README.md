@@ -18,12 +18,12 @@ cases/crv-0006/
 | `.gold_id` | `<case_id>-gN` |
 | `.file` | post-change path as it appears in the diff |
 | `.spans` | one or more `[start, end]` post-change line ranges where the defect lives |
-| `.also[]` | optional extra locations (`{file, spans}`) where the same defect manifests, such as a call site in another file; a finding anchored there counts |
+| `.also[]` | optional extra locations (`{file, spans}`) where the same defect manifests, such as a call site or a consumer shown as context; a finding anchored there counts. The primary location must touch a changed line; `also` locations may sit on context |
 | `.category` | one of the categories in `taxonomy.md` |
-| `.severity` | `high`, `medium` or `low`; `high` is the gate slice |
+| `.severity` | `high`, `medium` or `low`; `medium` and `high` enter the gate metric, `low` has its own recall |
 | `.root_cause` | one sentence the judge compares a finding against |
 | `.failure_path` | trigger, mechanism and observable impact |
-| `.needs_context_beyond_diff` | true when the evidence lives outside the diff; such cases are reported separately |
+| `.needs_context_beyond_diff` | true when the evidence lives outside the diff; informational, kept for error analysis, not scored |
 | `decoys[]` | correct-looking spans that are fine, with the reason; informational |
 
 ## meta.json

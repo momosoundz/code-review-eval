@@ -1,0 +1,15 @@
+{
+  "family_id": "fam-020",
+  "split": "release",
+  "source": "clean",
+  "provenance": {
+    "repo": "psf/requests",
+    "commit": "2144213c",
+    "paths": [
+      "production code only"
+    ],
+    "note": "merged commit as is",
+    "commit_title": "Constrain Response.reason to str (#7437)"
+  },
+  "status": "active"
+}
