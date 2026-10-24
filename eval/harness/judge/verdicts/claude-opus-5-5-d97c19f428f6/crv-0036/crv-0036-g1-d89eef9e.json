@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0036",
+  "gold_id": "crv-0036-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The HeadersType alias and Request.headers annotation are widened from Mapping[str, str | bytes] to Mapping[str, object], so the static check that header values are text or bytes before they reach the wire is removed.\n- failure path: A caller passes headers={\"X-Count\": 3} or a list-valued header; the type checker accepts it and the non-string value reaches header preparation at runtime, where it is rejected (or serialized unexpectedly) instead of being caught at the API boundary.\n\nReviewer finding\n- description: The title says Request.headers moves back to Mapping, but the attribute is annotated as Mapping[str, object], not Mapping[str, str | bytes]. The same widening to object is applied to HeadersType.\n- rationale: Trigger: a caller passes headers={'X': 1} or any non-str/bytes value. The type checker now accepts it, though the value can't be sent as a header value. Impact: type errors are no longer caught statically and surface at runtime when the request is prepared or sent. The title announces only the move to Mapping, so the loosened value type goes beyond the stated change.\n",
+  "critique": "The finding points to the same widening of HeadersType and Request.headers to Mapping[str, object]. It also describes the same consequence: non-str/bytes values like ints pass the static type check and only fail at runtime during request preparation.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 888,
+    "output_tokens": 90
+  }
+}

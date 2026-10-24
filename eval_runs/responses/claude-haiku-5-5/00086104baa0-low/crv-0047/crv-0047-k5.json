@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3576,
+        "severity": "low",
+        "category": "wrong_condition",
+        "description": "Removing the already_bracketed check means a non-required option whose metavar is already bracketed, such as metavar=\"[FOO]\", now renders as \"[[FOO]]\" in the usage line.",
+        "rationale": "Trigger: a non-required option declared with a metavar that starts with '[' and ends with ']'. Mechanism: the condition now always wraps var in another pair of brackets, where the removed guard previously left it unchanged. Impact: the generated help/usage text shows doubled brackets for such options, a visible output regression for users who rely on the previous behavior.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1511,
+      "output_tokens": 524,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3683,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "4d5ad745af65283e"
+  },
+  "raw": {
+    "id": "msg_011CgLH9Xt8S8tKfxa6fRLcA",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":3576,\"severity\":\"low\",\"category\":\"wrong_condition\",\"description\":\"Removing the already_bracketed check means a non-required option whose metavar is already bracketed, such as metavar=\\\"[FOO]\\\", now renders as \\\"[[FOO]]\\\" in the usage line.\",\"rationale\":\"Trigger: a non-required option declared with a metavar that starts with '[' and ends with ']'. Mechanism: the condition now always wraps var in another pair of brackets, where the removed guard previously left it unchanged. Impact: the generated help/usage text shows doubled brackets for such options, a visible output regression for users who rely on the previous behavior.\",\"confidence\":0.55}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1511,
+      "output_tokens": 524,
+      "output_tokens_details": {
+        "thinking_tokens": 282
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

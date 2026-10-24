@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0049",
+  "gold_id": "crv-0049-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: _encode_files only treats an object as a file when isinstance(fp, _SupportsRead) succeeds, which a wrapper that exposes read through __getattr__ fails\n- failure path: on Python 3.12 and later, isinstance against a runtime_checkable Protocol uses inspect.getattr_static and does not see attributes served by __getattr__; a file wrapper that proxies read() that way fails the check, is not read, and its contents never reach the multipart body; before 3.12 the Protocol check used hasattr and the removed `or hasattr(fp, 'read')` was redundant, so the defect only manifests on 3.12+\n\nReviewer finding\n- description: The `hasattr(fp, \"read\")` fallback was removed, leaving only `isinstance(fp, _SupportsRead)`. File-like objects that have a `read` attribute but fail the runtime protocol check are no longer read.\n- rationale: Trigger: a caller passes a file-like object to `files=` whose `read` is a non-callable attribute or is provided dynamically in a way `runtime_checkable` does not detect. The branch is skipped and the code falls through to the later `else`, which treats the object as raw data. Impact: the multipart upload body contains the object itself rather than its contents, or the request raises, where it previously worked.\n",
+  "critique": "The finding names the same change: the hasattr(fp, 'read') fallback was removed and only isinstance(fp, _SupportsRead) remains. It gives the same mechanism, a read that is provided dynamically and that runtime_checkable does not detect, so the object is not read and its contents are lost. It does not mention Python 3.12 or getattr_static, but the faulty operation and the failure are the same as in the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 956,
+    "output_tokens": 151
+  }
+}

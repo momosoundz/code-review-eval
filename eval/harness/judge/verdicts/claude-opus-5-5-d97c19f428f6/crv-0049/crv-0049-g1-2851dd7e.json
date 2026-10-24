@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0049",
+  "gold_id": "crv-0049-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: _encode_files only treats an object as a file when isinstance(fp, _SupportsRead) succeeds, which a wrapper that exposes read through __getattr__ fails\n- failure path: on Python 3.12 and later, isinstance against a runtime_checkable Protocol uses inspect.getattr_static and does not see attributes served by __getattr__; a file wrapper that proxies read() that way fails the check, is not read, and its contents never reach the multipart body; before 3.12 the Protocol check used hasattr and the removed `or hasattr(fp, 'read')` was redundant, so the defect only manifests on 3.12+\n\nReviewer finding\n- description: The `or hasattr(fp, \"read\")` fallback was removed, so file-like objects are now accepted only if `isinstance(fp, _SupportsRead)` passes. That protocol check is stricter than the old duck typing.\n- rationale: Trigger: a `files=` entry whose value has a `read` attribute that the protocol check rejects, for example a mock or proxy object. The `isinstance` check is false, so execution falls through to the `elif` branches. Impact: the file is no longer read and the request fails or misbehaves, a regression for working callers.\n",
+  "critique": "The finding names the removal of the `or hasattr(fp, 'read')` fallback and says the stricter `isinstance(fp, _SupportsRead)` check rejects proxy objects that do have `read`, so the file is never read. That is the same defect as the label. The finding does not explain the Python 3.12 getattr_static detail, but the faulty operation and the failure mechanism (a proxy wrapper fails the protocol check and its content is not read) are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 929,
+    "output_tokens": 166
+  }
+}

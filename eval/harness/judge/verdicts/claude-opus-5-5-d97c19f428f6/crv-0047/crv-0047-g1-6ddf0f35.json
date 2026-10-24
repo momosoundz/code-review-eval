@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0047",
+  "gold_id": "crv-0047-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: an optional argument's metavar is wrapped in brackets without checking whether the type already bracketed it\n- failure path: an optional Choice argument renders in the usage line as [[foo|bar|baz]] with two pairs of brackets instead of [foo|bar|baz]\n\nReviewer finding\n- description: Removing the already_bracketed guard means an optional option whose metavar is already bracketed, such as metavar=\"[PATH]\", is now wrapped again and rendered as \"[[PATH]]\" in help output.\n- rationale: Trigger: an optional option declared with a custom metavar that already has brackets, such as metavar=\"[PATH]\". Mechanism: the old code skipped adding brackets when the metavar was already bracketed; the new condition `if not self.required:` always adds them, producing nested brackets. Impact: the usage/help text shows \"[[PATH]]\" where it previously showed \"[PATH]\", a visible regression for users with such metavars. Whether this is intended is unclear from the diff.\n",
+  "critique": "Both describe the same faulty operation: an optional argument's metavar gets wrapped in brackets with no check for existing brackets, which produces double brackets. The finding's example is a custom metavar rather than a Choice type, but the mechanism and the visible result ([[...]]) are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 856,
+    "output_tokens": 109
+  }
+}

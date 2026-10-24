@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0032",
+  "gold_id": "crv-0032-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.\n- failure path: A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.\n\nReviewer finding\n- description: The refactor dropped the removal of names found in `param.secondary_opts`. Only `param.opts` is now checked when excluding names already reserved by other parameters.\n- rationale: Trigger: a boolean flag declared like `--shout/--help` or `-h/-H` puts `--help` in secondary_opts, and the context's help_option_names includes that name. Previously the name was removed from the help option's names; now it is kept, so the auto-added help option duplicates the name and collides with the user's option. Impact: conflicting option names, and the help option shadows or overrides the user's secondary option, or a duplicate-option warning is raised.\n",
+  "critique": "The finding names the same faulty operation: the refactored loop excludes help names found in param.opts but no longer those in param.secondary_opts. It also gives the same consequence, where a help name in a flag's secondary opts stays on the auto-generated help option and collides with the user's option. The example differs (`--shout/--help` instead of `--hint/-h`), but the mechanism is the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 892,
+    "output_tokens": 141
+  }
+}

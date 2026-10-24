@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The early-return shortcut fires when exponent is below the log threshold, which is the range where the exponential value is still under max. The comparison is inverted, so the wait jumps straight to max during the early attempts.",
+        "rationale": "Trigger: multiplier=1, max=100, exp_base=2, attempt_number=1, so exponent=0 and log2(100/1)\u22486.64; 0 < 6.64 holds, so the function returns max(max(0,min),100)=100 instead of 1*2**0=1. Mechanism: the shortcut should only apply when multiplier*exp_base**exponent already exceeds max, i.e. exponent >= log(max/multiplier, exp_base). Impact: every retry waits the full max from the first attempt, silently ignoring the exponential backoff schedule.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1695,
+      "output_tokens": 679,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4649,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "9b6bc2ac461b1171"
+  },
+  "raw": {
+    "id": "msg_011CgLGDZgmDB2D88jjeRDzn",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\": [{\"file\": \"tenacity/wait.py\", \"line\": 211, \"severity\": \"high\", \"category\": \"wrong_operator\", \"description\": \"The early-return shortcut fires when exponent is below the log threshold, which is the range where the exponential value is still under max. The comparison is inverted, so the wait jumps straight to max during the early attempts.\", \"rationale\": \"Trigger: multiplier=1, max=100, exp_base=2, attempt_number=1, so exponent=0 and log2(100/1)\u22486.64; 0 < 6.64 holds, so the function returns max(max(0,min),100)=100 instead of 1*2**0=1. Mechanism: the shortcut should only apply when multiplier*exp_base**exponent already exceeds max, i.e. exponent >= log(max/multiplier, exp_base). Impact: every retry waits the full max from the first attempt, silently ignoring the exponential backoff schedule.\", \"confidence\": 0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1695,
+      "output_tokens": 679,
+      "output_tokens_details": {
+        "thinking_tokens": 355
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0047",
+  "gold_id": "crv-0047-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: an optional argument's metavar is wrapped in brackets without checking whether the type already bracketed it\n- failure path: an optional Choice argument renders in the usage line as [[foo|bar|baz]] with two pairs of brackets instead of [foo|bar|baz]\n\nReviewer finding\n- description: Removing the already_bracketed guard means a metavar that is already bracketed gets wrapped in brackets a second time for optional parameters.\n- rationale: Trigger: an optional Option whose type returns a bracketed metavar, such as click.Choice, which builds '[a|b]'. Mechanism: with the guard removed, line 3576 wraps it again, producing '[[a|b]]'. Impact: the usage and help text for such options shows doubled brackets, a visible regression from the previous output.\n",
+  "critique": "Both describe the same defect: an optional parameter's metavar is wrapped in brackets without checking whether it is already bracketed. A Choice type therefore renders as [[a|b]]. The finding attributes this to an Option rather than an argument, but the mechanism and the symptom are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 792,
+    "output_tokens": 110
+  }
+}

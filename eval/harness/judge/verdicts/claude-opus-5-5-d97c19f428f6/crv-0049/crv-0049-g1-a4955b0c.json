@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0049",
+  "gold_id": "crv-0049-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: _encode_files only treats an object as a file when isinstance(fp, _SupportsRead) succeeds, which a wrapper that exposes read through __getattr__ fails\n- failure path: on Python 3.12 and later, isinstance against a runtime_checkable Protocol uses inspect.getattr_static and does not see attributes served by __getattr__; a file wrapper that proxies read() that way fails the check, is not read, and its contents never reach the multipart body; before 3.12 the Protocol check used hasattr and the removed `or hasattr(fp, 'read')` was redundant, so the defect only manifests on 3.12+\n\nReviewer finding\n- description: The `or hasattr(fp, \"read\")` fallback was removed, so file-like objects are now accepted only if `isinstance(fp, _SupportsRead)` returns True. The runtime-checkable Protocol is intended as a typing aid, not a replacement for the old duck-typing check.\n- rationale: Trigger: a file-like object passed in `files` that has a `read` attribute but does not satisfy the Protocol check. Examples are an object whose `read` is set as an instance attribute or provided via `__getattr__`, or an older Python version where the protocol check behaves differently. Mechanism: `isinstance` is False, so the branch is skipped and the object falls through to the else branch, where it is treated as raw data instead of being read. Impact: the request body is built from the object itself rather than its contents, or an error is raised, a regression for previously working inputs.\n",
+  "critique": "The finding identifies the removal of the hasattr fallback, which leaves only the isinstance(_SupportsRead) check. It explicitly names wrappers that provide read via __getattr__ as failing that check, so their contents are not read into the body. This is the same mechanism as the label, though the finding gets the version direction slightly wrong (it says older Python rather than 3.12+).",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 1027,
+    "output_tokens": 138
+  }
+}

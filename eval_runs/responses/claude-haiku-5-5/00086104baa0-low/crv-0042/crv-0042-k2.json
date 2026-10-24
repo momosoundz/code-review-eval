@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 304,
+        "severity": "medium",
+        "category": "error_handling",
+        "description": "When no usable CA bundle exists, the code now emits a warning and continues instead of raising OSError, so the request proceeds with a path that does not exist.",
+        "rationale": "Trigger: certifi's bundle path does not exist on disk (for example, a zipped install) and verify is left as default, or verify points to a missing file. Mechanism: the existence check now calls warnings.warn and falls through, so cert_loc, which points to a missing file, is passed on to the TLS layer. Impact: the caller gets a generic SSL/IO failure or a warning in place of the clear 'Could not find a suitable TLS CA certificate bundle' error, and HTTPS requests can fail in less diagnosable ways.",
+        "confidence": 0.6
+      },
+      {
+        "file": "src/requests/adapters.py",
+        "line": 301,
+        "severity": "medium",
+        "category": "wrong_variable_or_argument",
+        "description": "The default CA bundle path is used directly without extract_zipped_paths, so a bundle stored inside a zip archive is no longer extracted to a real file.",
+        "rationale": "Trigger: requests is installed as a zipped egg or zip archive, so certifi.where() returns a path inside the archive that is not a real file. Mechanism: cert_loc is set to that virtual path, and os.path.exists returns False, so no temporary file is extracted. Impact: HTTPS requests with default verification fail in this deployment, where the previous code worked.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1768,
+      "output_tokens": 1333,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 7202,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "e960625343f4db45"
+  },
+  "raw": {
+    "id": "msg_011CgLGzLGdWyoqpjLt9kqmq",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":304,\"severity\":\"medium\",\"category\":\"error_handling\",\"description\":\"When no usable CA bundle exists, the code now emits a warning and continues instead of raising OSError, so the request proceeds with a path that does not exist.\",\"rationale\":\"Trigger: certifi's bundle path does not exist on disk (for example, a zipped install) and verify is left as default, or verify points to a missing file. Mechanism: the existence check now calls warnings.warn and falls through, so cert_loc, which points to a missing file, is passed on to the TLS layer. Impact: the caller gets a generic SSL/IO failure or a warning in place of the clear 'Could not find a suitable TLS CA certificate bundle' error, and HTTPS requests can fail in less diagnosable ways.\",\"confidence\":0.6},{\"file\":\"src/requests/adapters.py\",\"line\":301,\"severity\":\"medium\",\"category\":\"wrong_variable_or_argument\",\"description\":\"The default CA bundle path is used directly without extract_zipped_paths, so a bundle stored inside a zip archive is no longer extracted to a real file.\",\"rationale\":\"Trigger: requests is installed as a zipped egg or zip archive, so certifi.where() returns a path inside the archive that is not a real file. Mechanism: cert_loc is set to that virtual path, and os.path.exists returns False, so no temporary file is extracted. Impact: HTTPS requests with default verification fail in this deployment, where the previous code worked.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1768,
+      "output_tokens": 1333,
+      "output_tokens_details": {
+        "thinking_tokens": 818
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

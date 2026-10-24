@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 231,
+        "severity": "medium",
+        "category": "input_validation",
+        "description": "The missing-argument check changed from truthiness to `is None`, so an empty `match=\"\"` is now accepted instead of raising TypeError.",
+        "rationale": "Trigger: a caller passes match=\"\" with message omitted, for example from an empty config default. Previously `not match` was true, so the constructor raised 'missing 1 required argument'. Now `match is None` is false, so no error is raised, and re.compile(\"\") matches every exception string. The predicate therefore retries on any exception, silently and without warning. The same change also means message=\"\" is accepted and only matches exceptions whose str is empty.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1706,
+      "output_tokens": 870,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5445,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "485e7ce2faf84da5"
+  },
+  "raw": {
+    "id": "msg_011CgLGXLQ46kaMpf9tYMtAv",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/retry.py\",\"line\":231,\"severity\":\"medium\",\"category\":\"input_validation\",\"description\":\"The missing-argument check changed from truthiness to `is None`, so an empty `match=\\\"\\\"` is now accepted instead of raising TypeError.\",\"rationale\":\"Trigger: a caller passes match=\\\"\\\" with message omitted, for example from an empty config default. Previously `not match` was true, so the constructor raised 'missing 1 required argument'. Now `match is None` is false, so no error is raised, and re.compile(\\\"\\\") matches every exception string. The predicate therefore retries on any exception, silently and without warning. The same change also means message=\\\"\\\" is accepted and only matches exceptions whose str is empty.\",\"confidence\":0.55}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1706,
+      "output_tokens": 870,
+      "output_tokens_details": {
+        "thinking_tokens": 615
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

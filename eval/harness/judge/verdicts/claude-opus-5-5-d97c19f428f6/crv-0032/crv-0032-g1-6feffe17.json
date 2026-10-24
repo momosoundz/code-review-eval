@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0032",
+  "gold_id": "crv-0032-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.\n- failure path: A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.\n\nReviewer finding\n- description: The loop no longer removes names in param.secondary_opts from the help option names, so a secondary option name that is also in help_option_names can remain as a help option.\n- rationale: Trigger: a command has a flag option like '--flag/--no-flag' and help_option_names includes '--no-flag'. The old code removed '--no-flag' via secondary_opts; the new loop only iterates param.opts, so '--no-flag' stays in the help names. Impact: the help option collides with the user's flag, so one of them is shadowed or the help option is wrongly offered, a behavior regression from the prior code.\n",
+  "critique": "The finding names the same mechanism as the label: the rewritten loop iterates only param.opts and drops the removal of secondary_opts from help_option_names. The result is the same collision between the help option and a user option. The finding's example ('--no-flag' instead of '-h') is different, but the faulty operation and failure mode are identical.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 879,
+    "output_tokens": 122
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0047",
+  "gold_id": "crv-0047-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: an optional argument's metavar is wrapped in brackets without checking whether the type already bracketed it\n- failure path: an optional Choice argument renders in the usage line as [[foo|bar|baz]] with two pairs of brackets instead of [foo|bar|baz]\n\nReviewer finding\n- description: Removing the already_bracketed check means optional parameters whose metavar already starts and ends with brackets get wrapped in brackets a second time, producing malformed usage text such as [[a|b]].\n- rationale: Trigger: an optional click.Option with a Choice type, whose get_metavar returns a bracketed string like [a|b], or a user-supplied metavar such as [VALUE]. Mechanism: the condition is now only not self.required, so f\"[{var}]\" wraps the already-bracketed var again. Impact: --help and usage output show doubled brackets, a visible regression from the previous behavior that this check existed to prevent.\n",
+  "critique": "The finding describes the same mechanism as the label: an optional argument's metavar gets wrapped in brackets without checking whether it is already bracketed. It also gives the same failure, an optional Choice rendering as [[a|b]].",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 836,
+    "output_tokens": 90
+  }
+}

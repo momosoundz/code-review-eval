@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 301,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The zip-extraction step was removed, so cert_loc now points at DEFAULT_CA_BUNDLE_PATH even when certifi lives inside a zip archive and that path is not a real file on disk.",
+        "rationale": "Trigger: requests is run from a zipped install where certifi.where() returns a path inside the archive. Mechanism: with extract_zipped_paths gone, the os.path.exists check fails and the code no longer extracts the bundle. Impact: HTTPS requests fail to load a CA bundle in zipped deployments that previously worked.",
+        "confidence": 0.55
+      },
+      {
+        "file": "src/requests/adapters.py",
+        "line": 304,
+        "severity": "medium",
+        "category": "error_handling",
+        "description": "A missing CA bundle file now produces only a warning instead of raising OSError, so the failure is deferred and the code continues with a nonexistent certificate path.",
+        "rationale": "Trigger: verify is set to a path that does not exist, or the default bundle is missing. Mechanism: the explicit existence check now warns and execution proceeds with an invalid cert_loc. Impact: the user loses the clear up-front error and instead sees a later, less direct SSL or file error from the transport layer.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1768,
+      "output_tokens": 1301,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 7036,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "e960625343f4db45"
+  },
+  "raw": {
+    "id": "msg_011CgLH1bJHqW5ekLFUfwBUR",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":301,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The zip-extraction step was removed, so cert_loc now points at DEFAULT_CA_BUNDLE_PATH even when certifi lives inside a zip archive and that path is not a real file on disk.\",\"rationale\":\"Trigger: requests is run from a zipped install where certifi.where() returns a path inside the archive. Mechanism: with extract_zipped_paths gone, the os.path.exists check fails and the code no longer extracts the bundle. Impact: HTTPS requests fail to load a CA bundle in zipped deployments that previously worked.\",\"confidence\":0.55},{\"file\":\"src/requests/adapters.py\",\"line\":304,\"severity\":\"medium\",\"category\":\"error_handling\",\"description\":\"A missing CA bundle file now produces only a warning instead of raising OSError, so the failure is deferred and the code continues with a nonexistent certificate path.\",\"rationale\":\"Trigger: verify is set to a path that does not exist, or the default bundle is missing. Mechanism: the explicit existence check now warns and execution proceeds with an invalid cert_loc. Impact: the user loses the clear up-front error and instead sees a later, less direct SSL or file error from the transport layer.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1768,
+      "output_tokens": 1301,
+      "output_tokens_details": {
+        "thinking_tokens": 856
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

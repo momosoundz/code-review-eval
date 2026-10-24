@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 213,
+        "severity": "high",
+        "category": "logic_other",
+        "description": "The new early-return branch returns self.max for every attempt whose exponent is below log(max/multiplier, exp_base), but in that range the exponential value multiplier*exp_base**exponent is still below max and should be returned.",
+        "rationale": "Trigger: wait_exponential(multiplier=1, min=0, max=100, exp_base=2) on attempt 1 gives exponent 0, which is below log2(100)\u22486.6, so the branch returns 100 instead of the correct 1. Mechanism: the guard is meant to detect overflow past max, but the condition holds exactly when the computed value is under max, so the shortcut fires in the non-clamped region and substitutes max. Impact: every early retry sleeps for max seconds instead of the exponential backoff, a silent wrong result on the common path.",
+        "confidence": 0.93
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1695,
+      "output_tokens": 621,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4113,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "9b6bc2ac461b1171"
+  },
+  "raw": {
+    "id": "msg_011CgLGDG4reyjEHNx6jZ3qt",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\": [{\"file\": \"tenacity/wait.py\", \"line\": 213, \"severity\": \"high\", \"category\": \"logic_other\", \"description\": \"The new early-return branch returns self.max for every attempt whose exponent is below log(max/multiplier, exp_base), but in that range the exponential value multiplier*exp_base**exponent is still below max and should be returned.\", \"rationale\": \"Trigger: wait_exponential(multiplier=1, min=0, max=100, exp_base=2) on attempt 1 gives exponent 0, which is below log2(100)\u22486.6, so the branch returns 100 instead of the correct 1. Mechanism: the guard is meant to detect overflow past max, but the condition holds exactly when the computed value is under max, so the shortcut fires in the non-clamped region and substitutes max. Impact: every early retry sleeps for max seconds instead of the exponential backoff, a silent wrong result on the common path.\", \"confidence\": 0.93}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1695,
+      "output_tokens": 621,
+      "output_tokens_details": {
+        "thinking_tokens": 299
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

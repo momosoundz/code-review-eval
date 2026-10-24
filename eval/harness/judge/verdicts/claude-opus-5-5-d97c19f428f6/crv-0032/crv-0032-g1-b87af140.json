@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0032",
+  "gold_id": "crv-0032-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.\n- failure path: A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.\n\nReviewer finding\n- description: The loop now removes only param.opts from the help option names and no longer removes param.secondary_opts, which the old code did.\n- rationale: Trigger: a command has a boolean option such as @click.option('--verbose/--help') whose secondary opt '--help' is reserved. Before this change, '--help' was removed from the candidate help names, so no conflicting help option was created. After it, '--help' stays in the candidates and the help option is added with that name, colliding with the secondary flag. Impact: the command gets a duplicate or shadowed --help, and users can no longer reach the intended behavior through that name.\n",
+  "critique": "Both the finding and the label describe the same mechanism: the loop strips only param.opts from the help names and no longer strips param.secondary_opts, so a secondary flag stays a help name and collides with the generated help option. The example differs ('--verbose/--help' versus '--hint/-h'), but the faulty operation and the resulting collision are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 880,
+    "output_tokens": 128
+  }
+}

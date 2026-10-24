@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0030",
+  "gold_id": "crv-0030-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The shape check before Editor.edit_files tests only for os.PathLike and no longer wraps a plain str, so a string filename is passed on as an iterable and consumed character by character when building the editor command.\n- failure path: click.edit(filename=\"notes.txt\") launches the editor with the nine single-character files n, o, t, e, s, ., t, x, t instead of notes.txt; saving creates stray files in the working directory and the intended file is never opened.\n\nReviewer finding\n- description: The single-file wrap now checks only `os.PathLike`, so a plain `str` filename is no longer wrapped in a tuple and is passed to `edit_files` as-is.\n- rationale: Trigger: calling `click.edit(filename=\"notes.txt\")` with a str. The condition at line 906 is False, so `filename` stays a str and `ed.edit_files(filenames=filename)` iterates it character by character, attempting to open files named \"n\", \"o\", \"t\", etc. Impact: the wrong files are opened or the editor fails, and the documented str usage that worked before (and is still advertised in the docstring and the 8.2.0 versionchanged note) silently breaks.\n",
+  "critique": "The finding points to the same thing as the label. The check that wraps a single filename only tests for os.PathLike, so a plain str goes to edit_files unwrapped and is iterated one character at a time. Both use the same click.edit(filename=\"notes.txt\") trigger, which opens files named by single characters.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 906,
+    "output_tokens": 116
+  }
+}

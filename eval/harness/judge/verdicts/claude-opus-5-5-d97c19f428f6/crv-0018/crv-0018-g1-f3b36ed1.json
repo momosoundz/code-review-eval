@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0018",
+  "gold_id": "crv-0018-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The new minimum wait defaults to one second instead of zero.\n- failure path: With default options, an early exponential result below one second is raised to a one-second delay, slowing retries that previously had no configured floor.\n\nReviewer finding\n- description: The new `min` parameter defaults to 1, not 0, so every existing `wait_exponential_jitter` that does not pass `min` now has a wait floor of 1 second.\n- rationale: Trigger: `wait_exponential_jitter(initial=0.1, jitter=0)` or any config whose computed wait is under 1s. The final `max(max(0, self.min), ...)` clamps the result up to 1s, where before it returned the computed value (e.g. 0.1s). This silently lengthens waits and breaks backward compatibility. A default of 0 would preserve the old behaviour.\n",
+  "critique": "The finding identifies that the new `min` parameter defaults to 1 instead of 0. It explains that this clamps small exponential waits (e.g., 0.1s) up to 1s, which is the same mechanism and effect as the labeled defect.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 800,
+    "output_tokens": 95
+  }
+}

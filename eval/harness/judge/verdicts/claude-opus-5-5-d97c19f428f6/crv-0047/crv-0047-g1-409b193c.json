@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0047",
+  "gold_id": "crv-0047-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: an optional argument's metavar is wrapped in brackets without checking whether the type already bracketed it\n- failure path: an optional Choice argument renders in the usage line as [[foo|bar|baz]] with two pairs of brackets instead of [foo|bar|baz]\n\nReviewer finding\n- description: Removing the already-bracketed check means an optional parameter whose metavar is already wrapped in brackets, such as metavar=\"[FILE]\", now renders as \"[[FILE]]\" in usage text.\n- rationale: Trigger: an optional option or argument is declared with a custom metavar that starts with '[' and ends with ']'. Mechanism: the deleted already_bracketed guard was what prevented the extra wrapping, and the new unconditional f\"[{var}]\" always adds another pair. Impact: the generated help and usage output shows doubled brackets, a visible regression for users who relied on the previous behavior.\n",
+  "critique": "Both describe the same mechanism: the metavar of an optional argument is wrapped in brackets unconditionally, with no check for brackets already present, which produces doubled brackets in usage. The finding's trigger is a custom metavar rather than a Choice type's bracketed metavar, but the faulty operation and the failure are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 829,
+    "output_tokens": 122
+  }
+}

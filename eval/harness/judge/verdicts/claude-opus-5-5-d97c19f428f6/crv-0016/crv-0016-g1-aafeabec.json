@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0016",
+  "gold_id": "crv-0016-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The OR composition checks for retry_all when deciding whether to flatten an existing retry_any.\n- failure path: with `(A & B) | C`, the retry_all on the left is spliced into the retry_any as if it were a plain list of predicates, so the combination behaves as `A | B | C`: a retry fires when only A holds although the author required A and B together; no error is raised and the extra retries are silent\n\nReviewer finding\n- description: In async `retry_any.__ror__`, the flatten check tests `isinstance(other, retry_all)` where it should test `retry_any`. This is the wrong class, and it is inconsistent with the sync version in tenacity/retry.py.\n- rationale: Trigger: `retry_all(a, b) | async_retry_any(c, d)`. The check matches, so the result is `retry_any(a, b, c, d)`, which turns an AND group into an OR. Behavior changes silently, and a retry fires when only `a` is true. The same mistake appears in the sync `retry_any.__ror__`, which should check `retry_any`.\n",
+  "critique": "The finding identifies the same faulty operation: the OR composition's flatten check tests retry_all instead of retry_any. It also gives the same consequence, an AND group spliced into an OR, so a retry fires when only one predicate holds and nothing signals it. The finding's mention of the async variant and of sync inconsistency does not change that the mechanism matches the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 876,
+    "output_tokens": 133
+  }
+}

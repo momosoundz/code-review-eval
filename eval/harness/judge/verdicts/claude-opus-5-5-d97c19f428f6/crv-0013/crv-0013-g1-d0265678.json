@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0013",
+  "gold_id": "crv-0013-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the wrapper now clears and reuses one statistics dict for every call instead of giving each call its own, so concurrent or nested calls of the same decorated function write into the same dict\n- failure path: two threads (or two concurrent awaits of the async wrapper) call the same decorated function; the second call's stats.clear() wipes the first call's start_time and attempt_number, and both read a merged, wrong statistics view afterwards\n\nReviewer finding\n- description: All concurrent or nested calls of the same wrapped function now share and clear one statistics dict. The old code gave each call a fresh copy's dict.\n- rationale: Trigger: the same decorated function runs concurrently (threads, asyncio tasks) or recursively. Each call runs stats.clear() and assigns the shared dict to its own copy, so one call wipes the other's attempt_number and delay_since_first_attempt mid-run. Impact: the statistics are corrupted, and anything that reads them, such as the attempt_number used by stop conditions, can be wrong. The shared dict also breaks the intent of the 'copy' comment above it.\n",
+  "critique": "The finding describes the same mechanism as the label: one statistics dict is shared and cleared on every call, replacing a fresh dict per call. When calls run concurrently or nested, one call's stats.clear() wipes the other's attempt_number and timing fields, which corrupts the statistics.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 888,
+    "output_tokens": 109
+  }
+}

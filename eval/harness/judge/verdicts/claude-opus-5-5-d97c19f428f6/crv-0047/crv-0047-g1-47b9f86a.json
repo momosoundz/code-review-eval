@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0047",
+  "gold_id": "crv-0047-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: an optional argument's metavar is wrapped in brackets without checking whether the type already bracketed it\n- failure path: an optional Choice argument renders in the usage line as [[foo|bar|baz]] with two pairs of brackets instead of [foo|bar|baz]\n\nReviewer finding\n- description: The removed `already_bracketed` check means an optional Argument whose type metavar is already bracketed now gets wrapped a second time, e.g. `[[VAR]]`.\n- rationale: Trigger: an optional Argument (required=False) whose type's get_metavar returns a string like `[FILE]`, which is the case for custom ParamTypes. Mechanism: the unconditional `if not self.required:` wraps the metavar in brackets again. Impact: usage and help text show doubled brackets such as `[[FILE]]`, a regression in the output.\n",
+  "critique": "Both describe the same faulty operation: an optional argument's metavar is wrapped in brackets unconditionally, without checking whether the type already bracketed it, which produces doubled brackets in the usage output. The finding uses a custom ParamType example instead of Choice, but the mechanism and the failure are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 811,
+    "output_tokens": 117
+  }
+}

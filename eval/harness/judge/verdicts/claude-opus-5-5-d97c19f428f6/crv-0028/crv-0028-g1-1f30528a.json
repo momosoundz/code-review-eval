@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0028",
+  "gold_id": "crv-0028-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The separator selection negates any_prefix_is_slash, picking ' / ' exactly when an option spelling already starts with a slash and '; ' otherwise.\n- failure path: An option declared as --shout/--no-shout renders in --help as '--shout; --no-shout', and a Windows-style /debug;/no-debug option renders as '/debug / /no-debug', where the slash separator is indistinguishable from the slash prefix of the names.\n\nReviewer finding\n- description: The separator condition was inverted to `not any_prefix_is_slash`, so the help left column now uses \"; \" for ordinary options and \" / \" for slash-prefixed options, the reverse of the original behavior.\n- rationale: Trigger: any option whose prefixes are not slash-style, such as `--verbose` with `-v`. Original code joined groups with \" / \" when any_prefix_is_slash was False and \"; \" when it was True. The new line 3395 uses \"; \" when any_prefix_is_slash is False, so the rendered help for common options changes from `-v / --verbose` to `-v; --verbose`, and slash options are rendered with the wrong separator. The title only announces exposing the spec without the hidden check, not changing the separator, so this is an unintended regression that every help page shows.\n",
+  "critique": "The finding points to the same inverted separator condition (`not any_prefix_is_slash`). That inversion makes ordinary options use \"; \" and slash-prefixed options use \" / \", which is the reverse of the intended behavior and the same mechanism as the label. The example differs (-v/--verbose vs --shout/--no-shout), but the defect is identical.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 940,
+    "output_tokens": 135
+  }
+}

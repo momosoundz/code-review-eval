@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0014",
+  "gold_id": "crv-0014-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the wrapper now clears and reuses one statistics dict for every call instead of giving each call its own, so concurrent or nested calls of the same decorated function write into the same dict\n- failure path: two threads (or two concurrent awaits of the async wrapper) call the same decorated function; the second call's stats.clear() wipes the first call's start_time and attempt_number, and both read a merged, wrong statistics view afterwards\n\nReviewer finding\n- description: stats.clear() empties the statistics dict that is shared by every call through the same wrapper, and the copy now reuses that same dict instead of getting its own. Concurrent or reentrant calls therefore overwrite each other's statistics.\n- rationale: Trigger: a retried function that calls itself recursively, or two threads calling the decorated function at once. Mechanism: the inner call runs stats.clear() on the dict the outer call is still updating, and both calls write into one dict. Impact: statistics read by the outer call (for example retry_object.statistics) show counts mixed from the other call or reset mid-run, which is silently wrong.\n",
+  "critique": "The finding describes the same defect as the label. It names a single statistics dict reused across calls, where stats.clear() from one call wipes another call's in-progress data. Concurrent or reentrant calls then read mixed or reset statistics.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 882,
+    "output_tokens": 91
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0036",
+  "gold_id": "crv-0036-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The HeadersType alias and Request.headers annotation are widened from Mapping[str, str | bytes] to Mapping[str, object], so the static check that header values are text or bytes before they reach the wire is removed.\n- failure path: A caller passes headers={\"X-Count\": 3} or a list-valued header; the type checker accepts it and the non-string value reaches header preparation at runtime, where it is rejected (or serialized unexpectedly) instead of being caught at the API boundary.\n\nReviewer finding\n- description: The annotation for `PreparedRequest.headers` was changed to an immutable `Mapping[str, object]`. The runtime object is a mutable `CaseInsensitiveDict`, and the title says to move `Request.headers` back to Mapping, not `PreparedRequest.headers`.\n- rationale: Trigger: user or hook code does `prepared.headers['X'] = ...`, which is the documented way to modify a PreparedRequest, or calls `.update()`/`.pop()`. Mechanism: the Mapping annotation has no `__setitem__`, so type checkers report errors on these valid operations. Impact: false type errors in user code, and the type no longer matches the real behavior. The `object` value type also loses the str/bytes guarantee on prepared headers.\n",
+  "critique": "The finding's main mechanism is that `PreparedRequest.headers` became an immutable Mapping, which causes false type errors on mutation. The label is about `HeadersType` and `Request.headers` being widened to `object` values, which removes the str/bytes check at the API boundary. The finding only mentions in passing that the value type lost the str/bytes guarantee, and it does so for prepared headers, not for the Request input boundary.",
+  "verdict": "no_match",
+  "usage": {
+    "input_tokens": 952,
+    "output_tokens": 158
+  }
+}

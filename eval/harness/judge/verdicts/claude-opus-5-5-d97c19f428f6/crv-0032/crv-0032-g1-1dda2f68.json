@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0032",
+  "gold_id": "crv-0032-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.\n- failure path: A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.\n\nReviewer finding\n- description: The loop now only removes names in param.opts and no longer removes names in param.secondary_opts, so a help option name that equals a parameter's secondary option is no longer excluded.\n- rationale: Trigger: the context sets help_option_names to include a name such as \"--no-help\", and a command has a boolean flag declared as \"--verbose/--no-help\", whose secondary opt is \"--no-help\". Before this change, \"--no-help\" was removed from the help names because it was in secondary_opts. After the change it stays, so the help option also claims \"--no-help\" and conflicts with the flag's secondary name. Impact: the help option may shadow or collide with the user's flag, so passing --no-help can trigger help or the flag fails to parse as intended.\n",
+  "critique": "The finding names the same mechanism as the label: the loop removes only param.opts and no longer removes param.secondary_opts, so a help name matching a secondary opt stays and collides with the user's flag. It uses a different example flag, but the fault and how it fails are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 923,
+    "output_tokens": 103
+  }
+}

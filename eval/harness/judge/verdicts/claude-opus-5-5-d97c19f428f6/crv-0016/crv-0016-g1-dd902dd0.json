@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0016",
+  "gold_id": "crv-0016-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The OR composition checks for retry_all when deciding whether to flatten an existing retry_any.\n- failure path: with `(A & B) | C`, the retry_all on the left is spliced into the retry_any as if it were a plain list of predicates, so the combination behaves as `A | B | C`: a retry fires when only A holds although the author required A and B together; no error is raised and the extra retries are silent\n\nReviewer finding\n- description: In the async retry_any.__ror__, the flatten check tests isinstance(other, retry_all) instead of retry_any, so an AND-combination on the left is merged into the OR's retries.\n- rationale: Trigger: an async retry_all on the left of a retry_any, e.g. (a & b) | c. retry_all.__or__ defers to c.__ror__(retry_all), which takes the isinstance(other, retry_all) branch and returns retry_any(a, b, c). Mechanism: the AND is flattened into the OR, so the result is any(a, b, c) instead of any(all(a, b), c). Impact: retries fire when only one of a or b holds, so the retry policy silently retries too often or in the wrong cases.\n",
+  "critique": "The finding identifies the same faulty check: the OR composition flattens when it sees retry_all instead of retry_any. It also gives the same consequence, (A & B) | C behaving as A | B | C and retrying when only one predicate holds. The location detail (__ror__ via deferral) is consistent with the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 908,
+    "output_tokens": 116
+  }
+}

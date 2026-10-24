@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0036",
+  "gold_id": "crv-0036-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The HeadersType alias and Request.headers annotation are widened from Mapping[str, str | bytes] to Mapping[str, object], so the static check that header values are text or bytes before they reach the wire is removed.\n- failure path: A caller passes headers={\"X-Count\": 3} or a list-valued header; the type checker accepts it and the non-string value reaches header preparation at runtime, where it is rejected (or serialized unexpectedly) instead of being caught at the API boundary.\n\nReviewer finding\n- description: The commit title says Request.headers moves back to Mapping, but the diff also changes the value type from `str | bytes` to `object` in both the attribute annotation and `HeadersType`. This is a broader loosening than the title announces.\n- rationale: Trigger: a caller passes `headers={'X': 1}` or any non-str/bytes value. Mechanism: the type checker now accepts it, although header validation and sending code expects str or bytes. Impact: the mistake is no longer caught statically and surfaces at runtime as an InvalidHeader error.\n",
+  "critique": "The finding names the same change: the value type in HeadersType and the Request.headers annotation is widened from str | bytes to object. It describes the same mechanism, where a non-str value such as an int passes the type checker and fails at runtime during header validation.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 878,
+    "output_tokens": 94
+  }
+}

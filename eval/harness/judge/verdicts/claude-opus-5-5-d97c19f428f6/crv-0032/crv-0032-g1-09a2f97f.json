@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0032",
+  "gold_id": "crv-0032-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.\n- failure path: A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.\n\nReviewer finding\n- description: The rewrite removes reserved names only from param.opts and no longer from param.secondary_opts, which the original code also excluded.\n- rationale: Trigger: a boolean flag defined with a secondary opt that matches a help name, e.g. an option declared as '--foo/-h' with help_option_names=['-h','--help']. The old code removed '-h' from the help names; the new code keeps it. The help option and the flag then both claim '-h', which causes a conflict or shadowing, and the user sees the wrong behavior for '-h'.\n",
+  "critique": "The finding names the same mechanism as the label. The rewrite removes help-name candidates using only param.opts and drops the secondary_opts exclusion. It also gives the same trigger: a '--x/-h' flag with help_option_names ['-h','--help'], where -h is claimed by both the help option and the flag.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 861,
+    "output_tokens": 117
+  }
+}

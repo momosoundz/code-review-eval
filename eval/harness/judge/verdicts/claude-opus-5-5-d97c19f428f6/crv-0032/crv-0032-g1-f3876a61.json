@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0032",
+  "gold_id": "crv-0032-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.\n- failure path: A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.\n\nReviewer finding\n- description: The rewrite removes only names found in param.opts and drops the removal of param.secondary_opts. Names reserved by a secondary option (such as the off-switch of a boolean flag like --help/--no-help) are no longer excluded from the help option names.\n- rationale: Trigger: a command declares a boolean flag whose secondary opt matches an entry in help_option_names, for example an option with '--foo/-h' where -h is a secondary opt, and the context uses help_option_names including '-h'. The old code excluded it. The new code keeps '-h' in the list, so the help option is registered with the same name and conflicts with the user's parameter. Impact: duplicate option registration or the help option shadowing the user's secondary flag.\n",
+  "critique": "The finding names the same cause: the rewritten loop removes only param.opts and no longer removes param.secondary_opts. It also gives the same failure: with a '--foo/-h' flag and '-h' in help_option_names, -h stays a help name and the help option conflicts with or shadows the user's flag.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 921,
+    "output_tokens": 114
+  }
+}

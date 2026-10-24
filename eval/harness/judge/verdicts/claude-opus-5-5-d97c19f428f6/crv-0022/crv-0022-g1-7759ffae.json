@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0022",
+  "gold_id": "crv-0022-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The exception-message predicate requires the regular expression to match the entire exception message.\n- failure path: Given an exception message with a matching prefix followed by additional diagnostic text, the retry condition returns false and Tenacity propagates the exception without retrying.\n\nReviewer finding\n- description: Changed `match.match` to `match.fullmatch`, so the regex must now match the entire exception string rather than just a prefix. This changes the semantics of the `match` argument.\n- rationale: Trigger: `match=\"timeout\"` with exception text \"timeout after 5s\". Before, `re.match` succeeded and the retry happened. Now `fullmatch` fails, so the retry is silently skipped or the exception is raised. Existing users relying on prefix matching (the documented behavior of re.match) break.\n",
+  "critique": "The finding says the predicate switched to fullmatch and now requires the regex to match the entire exception message. Its example is a matching prefix followed by extra text (\"timeout after 5s\"), which fails the predicate, so no retry happens and the exception propagates. That is the same root cause and failure path as the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 786,
+    "output_tokens": 116
+  }
+}

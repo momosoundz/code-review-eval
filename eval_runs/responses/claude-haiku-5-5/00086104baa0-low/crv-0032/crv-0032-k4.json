@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1188,
+        "severity": "low",
+        "category": "wrong_variable_or_argument",
+        "description": "The loop now only removes each parameter's primary `opts`, dropping the earlier removal of `secondary_opts`. A help option name that matches a parameter's secondary option (for example `--no-verbose` from `--verbose/--no-verbose`) is no longer excluded.",
+        "rationale": "Trigger: a command has a flag `--verbose/--no-verbose` and `help_option_names` includes `--no-verbose`. Before the change, `--no-verbose` was removed from the help names, so it was not claimed twice. Now it stays, so the help option is registered with a name the flag already uses. Impact: the parser sees a conflicting option name, so one of the two options silently stops working.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1715,
+      "output_tokens": 736,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4956,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "2514beb431c2b241"
+  },
+  "raw": {
+    "id": "msg_011CgLGohNpTALkohoq2TDkT",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1188,\"severity\":\"low\",\"category\":\"wrong_variable_or_argument\",\"description\":\"The loop now only removes each parameter's primary `opts`, dropping the earlier removal of `secondary_opts`. A help option name that matches a parameter's secondary option (for example `--no-verbose` from `--verbose/--no-verbose`) is no longer excluded.\",\"rationale\":\"Trigger: a command has a flag `--verbose/--no-verbose` and `help_option_names` includes `--no-verbose`. Before the change, `--no-verbose` was removed from the help names, so it was not claimed twice. Now it stays, so the help option is registered with a name the flag already uses. Impact: the parser sees a conflicting option name, so one of the two options silently stops working.\",\"confidence\":0.55}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1715,
+      "output_tokens": 736,
+      "output_tokens_details": {
+        "thinking_tokens": 454
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

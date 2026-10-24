@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0014",
+  "gold_id": "crv-0014-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the wrapper now clears and reuses one statistics dict for every call instead of giving each call its own, so concurrent or nested calls of the same decorated function write into the same dict\n- failure path: two threads (or two concurrent awaits of the async wrapper) call the same decorated function; the second call's stats.clear() wipes the first call's start_time and attempt_number, and both read a merged, wrong statistics view afterwards\n\nReviewer finding\n- description: Calling stats.clear() on the shared per-decorator statistics dict, instead of binding a fresh dict, wipes the statistics of any in-progress call that shares it.\n- rationale: Trigger: a retry-decorated function is called re-entrantly (recursion) or concurrently from another thread while an earlier call is still running. Mechanism: the earlier call's self._local.statistics is the same dict object as wrapped_f.statistics, so the new call's clear() empties it mid-run. The original code rebound the attribute to a fresh copy dict, which avoided this and was the protection the existing comment describes. Impact: the outer call's statistics (attempt_number, idle_for, etc.) silently reset or show the inner call's values.\n",
+  "critique": "The finding points to the same fault: stats.clear() runs on one shared statistics dict instead of binding a fresh dict per call. The failure is also the same: a concurrent or re-entrant call wipes and overwrites the in-progress call's attempt_number and related fields. The label and finding agree on both the mechanism and the trigger.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 915,
+    "output_tokens": 123
+  }
+}

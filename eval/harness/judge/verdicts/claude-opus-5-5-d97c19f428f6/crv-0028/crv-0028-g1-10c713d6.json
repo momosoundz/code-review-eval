@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0028",
+  "gold_id": "crv-0028-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The separator selection negates any_prefix_is_slash, picking ' / ' exactly when an option spelling already starts with a slash and '; ' otherwise.\n- failure path: An option declared as --shout/--no-shout renders in --help as '--shout; --no-shout', and a Windows-style /debug;/no-debug option renders as '/debug / /no-debug', where the slash separator is indistinguishable from the slash prefix of the names.\n\nReviewer finding\n- description: The separator conditional was inverted while moving the join into get_help_spec. The original was `(\"; \" if any_prefix_is_slash else \" / \")`, and the new code is `(\"; \" if not any_prefix_is_slash else \" / \")`.\n- rationale: Trigger: any option with secondary opts, e.g. a boolean flag `--shout/--no-shout`. The original code joined with \" / \" when no slash prefix was used, but the new code joins with \"; \". Help output becomes `--shout; --no-shout` instead of `--shout / --no-shout`. Options using a slash prefix such as `/debug;/no-debug` get \" / \" instead of \"; \". The help text changes for every flag with a secondary option, and help-output tests would fail.\n",
+  "critique": "The finding identifies the inverted condition on any_prefix_is_slash in the separator choice. It gives the same consequences as the label: '--shout; --no-shout', and ' / ' used for slash-prefixed options.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 925,
+    "output_tokens": 87
+  }
+}

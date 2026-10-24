@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0032",
+  "gold_id": "crv-0032-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.\n- failure path: A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.\n\nReviewer finding\n- description: The rewrite only removes names found in `param.opts` and no longer removes names found in `param.secondary_opts`. The original code removed both.\n- rationale: Trigger: a boolean flag declared like `--flag/--no-flag`, or `--help/--no-help`, where a help name such as `--help` appears only in `secondary_opts`. The help name is now not dropped, so the auto-generated help option is still registered under that name. The result is a conflict or shadowing of the user's option, or a duplicate option name.\n",
+  "critique": "The finding names the same defect: the rewritten loop removes help names found in param.opts but not those in param.secondary_opts. In both, a help name declared only as a secondary opt stays in the help names, so the auto-generated help option conflicts with the user's option. The example flag differs from the label's, but the mechanism is the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 852,
+    "output_tokens": 119
+  }
+}

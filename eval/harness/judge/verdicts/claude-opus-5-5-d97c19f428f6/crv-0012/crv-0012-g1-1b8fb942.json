@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0012",
+  "gold_id": "crv-0012-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The exponential cap check uses the reversed comparison and returns the cap while the computed delay is still below it.\n- failure path: With a retry attempt whose exponent is below the cap threshold, the wait strategy immediately returns the maximum delay instead of the smaller exponential delay.\n\nReviewer finding\n- description: When the shortcut fires it returns `max(max(0, self.min), self.max)`, which is the cap, not the clamped exponential value. The intended shortcut should return the cap only when the exponential value has already exceeded it, and otherwise the result must still respect the minimum bound.\n- rationale: Trigger: any configuration where the exponent is past the threshold, such as attempt 20 with multiplier=1, max=100, exp_base=2. The return value is max(min, max), which is the same as the original clamp result only in that case. The problem is that the branch's trigger is inverted (see the line 211 finding), so the returned value is wrong for the early attempts. Impact: incorrect wait durations.\n",
+  "critique": "The finding says the shortcut branch's trigger is inverted, so early attempts (exponent below threshold) wrongly return the cap. This is the same reversed comparison that returns the max delay before the exponential value reaches it. The finding also refers to a separate line-211 finding, but it states the mechanism and the failure clearly.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 857,
+    "output_tokens": 121
+  }
+}

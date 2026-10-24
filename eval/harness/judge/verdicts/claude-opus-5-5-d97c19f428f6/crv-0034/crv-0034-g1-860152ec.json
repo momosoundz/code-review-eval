@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0034",
+  "gold_id": "crv-0034-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: After stripping ANSI codes the prompt text is also passed through str.strip(), which removes the whitespace at the end of the prompt that separates it from the user's typed input.\n- failure path: click.prompt(\"Name\") builds the prompt 'Name: '; when the stream does not support color (piped output, CliRunner, NO_COLOR) the prompt is shown as 'Name:' with the cursor glued to the colon, while on a color-capable terminal the same call keeps the trailing space, so transcripts differ between the two environments.\n\nReviewer finding\n- description: When ANSI stripping is triggered, the code calls `.strip()` on the result of `strip_ansi(text)`, which removes leading and trailing whitespace from the prompt. The title only says to strip ANSI codes.\n- rationale: Trigger: a prompt like \"Name: \" or \"Continue? [y/N]: \" with a trailing space, or one with leading indentation, when the stream is not a tty or color is disabled, as in piped output or CliRunner. The trailing space separating the prompt from user input is dropped, so output shows \"Name:value\" and the prompt text changes between tty and non-tty runs. Existing tests and users that compare prompt output will see different text.\n",
+  "critique": "The finding names the same faulty operation: an extra .strip() after strip_ansi drops the trailing space of the prompt. It also gives the same trigger, a non-color stream such as piped output or CliRunner, and the same effect, output that differs between tty and non-tty runs.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 930,
+    "output_tokens": 105
+  }
+}

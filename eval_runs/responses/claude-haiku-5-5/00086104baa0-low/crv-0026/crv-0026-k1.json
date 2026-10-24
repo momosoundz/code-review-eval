@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1321,
+        "severity": "medium",
+        "category": "wrong_operator",
+        "description": "The guard uses all() where the docstring describes an at-least-one-documented rule. If any positional argument lacks help, the whole Positional arguments section is hidden, even when other arguments have help text.",
+        "rationale": "Trigger: a command with two arguments, one with help='file to read' and one with no help. Previously the documented argument was listed. Now all() is False, so no section is written and the help text disappears. The same guard also makes an empty section appear for commands with no arguments, since all() of an empty list is True and the heading is written with an empty body. Impact: help output loses documented positional arguments, and commands with no arguments show an empty heading.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1866,
+      "output_tokens": 987,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5864,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "f5016dccaeddfb54"
+  },
+  "raw": {
+    "id": "msg_011CgLGf5hVbcUio7HF1of2g",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\": [{\"file\": \"src/click/core.py\", \"line\": 1321, \"severity\": \"medium\", \"category\": \"wrong_operator\", \"description\": \"The guard uses all() where the docstring describes an at-least-one-documented rule. If any positional argument lacks help, the whole Positional arguments section is hidden, even when other arguments have help text.\", \"rationale\": \"Trigger: a command with two arguments, one with help='file to read' and one with no help. Previously the documented argument was listed. Now all() is False, so no section is written and the help text disappears. The same guard also makes an empty section appear for commands with no arguments, since all() of an empty list is True and the heading is written with an empty body. Impact: help output loses documented positional arguments, and commands with no arguments show an empty heading.\", \"confidence\": 0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1866,
+      "output_tokens": 987,
+      "output_tokens_details": {
+        "thinking_tokens": 720
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

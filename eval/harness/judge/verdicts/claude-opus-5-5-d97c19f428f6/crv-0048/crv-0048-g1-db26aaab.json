@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0048",
+  "gold_id": "crv-0048-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: style() tests fg and bg for truthiness instead of `is not None`, so the 256-color index 0 is skipped\n- failure path: click.style('x', fg=0) or bg=0, meaning black, applies no color at all and the text renders in the terminal default; the caller sees no error\n\nReviewer finding\n- description: Truthiness checks replace `is not None`, so a valid color value of integer 0 (the 256-color palette entry for black) is silently skipped and no color code is emitted.\n- rationale: Trigger: click.style('x', fg=0) or bg=0. `if fg:` is False for 0, so no escape sequence is appended and the text is uncolored, with no error. The same applies to bg at line 684.\n",
+  "critique": "The finding names the same mechanism as the label: `style()` tests fg/bg by truthiness instead of `is not None`, so integer 0 (256-color black) is skipped. It also gives the same outcome, uncolored text with no error.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 763,
+    "output_tokens": 92
+  }
+}

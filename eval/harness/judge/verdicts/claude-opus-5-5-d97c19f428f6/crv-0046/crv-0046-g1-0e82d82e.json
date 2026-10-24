@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0046",
+  "gold_id": "crv-0046-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: Sentinel loses its __reduce_ex__, so pickling a member falls back to Enum's default reduction by value, and the value object() cannot be looked up on unpickling\n- failure path: pickle.loads(pickle.dumps(UNSET)) rebuilds the member through Enum's default reduction by value; the reconstructed object() matches no Sentinel member, so unpickling raises ValueError; any parameter default holding UNSET that crosses a pickle boundary (multiprocessing, a cache) fails to load\n\nReviewer finding\n- description: Removing the custom __reduce_ex__ means pickling a sentinel falls back to Enum's default reduce, which serializes the raw object() value. Unpickling then calls Sentinel(<new object>), which fails because the new object is not identical to the member's value.\n- rationale: Trigger: pickle.dumps of an object holding UNSET or FLAG_NEEDS_VALUE, such as a Context or parameter default, followed by pickle.loads. Mechanism: the restored value is a fresh object() that matches no member, so Enum lookup raises ValueError. Impact: unpickling fails with an error instead of restoring the sentinel identity that the removed code preserved by name.\n",
+  "critique": "The finding gives the same mechanism as the label: once __reduce_ex__ is removed, pickling falls back to Enum's reduction by value. On unpickling, the fresh object() matches no member, so Sentinel lookup raises ValueError.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 935,
+    "output_tokens": 96
+  }
+}

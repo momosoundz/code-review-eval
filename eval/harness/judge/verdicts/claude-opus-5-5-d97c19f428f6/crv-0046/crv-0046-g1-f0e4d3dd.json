@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0046",
+  "gold_id": "crv-0046-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: Sentinel loses its __reduce_ex__, so pickling a member falls back to Enum's default reduction by value, and the value object() cannot be looked up on unpickling\n- failure path: pickle.loads(pickle.dumps(UNSET)) rebuilds the member through Enum's default reduction by value; the reconstructed object() matches no Sentinel member, so unpickling raises ValueError; any parameter default holding UNSET that crosses a pickle boundary (multiprocessing, a cache) fails to load\n\nReviewer finding\n- description: The removed __copy__, __deepcopy__ and __reduce_ex__ overrides had kept Sentinel members singletons under copy and pickle. Their values are plain `object()` instances, so this removal can break that.\n- rationale: Trigger: copy.deepcopy or pickle of a Context, parameter default or other structure that holds UNSET or FLAG_NEEDS_VALUE. Enum's default __reduce_ex__ pickles by value, and a bare `object()` is not picklable, which raises an error. Default enum copy handling mostly returns self for copy and deepcopy, so deepcopy likely still works. Pickling is the likelier failure, with a possible `is UNSET` identity break. Impact: pickling objects that contain these sentinels fails where it used to work.\n",
+  "critique": "Both the finding and the label blame the removed `__reduce_ex__`, which makes pickling fall back to Enum's by-value reduction on an `object()` value. The finding places the error at dump time (\"object() is not picklable\") rather than at load time (ValueError from a failed member lookup), but it is the same faulty operation and the same round-trip failure.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 969,
+    "output_tokens": 307
+  }
+}

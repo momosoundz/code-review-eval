@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0014",
+  "gold_id": "crv-0014-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The copied retry instance receives the original instance\u2019s statistics dictionary instead of the wrapper\u2019s shared dictionary.\n- failure path: When the wrapped function runs, updates go to the original retry object\u2019s statistics while decorators still expose the separate wrapper dictionary, so the observed statistics remain empty or stale.\n\nReviewer finding\n- description: The sync wrapper clears and reuses one shared statistics dict across calls, so concurrent threads calling the same decorated function corrupt each other's statistics.\n- rationale: Trigger: two threads call the same decorated function at once. Mechanism: stats.clear() and the shared dict assignment on lines 377-379 let both calls write to the same dict, which the original per-call copy.statistics avoided. Impact: stats such as attempt_number are interleaved or reset, giving silently wrong values.\n",
+  "critique": "The label is about the copy getting the original instance's statistics dict instead of the wrapper's shared dict, so wrapper.statistics stays empty or stale. The finding describes the opposite situation: a shared dict being correctly wired but corrupted by concurrent threads. That is a different mechanism.",
+  "verdict": "no_match",
+  "usage": {
+    "input_tokens": 808,
+    "output_tokens": 114
+  }
+}

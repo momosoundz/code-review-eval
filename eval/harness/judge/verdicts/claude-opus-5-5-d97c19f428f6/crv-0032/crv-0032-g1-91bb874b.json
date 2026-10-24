@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0032",
+  "gold_id": "crv-0032-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.\n- failure path: A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.\n\nReviewer finding\n- description: The rewrite drops the removal of param.secondary_opts from the help option names, so names reserved only as a secondary option no longer get excluded.\n- rationale: Trigger: a command has a flag declared as a secondary option matching the help name, such as click.option('--x/--help'), so '--help' appears in that param's secondary_opts and not in its opts. The old code removed '--help' from the candidates via difference_update(param.secondary_opts). The new loop only iterates param.opts, so '--help' stays a help option and collides with the user's parameter, which can cause a parser conflict or the help option shadowing the user's flag. The impact is that the user's secondary flag stops working or the help option is wrongly registered.\n",
+  "critique": "The finding names the same mechanism as the label: the new loop removes only param.opts and skips param.secondary_opts, so a help name declared as a secondary option is not excluded and collides with the user's flag. Its example uses '--x/--help' instead of '--hint/-h', but the defect and the consequence are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 916,
+    "output_tokens": 117
+  }
+}

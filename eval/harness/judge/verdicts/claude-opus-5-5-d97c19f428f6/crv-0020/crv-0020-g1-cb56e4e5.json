@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0020",
+  "gold_id": "crv-0020-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: __aexit__ delegates to __exit__ with None for the exception type, value and traceback instead of forwarding the arguments it received\n- failure path: an exception raised inside `async with attempt:` reaches __aexit__, which calls __exit__ with (None, None, None); __exit__ takes its success branch, records no failed outcome and returns None, so the exception propagates out of the async with and past the retry loop: the attempt is never recorded as failed and no retry happens\n\nReviewer finding\n- description: __aexit__ discards the exception arguments and calls self.__exit__(None, None, None), so the attempt is always recorded as a success even when the body raised.\n- rationale: Trigger: a caller uses `async with attempt:` on an AttemptManager and the body raises ValueError. The exc_type, exc_value and traceback passed to __aexit__ are ignored. The sync __exit__ then calls retry_state.set_result(None) instead of set_exception, so the retry loop treats the failed attempt as successful and does not retry. The exception still propagates out of the block, so the caller sees an unretried failure, and the retry policy is silently bypassed.\n",
+  "critique": "The finding names the same faulty operation: __aexit__ calls __exit__(None, None, None) instead of forwarding the exception arguments. It also gives the same consequence: __exit__ takes the success path, the failure is not recorded, the exception propagates and no retry occurs.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 904,
+    "output_tokens": 107
+  }
+}

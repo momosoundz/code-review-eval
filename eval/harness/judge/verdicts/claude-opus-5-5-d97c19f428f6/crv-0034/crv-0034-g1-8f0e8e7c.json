@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0034",
+  "gold_id": "crv-0034-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: After stripping ANSI codes the prompt text is also passed through str.strip(), which removes the whitespace at the end of the prompt that separates it from the user's typed input.\n- failure path: click.prompt(\"Name\") builds the prompt 'Name: '; when the stream does not support color (piped output, CliRunner, NO_COLOR) the prompt is shown as 'Name:' with the cursor glued to the colon, while on a color-capable terminal the same call keeps the trailing space, so transcripts differ between the two environments.\n\nReviewer finding\n- description: The added `.strip()` removes the trailing space from the prompt text, so the prompt no longer ends with the separator `\": \"` that `prompt()` adds before the cursor.\n- rationale: Trigger: `prompt()` runs with a non-tty stream and color not forced, so the new branch executes. `prompt()` builds the text as `f\"{text}: \"`, so the trailing space is stripped and `input()` displays `Name:` with the cursor directly after the colon. Impact: the user-visible prompt formatting changes for every stripped prompt, and typed input runs into the colon. Only `strip_ansi` was needed to fulfil the commit's intent.\n",
+  "critique": "The finding points to the added .strip() after ANSI stripping in the non-color branch. It says this removes the trailing space from 'Name: ', so the prompt shows 'Name:' with the cursor against the colon. That is the same operation and the same failure as the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 926,
+    "output_tokens": 100
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0038",
+  "gold_id": "crv-0038-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: Response.__init__ reads self.raw.reason to initialize reason, but raw has no underlying response object yet at construction time, so the attribute access dereferences None.\n- failure path: Any call that builds a Response, such as every adapter.send or a plain Response(), raises AttributeError ('NoneType' object has no attribute 'reason') before the object is populated, so no request can complete.\n\nReviewer finding\n- description: Response.__init__ now reads self.raw.reason, but self.raw is not set at that point in __init__ and defaults to None. Adapter.build_response sets resp.raw after construction. Also, Response() created directly has raw=None.\n- rationale: Trigger: any `Response()` construction, including the one in HTTPAdapter.build_response, or in tests/mocks. In requests, `self.raw = None` is set later in __init__, so it either raises AttributeError (if raw not yet defined) or, if defined as None, raises AttributeError 'NoneType has no attribute reason'. Impact: every request crashes, and the later assignment of reason in the adapter becomes redundant.\n",
+  "critique": "The finding identifies the same faulty operation: Response.__init__ reads self.raw.reason while raw is None or not yet set. It also gives the same failure, an AttributeError on every Response construction, including the one in adapter build_response, so all requests fail.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 888,
+    "output_tokens": 98
+  }
+}

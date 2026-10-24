@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0028",
+  "gold_id": "crv-0028-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The separator selection negates any_prefix_is_slash, picking ' / ' exactly when an option spelling already starts with a slash and '; ' otherwise.\n- failure path: An option declared as --shout/--no-shout renders in --help as '--shout; --no-shout', and a Windows-style /debug;/no-debug option renders as '/debug / /no-debug', where the slash separator is indistinguishable from the slash prefix of the names.\n\nReviewer finding\n- description: The separator selection is inverted: the original code used \"; \" when any_prefix_is_slash was true and \" / \" otherwise, but the new code uses \"; \" when it is false and \" / \" when it is true.\n- rationale: For a normal option such as --verbose with prefix '-' and '--' (any_prefix_is_slash is False), the new expression picks \"; \" and produces a different left column than before. For slash-prefixed options such as /debug the separator also flips. Every option's help left column changes, so help output for ordinary options is wrong.\n",
+  "critique": "The finding identifies the same inverted separator choice: \"; \" when any_prefix_is_slash is false and \" / \" when it is true. It describes the same effects, with normal --options getting \"; \" and slash-prefixed options getting the flipped separator.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 853,
+    "output_tokens": 100
+  }
+}

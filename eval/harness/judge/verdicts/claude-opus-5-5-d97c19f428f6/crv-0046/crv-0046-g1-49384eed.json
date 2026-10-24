@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0046",
+  "gold_id": "crv-0046-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: Sentinel loses its __reduce_ex__, so pickling a member falls back to Enum's default reduction by value, and the value object() cannot be looked up on unpickling\n- failure path: pickle.loads(pickle.dumps(UNSET)) rebuilds the member through Enum's default reduction by value; the reconstructed object() matches no Sentinel member, so unpickling raises ValueError; any parameter default holding UNSET that crosses a pickle boundary (multiprocessing, a cache) fails to load\n\nReviewer finding\n- description: Removing the custom __reduce_ex__ means pickling Sentinel members now uses the default Enum reduce, which reconstructs the member from its value. Each sentinel's value is a fresh object(), so unpickling cannot look it up and fails.\n- rationale: Trigger: a Click object holding UNSET or FLAG_NEEDS_VALUE (e.g. a Parameter or default value) is pickled, such as when sent to a multiprocessing worker. Mechanism: the default Enum reduce returns (Sentinel, (value,)), and the value is a new object() that does not match the class's member values on load, so Sentinel(value) raises ValueError. Impact: unpickling crashes, and identity with UNSET is lost even if it did not crash.\n",
+  "critique": "The finding names the same cause: removing __reduce_ex__ makes pickling fall back to Enum's by-value reduction. The fresh object() value then matches no member on load, so Sentinel(value) raises ValueError. The mechanism and trigger (multiprocessing) are the same as in the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 959,
+    "output_tokens": 113
+  }
+}

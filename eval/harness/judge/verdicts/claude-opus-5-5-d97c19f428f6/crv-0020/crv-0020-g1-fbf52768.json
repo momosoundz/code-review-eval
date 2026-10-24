@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0020",
+  "gold_id": "crv-0020-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: __aexit__ delegates to __exit__ with None for the exception type, value and traceback instead of forwarding the arguments it received\n- failure path: an exception raised inside `async with attempt:` reaches __aexit__, which calls __exit__ with (None, None, None); __exit__ takes its success branch, records no failed outcome and returns None, so the exception propagates out of the async with and past the retry loop: the attempt is never recorded as failed and no retry happens\n\nReviewer finding\n- description: __aexit__ discards the exception arguments and calls self.__exit__(None, None, None), so any exception raised inside an `async with` attempt block is recorded as a successful result and suppressed instead of being retried.\n- rationale: Trigger: the body of `async with attempt:` raises an exception (e.g. a network error). The sync __exit__ only records the failure and swallows the exception when exc_type and exc_value are non-None; here they are always None, so it calls set_result(None), marking the attempt successful. The retry loop then stops, and the error is silently dropped, so the caller gets a wrong result rather than a retry or a propagated error.\n",
+  "critique": "Both identify the same root cause: __aexit__ calls __exit__(None, None, None) instead of forwarding the exception, so __exit__ takes its success branch and no failed attempt is recorded or retried. The finding wrongly says the exception is suppressed, whereas the label says it propagates out of the retry loop; the faulty operation and its core effect (no failure recorded, no retry) still match.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 899,
+    "output_tokens": 392
+  }
+}

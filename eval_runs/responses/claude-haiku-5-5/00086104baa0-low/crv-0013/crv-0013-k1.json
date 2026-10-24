@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "stats.clear() mutates the single statistics dict shared by every call of the decorated function, instead of giving each call its own dict.",
+        "rationale": "Trigger: two threads call the same decorated function at the same time. Mechanism: the first call's clear() empties the dict the second call is still writing to, and both copies write into the same object via copy._local.statistics and self._local.statistics. Impact: statistics such as attempt_number and idle_for are wrong or lost for one or both calls. The previous code rebound a fresh dict per call, so concurrent calls did not share state.",
+        "confidence": 0.55
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 218,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "stats.clear() reuses one statistics dict across all concurrent invocations of the same async decorated function.",
+        "rationale": "Trigger: two asyncio tasks await the same decorated coroutine function concurrently. Mechanism: the second call clears the dict the first call is still updating, and both share it through copy._local.statistics. Impact: retry statistics reported to either caller are corrupted, and a caller that kept a reference to the dict from an earlier call sees it reset. The previous code allocated a new dict per call.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2366,
+      "output_tokens": 1226,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 6658,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "3e58b62371b612c9"
+  },
+  "raw": {
+    "id": "msg_011CgLGEvZQgYY8zCKnXWXKJ",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":377,\"severity\":\"medium\",\"category\":\"concurrency\",\"description\":\"stats.clear() mutates the single statistics dict shared by every call of the decorated function, instead of giving each call its own dict.\",\"rationale\":\"Trigger: two threads call the same decorated function at the same time. Mechanism: the first call's clear() empties the dict the second call is still writing to, and both copies write into the same object via copy._local.statistics and self._local.statistics. Impact: statistics such as attempt_number and idle_for are wrong or lost for one or both calls. The previous code rebound a fresh dict per call, so concurrent calls did not share state.\",\"confidence\":0.55},{\"file\":\"tenacity/asyncio/__init__.py\",\"line\":218,\"severity\":\"medium\",\"category\":\"concurrency\",\"description\":\"stats.clear() reuses one statistics dict across all concurrent invocations of the same async decorated function.\",\"rationale\":\"Trigger: two asyncio tasks await the same decorated coroutine function concurrently. Mechanism: the second call clears the dict the first call is still updating, and both share it through copy._local.statistics. Impact: retry statistics reported to either caller are corrupted, and a caller that kept a reference to the dict from an earlier call sees it reset. The previous code allocated a new dict per call.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2366,
+      "output_tokens": 1226,
+      "output_tokens_details": {
+        "thinking_tokens": 769
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

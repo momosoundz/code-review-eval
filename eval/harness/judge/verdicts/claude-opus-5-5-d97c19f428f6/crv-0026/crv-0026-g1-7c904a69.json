@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0026",
+  "gold_id": "crv-0026-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The guard uses all(...) instead of any(...) over the arguments' help attributes, so the section is gated on every argument being documented rather than on at least one.\n- failure path: A command with arguments SRC (help set) and DST (no help) prints no 'Positional arguments' section at all in --help, silently dropping the documented text; conversely a command with zero arguments satisfies all([]) and prints an empty 'Positional arguments' header on every --help.\n\nReviewer finding\n- description: The docstring says the section is shown if at least one argument is documented, but the condition `all(arg.help is not None ...)` requires every argument to have help. Using `all` instead of `any` is the wrong quantifier.\n- rationale: Trigger: a command with two arguments where only one has help text. `all` evaluates to False, so the whole 'Positional arguments' section is dropped and the documented argument disappears from the help output. Trigger 2: a command with no arguments makes `all([])` True, so an empty 'Positional arguments' section header is emitted with no entries.\n",
+  "critique": "The finding identifies the same faulty operation: the guard uses all() where any() is needed. It also gives both failure paths from the label: a partially documented argument list drops the whole section, and an empty argument list prints an empty header because all([]) is True.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 868,
+    "output_tokens": 95
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 112,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "retry_any.__ror__ checks isinstance(other, retry_all) but then flattens other's retries into a retry_any, so an AND-combined condition is turned into an OR.",
+        "rationale": "Trigger: evaluating retry_all(A, B) | retry_any(C, D) in the asyncio module. retry_base.__or__ delegates to retry_any.__ror__ with other=retry_all(A, B), which takes the isinstance(other, retry_all) branch and builds retry_any(A, B, C, D). Mechanism: the result is A or B or C or D, but the intended meaning is (A and B) or C or D. Impact: the retry policy retries in cases it should not, or stops retrying in cases it should, silently changing behavior. The isinstance check should be retry_any, as in the synchronous retry.py.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2615,
+      "output_tokens": 1296,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 6776,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "2a6e05b6ea9f513c"
+  },
+  "raw": {
+    "id": "msg_011CgLGR7oraQrCD9h5EdZz4",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/asyncio/retry.py\",\"line\":112,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"retry_any.__ror__ checks isinstance(other, retry_all) but then flattens other's retries into a retry_any, so an AND-combined condition is turned into an OR.\",\"rationale\":\"Trigger: evaluating retry_all(A, B) | retry_any(C, D) in the asyncio module. retry_base.__or__ delegates to retry_any.__ror__ with other=retry_all(A, B), which takes the isinstance(other, retry_all) branch and builds retry_any(A, B, C, D). Mechanism: the result is A or B or C or D, but the intended meaning is (A and B) or C or D. Impact: the retry policy retries in cases it should not, or stops retrying in cases it should, silently changing behavior. The isinstance check should be retry_any, as in the synchronous retry.py.\",\"confidence\":0.85}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2615,
+      "output_tokens": 1296,
+      "output_tokens_details": {
+        "thinking_tokens": 967
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

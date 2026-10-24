@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0016",
+  "gold_id": "crv-0016-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The OR composition checks for retry_all when deciding whether to flatten an existing retry_any.\n- failure path: with `(A & B) | C`, the retry_all on the left is spliced into the retry_any as if it were a plain list of predicates, so the combination behaves as `A | B | C`: a retry fires when only A holds although the author required A and B together; no error is raised and the extra retries are silent\n\nReviewer finding\n- description: The async `retry_any.__ror__` checks `isinstance(other, retry_all)` when it should check `retry_any`, and the async `retry_all.__rand__` checks `retry_all` correctly. The `__ror__` check is therefore wrong: it unpacks a `retry_all`'s retries into a `retry_any`.\n- rationale: Trigger: `sync_retry_all | async_retry_any`. `retry_base.__or__` dispatches to `other.__ror__(self)`, and the `isinstance(other, retry_all)` branch fires. The result is `retry_any(*all.retries, *any.retries)`, which turns an AND group into separate OR members. The `retry_all` semantics are silently lost, so retries happen under the wrong conditions.\n",
+  "critique": "Both describe the same mechanism: the OR composition's flattening check tests for retry_all instead of retry_any. As a result, a retry_all's predicates are spliced into the retry_any, AND becomes OR, and retries fire silently under the wrong conditions. The trigger differs slightly (`__ror__` with a retry_all on the left), but `(A & B) | C` is exactly that case.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 920,
+    "output_tokens": 144
+  }
+}

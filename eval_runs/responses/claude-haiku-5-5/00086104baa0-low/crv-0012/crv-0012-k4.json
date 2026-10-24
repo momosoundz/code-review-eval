@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 213,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The early-return guard is inverted. It returns the maximum wait whenever exponent is below log(max/multiplier, exp_base), which is exactly when the exponential value is still under max, so early retries wait the maximum instead of the small computed backoff.",
+        "rationale": "Trigger: wait_exponential(multiplier=1, max=100, exp_base=2) on attempt 1 gives exponent 0, and 0 < log2(100)\u22486.64 holds, so the function returns 100 instead of 1. Mechanism: the branch should fire only once multiplier*exp_base**exponent has reached or exceeded max, but the comparison is reversed. Impact: every retry sleeps for max from the first attempt, causing large unexpected delays and silently wrong backoff behavior for all users of wait_exponential with a finite max.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1695,
+      "output_tokens": 699,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5110,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "9b6bc2ac461b1171"
+  },
+  "raw": {
+    "id": "msg_011CgLGEDsBZfTTVqT6Farcr",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":213,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The early-return guard is inverted. It returns the maximum wait whenever exponent is below log(max/multiplier, exp_base), which is exactly when the exponential value is still under max, so early retries wait the maximum instead of the small computed backoff.\",\"rationale\":\"Trigger: wait_exponential(multiplier=1, max=100, exp_base=2) on attempt 1 gives exponent 0, and 0 < log2(100)\u22486.64 holds, so the function returns 100 instead of 1. Mechanism: the branch should fire only once multiplier*exp_base**exponent has reached or exceeded max, but the comparison is reversed. Impact: every retry sleeps for max from the first attempt, causing large unexpected delays and silently wrong backoff behavior for all users of wait_exponential with a finite max.\",\"confidence\":0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1695,
+      "output_tokens": 699,
+      "output_tokens_details": {
+        "thinking_tokens": 374
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

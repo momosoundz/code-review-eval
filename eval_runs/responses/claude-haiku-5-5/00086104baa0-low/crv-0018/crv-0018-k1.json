@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 258,
+        "severity": "medium",
+        "category": "wrong_literal_or_default",
+        "description": "The new `min` parameter defaults to 1 second, so existing callers that never pass `min` now get every wait clamped to at least 1 second, where previously the floor was 0.",
+        "rationale": "Trigger: an existing caller constructs wait_exponential_jitter(initial=0.1, max=10) without a min argument. Mechanism: the return value is max(max(0, self.min), min(result, self.max)) with self.min=1, so the first waits (about 0.1 to 1.1 seconds) are raised to 1 second. Impact: retries run slower than configured with no code change on the user's side, a silent behavior change for upgraded users.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2020,
+      "output_tokens": 591,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4146,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "1182a1436f18c412"
+  },
+  "raw": {
+    "id": "msg_011CgLGTMAqFTQa4JkQmLkdE",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":258,\"severity\":\"medium\",\"category\":\"wrong_literal_or_default\",\"description\":\"The new `min` parameter defaults to 1 second, so existing callers that never pass `min` now get every wait clamped to at least 1 second, where previously the floor was 0.\",\"rationale\":\"Trigger: an existing caller constructs wait_exponential_jitter(initial=0.1, max=10) without a min argument. Mechanism: the return value is max(max(0, self.min), min(result, self.max)) with self.min=1, so the first waits (about 0.1 to 1.1 seconds) are raised to 1 second. Impact: retries run slower than configured with no code change on the user's side, a silent behavior change for upgraded users.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2020,
+      "output_tokens": 591,
+      "output_tokens_details": {
+        "thinking_tokens": 323
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1325,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "When a command has no positional arguments, args is empty, so the all() check is trivially true and an empty 'Positional arguments' section heading is written for every such command's help output.",
+        "rationale": "Trigger: format help for any command or group with no Argument params. args == [], all([]) is True, so the section context manager runs and writes its heading even though records is empty. Mechanism: the guard that should suppress the section when there is nothing to list is missing; the old code used `if args:`. Impact: every argument-less command's --help shows a spurious, empty 'Positional arguments:' header, a visible regression on a common path.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1866,
+      "output_tokens": 885,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5395,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "f5016dccaeddfb54"
+  },
+  "raw": {
+    "id": "msg_011CgLGg4Muu9tsXdrVngQZ9",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1325,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"When a command has no positional arguments, args is empty, so the all() check is trivially true and an empty 'Positional arguments' section heading is written for every such command's help output.\",\"rationale\":\"Trigger: format help for any command or group with no Argument params. args == [], all([]) is True, so the section context manager runs and writes its heading even though records is empty. Mechanism: the guard that should suppress the section when there is nothing to list is missing; the old code used `if args:`. Impact: every argument-less command's --help shows a spurious, empty 'Positional arguments:' header, a visible regression on a common path.\",\"confidence\":0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1866,
+      "output_tokens": 885,
+      "output_tokens_details": {
+        "thinking_tokens": 638
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

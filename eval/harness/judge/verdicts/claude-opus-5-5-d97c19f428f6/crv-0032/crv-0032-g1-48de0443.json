@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0032",
+  "gold_id": "crv-0032-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.\n- failure path: A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.\n\nReviewer finding\n- description: The rewrite only removes names found in `param.opts` and no longer removes names found in `param.secondary_opts`, which the old code also removed.\n- rationale: Trigger: a command defines a boolean flag with a secondary option, such as `--shout/--help`, or a secondary name like `-h`, that collides with a help option name. The old code removed the name from the help option names. The new code keeps it, so the help option is registered with a conflicting name and either shadows the user's option or makes parsing ambiguous. The title says only that order is preserved, so dropping the secondary_opts loop is an unintended behavior change.\n",
+  "critique": "The finding points to the same omission: the rewrite no longer removes param.secondary_opts from the help option names. It also gives the same consequence, a secondary flag name like -h colliding with the help option, so help shadows the user's flag.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 883,
+    "output_tokens": 91
+  }
+}

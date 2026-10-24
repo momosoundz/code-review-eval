@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_utils.py",
+        "line": 20,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing the custom __reduce_ex__ means Sentinel members no longer pickle by name, so a round-trip through pickle does not return the same UNSET/FLAG_NEEDS_VALUE object.",
+        "rationale": "Trigger: a Parameter or default value holding UNSET is pickled (for example sent to a multiprocessing worker). The default Enum reduce uses the member's value, which is a bare object() that is not a stable identity, so unpickling either fails or yields a new object. Code that checks `value is UNSET` then misclassifies the value as a real user value, and the operator sees wrong defaults or a pickling error.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1945,
+      "output_tokens": 1061,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5830,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "8a3cd15243ee2240"
+  },
+  "raw": {
+    "id": "msg_011CgLH6ccJut9HVAA5EMcSv",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/_utils.py\",\"line\":20,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"Removing the custom __reduce_ex__ means Sentinel members no longer pickle by name, so a round-trip through pickle does not return the same UNSET/FLAG_NEEDS_VALUE object.\",\"rationale\":\"Trigger: a Parameter or default value holding UNSET is pickled (for example sent to a multiprocessing worker). The default Enum reduce uses the member's value, which is a bare object() that is not a stable identity, so unpickling either fails or yields a new object. Code that checks `value is UNSET` then misclassifies the value as a real user value, and the operator sees wrong defaults or a pickling error.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1945,
+      "output_tokens": 1061,
+      "output_tokens_details": {
+        "thinking_tokens": 799
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

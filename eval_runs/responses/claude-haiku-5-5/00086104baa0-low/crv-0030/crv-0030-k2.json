@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 906,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The check was changed from isinstance(filename, str) to isinstance(filename, os.PathLike), so a plain str filename is no longer wrapped in a tuple before being passed to edit_files.",
+        "rationale": "Trigger: calling click.edit(filename=\"notes.txt\") with a str path. The str is not PathLike, so it skips the wrapping and is passed directly to ed.edit_files, which iterates over it character by character, so the editor is asked to open \"n\", \"o\", \"t\", and so on. The str case is the most common use of this parameter, so the regression affects ordinary calls. Impact: the editor fails to open the intended file or opens nonexistent files, and the user's edits are not applied to the intended file.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2535,
+      "output_tokens": 645,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4611,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "a0594e58304ba7e8"
+  },
+  "raw": {
+    "id": "msg_011CgLGm3QkcU9YwPqQNWmH5",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/termui.py\",\"line\":906,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The check was changed from isinstance(filename, str) to isinstance(filename, os.PathLike), so a plain str filename is no longer wrapped in a tuple before being passed to edit_files.\",\"rationale\":\"Trigger: calling click.edit(filename=\\\"notes.txt\\\") with a str path. The str is not PathLike, so it skips the wrapping and is passed directly to ed.edit_files, which iterates over it character by character, so the editor is asked to open \\\"n\\\", \\\"o\\\", \\\"t\\\", and so on. The str case is the most common use of this parameter, so the regression affects ordinary calls. Impact: the editor fails to open the intended file or opens nonexistent files, and the user's edits are not applied to the intended file.\",\"confidence\":0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2535,
+      "output_tokens": 645,
+      "output_tokens_details": {
+        "thinking_tokens": 352
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

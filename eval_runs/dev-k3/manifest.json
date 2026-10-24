@@ -2,8 +2,8 @@
   "run": "dev-k3",
   "model": "claude-haiku-5-5",
   "effort": "low",
-  "prompt_id": "f477d15560c2",
-  "reviewer_version": "f477d15560c2-low",
+  "prompt_id": "00086104baa0",
+  "reviewer_version": "00086104baa0-low",
   "context_mode": "hunk_only",
   "k": 3,
   "split": [
@@ -12,7 +12,6 @@
   "case_ids": [
     "crv-0001",
     "crv-0002",
-    "crv-0003",
     "crv-0004",
     "crv-0005",
     "crv-0006",
@@ -21,13 +20,14 @@
     "crv-0009",
     "crv-0010"
   ],
-  "gold_hash": "13d15ca9c52f",
-  "git_sha": "12d4f77",
-  "calls_made": 20,
-  "cache_hits": 10,
+  "gold_hash": "e841a8612d29",
+  "git_sha": "12f8ae3",
+  "calls_made": 0,
+  "cache_hits": 27,
   "no_output": 0,
-  "cost_usd": 0.0149,
-  "cost_usd_this_invocation": 0.0099,
-  "started_at": "2026-10-23T04:54:02+00:00",
-  "finished_at": "2026-10-23T04:55:15+00:00"
+  "cost_usd": 0.0132,
+  "cost_usd_this_invocation": 0.0,
+  "started_at": "2026-10-23T22:04:19+00:00",
+  "finished_at": "2026-10-23T22:04:19+00:00",
+  "cases_without_title": []
 }

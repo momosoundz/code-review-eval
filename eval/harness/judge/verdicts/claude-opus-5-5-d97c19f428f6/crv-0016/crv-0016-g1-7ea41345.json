@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0016",
+  "gold_id": "crv-0016-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The OR composition checks for retry_all when deciding whether to flatten an existing retry_any.\n- failure path: with `(A & B) | C`, the retry_all on the left is spliced into the retry_any as if it were a plain list of predicates, so the combination behaves as `A | B | C`: a retry fires when only A holds although the author required A and B together; no error is raised and the extra retries are silent\n\nReviewer finding\n- description: async retry_any.__ror__ flattens `other` when it is an instance of retry_all, but the check should be for retry_any. `retry_all | retry_any` therefore loses the AND semantics of the retry_all operand.\n- rationale: Trigger: `(a & b) | async_retry_any(c, d)`. The code splices `other.retries` (a, b) into retry_any(a, b, c, d), turning `(a and b) or c or d` into `a or b or c or d`. The retry decision becomes silently wrong.\n",
+  "critique": "Both describe the same fault: the OR composition flattens its operand when it is a retry_all instead of a retry_any. In both cases this splices the AND-ed predicates into the retry_any, so `(A & B) | C` silently becomes `A | B | C`. The finding places it in async retry_any.__ror__, which is consistent with the label's description of flattening into an existing retry_any.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 839,
+    "output_tokens": 653
+  }
+}

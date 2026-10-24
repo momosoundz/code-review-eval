@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The shortcut condition is inverted: it returns self.max when exponent is below the threshold log(max/multiplier, exp_base), i.e. when the computed backoff is still under the cap, instead of when it has reached the cap.",
+        "rationale": "Trigger: wait_exponential(multiplier=1, max=100, exp_base=2) on the first retry (attempt_number=1, exponent=0). The threshold is log(100,2)\u22486.64, and 0<6.64, so the new branch returns max(0,min,100)=100 instead of the expected 1*2**0=1. The original code would have returned the small computed value. Early retries therefore wait the full max, and the backoff curve is wrong for nearly every attempt before the cap is reached; the operator sees much longer waits and reduced retry throughput.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1695,
+      "output_tokens": 698,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4412,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "9b6bc2ac461b1171"
+  },
+  "raw": {
+    "id": "msg_011CgLGEbgbUzDHagWATSddu",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":211,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The shortcut condition is inverted: it returns self.max when exponent is below the threshold log(max/multiplier, exp_base), i.e. when the computed backoff is still under the cap, instead of when it has reached the cap.\",\"rationale\":\"Trigger: wait_exponential(multiplier=1, max=100, exp_base=2) on the first retry (attempt_number=1, exponent=0). The threshold is log(100,2)\u22486.64, and 0<6.64, so the new branch returns max(0,min,100)=100 instead of the expected 1*2**0=1. The original code would have returned the small computed value. Early retries therefore wait the full max, and the backoff curve is wrong for nearly every attempt before the cap is reached; the operator sees much longer waits and reduced retry throughput.\",\"confidence\":0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1695,
+      "output_tokens": 698,
+      "output_tokens_details": {
+        "thinking_tokens": 381
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

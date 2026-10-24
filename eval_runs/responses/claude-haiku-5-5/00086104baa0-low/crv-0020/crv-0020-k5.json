@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 226,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "__aexit__ discards the exception arguments and calls self.__exit__(None, None, None), so any exception raised inside an `async with` attempt block is recorded as a successful result and suppressed instead of being retried.",
+        "rationale": "Trigger: the body of `async with attempt:` raises an exception (e.g. a network error). The sync __exit__ only records the failure and swallows the exception when exc_type and exc_value are non-None; here they are always None, so it calls set_result(None), marking the attempt successful. The retry loop then stops, and the error is silently dropped, so the caller gets a wrong result rather than a retry or a propagated error.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1554,
+      "output_tokens": 664,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4561,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "ce6af1c981eb65b9"
+  },
+  "raw": {
+    "id": "msg_011CgLGWzzVp7vzj21SvaQ9H",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":226,\"severity\":\"high\",\"category\":\"wrong_variable_or_argument\",\"description\":\"__aexit__ discards the exception arguments and calls self.__exit__(None, None, None), so any exception raised inside an `async with` attempt block is recorded as a successful result and suppressed instead of being retried.\",\"rationale\":\"Trigger: the body of `async with attempt:` raises an exception (e.g. a network error). The sync __exit__ only records the failure and swallows the exception when exc_type and exc_value are non-None; here they are always None, so it calls set_result(None), marking the attempt successful. The retry loop then stops, and the error is silently dropped, so the caller gets a wrong result rather than a retry or a propagated error.\",\"confidence\":0.85}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1554,
+      "output_tokens": 664,
+      "output_tokens_details": {
+        "thinking_tokens": 393
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

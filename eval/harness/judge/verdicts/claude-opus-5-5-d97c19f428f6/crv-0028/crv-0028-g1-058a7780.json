@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0028",
+  "gold_id": "crv-0028-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The separator selection negates any_prefix_is_slash, picking ' / ' exactly when an option spelling already starts with a slash and '; ' otherwise.\n- failure path: An option declared as --shout/--no-shout renders in --help as '--shout; --no-shout', and a Windows-style /debug;/no-debug option renders as '/debug / /no-debug', where the slash separator is indistinguishable from the slash prefix of the names.\n\nReviewer finding\n- description: The separator condition in get_help_spec is inverted: it now uses \"; \" when no prefix is a slash and \" / \" when one is, the reverse of the original code.\n- rationale: Trigger: any Option whose prefixes include a slash (e.g. /debug/--no-debug or a '/' prefix) with any_prefix_is_slash set. Mechanism: the ternary was changed to `not any_prefix_is_slash`, so the slash-style separator is applied to non-slash options and \"; \" to slash options. Impact: --help output for such options shows the wrong spelling separators, a visible regression in the help text.\n",
+  "critique": "The finding identifies the same inverted ternary on any_prefix_is_slash in get_help_spec. Because of that inversion, ' / ' is used when a slash prefix exists and '; ' otherwise, which garbles the help text. This is the same mechanism as the labeled defect.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 882,
+    "output_tokens": 108
+  }
+}

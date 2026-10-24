@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0020",
+  "gold_id": "crv-0020-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: __aexit__ delegates to __exit__ with None for the exception type, value and traceback instead of forwarding the arguments it received\n- failure path: an exception raised inside `async with attempt:` reaches __aexit__, which calls __exit__ with (None, None, None); __exit__ takes its success branch, records no failed outcome and returns None, so the exception propagates out of the async with and past the retry loop: the attempt is never recorded as failed and no retry happens\n\nReviewer finding\n- description: __aexit__ discards the actual exception info and calls self.__exit__(None, None, None), so exceptions raised inside an async with block are not passed to the retry logic.\n- rationale: Trigger: an exception is raised inside an `async with` block using this object. The mechanism: __aexit__ receives exc_type/exc_value/traceback but passes None for all of them to __exit__, so the sync __exit__ sees no exception and treats the block as successful (setting result None and returning None), suppressing the error. Impact: the exception is silently swallowed rather than being recorded for retry or propagated to the caller, producing silently wrong results.\n",
+  "critique": "Both describe the same defect: __aexit__ calls __exit__(None, None, None) instead of forwarding the exception info, so __exit__ takes its success branch and never records the attempt as failed or retries it. The finding wrongly says the exception is swallowed, whereas returning None lets it propagate. That is a mistake about the downstream effect, not a different faulty operation or mechanism.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 897,
+    "output_tokens": 366
+  }
+}

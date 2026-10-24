@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 304,
+        "severity": "medium",
+        "category": "error_handling",
+        "description": "When the CA bundle path does not exist, the code now only emits a warning instead of raising OSError, and the removed extract_zipped_paths call means zipped installs now hit this path.",
+        "rationale": "Trigger: requests is loaded from a zip archive (or the bundle is otherwise missing) with verify left at its default, so DEFAULT_CA_BUNDLE_PATH points into the archive and os.path.exists returns False. The changed code only warns and continues with a nonexistent cert_loc, so the request proceeds to TLS setup with an invalid CA path. Impact: the user gets a warning and then an obscure SSL failure later, instead of the clear OSError that previously explained the missing bundle, and the zip-extraction fallback that made this work is gone.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1768,
+      "output_tokens": 885,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5654,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "e960625343f4db45"
+  },
+  "raw": {
+    "id": "msg_011CgLGyvA454QdH9CTaeSbB",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":304,\"severity\":\"medium\",\"category\":\"error_handling\",\"description\":\"When the CA bundle path does not exist, the code now only emits a warning instead of raising OSError, and the removed extract_zipped_paths call means zipped installs now hit this path.\",\"rationale\":\"Trigger: requests is loaded from a zip archive (or the bundle is otherwise missing) with verify left at its default, so DEFAULT_CA_BUNDLE_PATH points into the archive and os.path.exists returns False. The changed code only warns and continues with a nonexistent cert_loc, so the request proceeds to TLS setup with an invalid CA path. Impact: the user gets a warning and then an obscure SSL failure later, instead of the clear OSError that previously explained the missing bundle, and the zip-extraction fallback that made this work is gone.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1768,
+      "output_tokens": 885,
+      "output_tokens_details": {
+        "thinking_tokens": 579
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

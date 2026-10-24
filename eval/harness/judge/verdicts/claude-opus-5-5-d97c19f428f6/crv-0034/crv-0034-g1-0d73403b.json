@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0034",
+  "gold_id": "crv-0034-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: After stripping ANSI codes the prompt text is also passed through str.strip(), which removes the whitespace at the end of the prompt that separates it from the user's typed input.\n- failure path: click.prompt(\"Name\") builds the prompt 'Name: '; when the stream does not support color (piped output, CliRunner, NO_COLOR) the prompt is shown as 'Name:' with the cursor glued to the colon, while on a color-capable terminal the same call keeps the trailing space, so transcripts differ between the two environments.\n\nReviewer finding\n- description: The prompt text is now `.strip()`ped whenever ANSI stripping applies, which also removes the trailing space that separates the prompt from user input (e.g. \"Name: \" becomes \"Name:\").\n- rationale: Trigger: a prompt such as \"Name: \" is shown with stripping enabled, which happens when the stream is not a TTY (piped output or CliRunner). Mechanism: strip() removes the trailing space, so input() renders the prompt without the separator. Impact: prompts on non-TTY streams are formatted differently from the echo-based path and from TTY output, with the cursor directly against the colon. Only the ANSI removal was needed, so the strip() call is an unintended change.\n",
+  "critique": "The finding names the same faulty operation: str.strip() is applied after ANSI stripping and removes the trailing space. It describes the same effect, \"Name: \" becoming \"Name:\" on non-TTY streams, so output differs from TTY output. That is the labeled mechanism and failure path.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 939,
+    "output_tokens": 113
+  }
+}

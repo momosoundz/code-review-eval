@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0016",
+  "gold_id": "crv-0016-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The OR composition checks for retry_all when deciding whether to flatten an existing retry_any.\n- failure path: with `(A & B) | C`, the retry_all on the left is spliced into the retry_any as if it were a plain list of predicates, so the combination behaves as `A | B | C`: a retry fires when only A holds although the author required A and B together; no error is raised and the extra retries are silent\n\nReviewer finding\n- description: The async `__ror__` flattens using `isinstance(other, retry_all)`, but it is defined on the async `retry_any`, so the check should be against `retry_any`. The base-class version in tenacity/retry.py correctly checks `retry_any`. Here `retry_all.retries` are merged into a `retry_any`.\n- rationale: Trigger: `retry_all(a, b) | async_retry_any(c)`. The code runs `retry_any(a, b, c)`, so the AND-group is flattened into an OR. A retry that should fire only when both a and b hold now fires when a alone holds. This silently changes retry behavior. `retry_all` here is the async class (the name resolves at call time), and `retry_any` and `retry_all` are separate classes.\n",
+  "critique": "The finding describes the same fault as the label. The OR composition (`__ror__`) uses the wrong isinstance check against `retry_all` instead of `retry_any`, so an AND-group is spliced into the OR as `A | B | C` and retries silently fire when only A holds. The mechanism and consequence are identical.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 918,
+    "output_tokens": 119
+  }
+}

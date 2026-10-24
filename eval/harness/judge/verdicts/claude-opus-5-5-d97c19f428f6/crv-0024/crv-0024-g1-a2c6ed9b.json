@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0024",
+  "gold_id": "crv-0024-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: Argument.get_help_record returns self.help unchanged, so the second element of the tuple is None for an undocumented argument even though format_arguments now feeds every record straight into formatter.write_dl without a fallback.\n- failure path: A command declares two arguments and sets help on only one; running it with --help makes write_dl measure and wrap a None description and the help command crashes with a TypeError instead of printing usage.\n\nReviewer finding\n- description: Argument.get_help_record returns (metavar, self.help) without substituting an empty string, so an undocumented argument yields a None description, contrary to the docstring's promise of an empty description.\n- rationale: Trigger: a command with one argument that has help and another argument with no help. format_options sees an argument with help, so it calls write_dl on records that include (metavar, None) for the undocumented argument. The formatter then wraps the None description via text wrapping, which raises a TypeError. Impact: help output for such a command crashes instead of listing the argument with an empty description.\n",
+  "critique": "Both identify that Argument.get_help_record returns self.help unchanged (None) for undocumented arguments. They also give the same crash path: a mixed help/no-help command passes (metavar, None) to write_dl, and wrapping the None description raises a TypeError. The finding attributes the call to format_options instead of format_arguments, but the faulty operation and mechanism are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 855,
+    "output_tokens": 139
+  }
+}

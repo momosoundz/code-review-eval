@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0012",
+  "gold_id": "crv-0012-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The exponential cap check uses the reversed comparison and returns the cap while the computed delay is still below it.\n- failure path: With a retry attempt whose exponent is below the cap threshold, the wait strategy immediately returns the maximum delay instead of the smaller exponential delay.\n\nReviewer finding\n- description: The fast-path returns `max(max(0, self.min), self.max)`, which is effectively self.max, when the exponent is below log(max/multiplier). That is the regime where the result is below max, and the normal computation is multiplier*exp_base**exponent. The early return therefore yields the maximum wait for small attempt numbers, and the condition looks inverted: it should apply when the exponent is above the log, where the result would be clamped to max anyway.\n- rationale: Trigger: default wait_exponential(multiplier=1, max=10, exp_base=2) on attempt 1. The exponent is 0, which is less than log2(10)=3.3, so it returns 10 seconds instead of 1. Impact: the exponential backoff is skipped and every early retry waits the max, which gives wrong delays on the common path.\n",
+  "critique": "The finding points to the same reversed comparison in the cap check: the early return gives max when the exponent is below the log threshold, so small attempts get the maximum delay instead of the exponential value. This is the same mechanism and failure path as the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 896,
+    "output_tokens": 92
+  }
+}

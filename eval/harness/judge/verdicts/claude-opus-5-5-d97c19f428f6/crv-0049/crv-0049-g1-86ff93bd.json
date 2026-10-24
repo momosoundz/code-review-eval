@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0049",
+  "gold_id": "crv-0049-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: _encode_files only treats an object as a file when isinstance(fp, _SupportsRead) succeeds, which a wrapper that exposes read through __getattr__ fails\n- failure path: on Python 3.12 and later, isinstance against a runtime_checkable Protocol uses inspect.getattr_static and does not see attributes served by __getattr__; a file wrapper that proxies read() that way fails the check, is not read, and its contents never reach the multipart body; before 3.12 the Protocol check used hasattr and the removed `or hasattr(fp, 'read')` was redundant, so the defect only manifests on 3.12+\n\nReviewer finding\n- description: The `or hasattr(fp, \"read\")` fallback was removed, leaving only `isinstance(fp, _SupportsRead)`. `SupportsRead` is a `runtime_checkable` Protocol whose `read` signature is `read(self, length=..., /)`, so runtime checking cannot be assumed to accept every file-like object that `hasattr` accepted.\n- rationale: Trigger: a file-like object passed in `files` that has a `read` attribute but does not satisfy the protocol check, e.g. a `read` that is a non-callable attribute or an object with `__getattr__`/`__slots__` quirks. The isinstance check now fails, so it falls through to the later branches instead of calling `fp.read()`. Impact: the file is handled as if it were not a readable object, so the request is built with wrong content or raises instead of sending the file.\n",
+  "critique": "The finding points at the removed hasattr fallback and the isinstance(fp, _SupportsRead) check failing for objects with __getattr__ quirks, so the file is not read. That is the labeled mechanism. It does not mention the 3.12 getattr_static change, but it identifies the same operation and the same failure (a __getattr__-proxied read is not recognized, so the contents are not sent).",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 1027,
+    "output_tokens": 144
+  }
+}

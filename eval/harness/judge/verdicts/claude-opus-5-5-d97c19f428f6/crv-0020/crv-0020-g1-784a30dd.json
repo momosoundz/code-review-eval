@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0020",
+  "gold_id": "crv-0020-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: __aexit__ delegates to __exit__ with None for the exception type, value and traceback instead of forwarding the arguments it received\n- failure path: an exception raised inside `async with attempt:` reaches __aexit__, which calls __exit__ with (None, None, None); __exit__ takes its success branch, records no failed outcome and returns None, so the exception propagates out of the async with and past the retry loop: the attempt is never recorded as failed and no retry happens\n\nReviewer finding\n- description: __aexit__ calls self.__exit__(None, None, None) instead of forwarding exc_type, exc_value and traceback, so the exception raised in the `async with` body is discarded.\n- rationale: Trigger: the body of `async with attempt:` raises an exception. __exit__ gets None arguments, so it takes the success path, probably calling set_result(None). The failed attempt is recorded as a success and the exception is not recorded. __exit__ returns None, so the exception propagates, but retries never see the failure and the retry logic is bypassed. The sync __exit__ presumably does the exception handling when given the real exc_type, exc_value and traceback.\n",
+  "critique": "The finding names the same faulty operation: __aexit__ passes None arguments to __exit__ instead of forwarding the ones it received. It gives the same consequence: __exit__ takes its success path, the failure is never recorded, the exception propagates, and no retry happens. Its wording that the exception is 'discarded' is slightly loose, but its rationale correctly says the exception propagates.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 905,
+    "output_tokens": 141
+  }
+}

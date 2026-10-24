@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 906,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The single-file wrap check was changed from `isinstance(filename, str)` to `isinstance(filename, os.PathLike)`, so a plain string filename is no longer wrapped in a tuple.",
+        "rationale": "Trigger: calling click.edit(filename=\"notes.txt\") with a str. The check is False, so the str is passed unwrapped to ed.edit_files, which iterates it character by character and tries to open files named \"n\", \"o\", \"t\", and so on. The user's intended file is never opened and the editor is launched on bogus paths, which is a silent wrong result on a common input.",
+        "confidence": 0.92
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2535,
+      "output_tokens": 473,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3436,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "a0594e58304ba7e8"
+  },
+  "raw": {
+    "id": "msg_011CgLGkna2iDYKFDV4n27sa",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/termui.py\",\"line\":906,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The single-file wrap check was changed from `isinstance(filename, str)` to `isinstance(filename, os.PathLike)`, so a plain string filename is no longer wrapped in a tuple.\",\"rationale\":\"Trigger: calling click.edit(filename=\\\"notes.txt\\\") with a str. The check is False, so the str is passed unwrapped to ed.edit_files, which iterates it character by character and tries to open files named \\\"n\\\", \\\"o\\\", \\\"t\\\", and so on. The user's intended file is never opened and the editor is launched on bogus paths, which is a silent wrong result on a common input.\",\"confidence\":0.92}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2535,
+      "output_tokens": 473,
+      "output_tokens_details": {
+        "thinking_tokens": 221
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0030",
+  "gold_id": "crv-0030-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The shape check before Editor.edit_files tests only for os.PathLike and no longer wraps a plain str, so a string filename is passed on as an iterable and consumed character by character when building the editor command.\n- failure path: click.edit(filename=\"notes.txt\") launches the editor with the nine single-character files n, o, t, e, s, ., t, x, t instead of notes.txt; saving creates stray files in the working directory and the intended file is never opened.\n\nReviewer finding\n- description: The check `isinstance(filename, str)` was replaced with `isinstance(filename, os.PathLike)`, so plain `str` filenames are no longer wrapped in a tuple. `str` does not implement `os.PathLike`.\n- rationale: Trigger: `click.edit(filename=\"foo.txt\")`. The string is passed unwrapped to `edit_files`, which iterates it character by character. The editor is then launched with one argument per character (\"f\", \"o\", \"o\", ...) instead of the file name. This breaks the most common usage. The condition should be `isinstance(filename, (str, os.PathLike))`.\n",
+  "critique": "The finding matches the label's mechanism: the isinstance check now tests only os.PathLike, so a plain str is not wrapped and edit_files iterates it character by character. Both describe the editor being launched with one-character filenames.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 887,
+    "output_tokens": 89
+  }
+}

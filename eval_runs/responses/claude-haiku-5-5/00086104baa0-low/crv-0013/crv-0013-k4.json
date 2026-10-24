@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "high",
+        "category": "concurrency",
+        "description": "The per-call statistics dict is now shared across all calls to the same decorated function, and stats.clear() wipes it on each new call, so overlapping or nested calls corrupt each other's statistics.",
+        "rationale": "Trigger: two threads (or a nested/recursive call) invoke the same decorated function, and the second call starts while the first is still running or after the first has returned and its stats are still being read. Mechanism: the new code calls stats.clear() on the dict that wrapped_f.statistics references and gives the new copy that same dict, so the first call's copy._local.statistics now reflects the second call's attempts and timings. Previously each call got its own dict via copy.statistics. Impact: callers reading retry.statistics (attempt_number, start_time, idle_for) from an in-flight or completed call silently see wrong values.",
+        "confidence": 0.6
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 217,
+        "severity": "high",
+        "category": "concurrency",
+        "description": "The asyncio wrapper reuses and clears one statistics dict shared by all concurrent invocations of the same decorated coroutine function.",
+        "rationale": "Trigger: two asyncio tasks await the same decorated coroutine function at overlapping times. Mechanism: the second invocation runs stats.clear() on the dict that the first invocation's copy is using, and then both copies write attempt counts into that single dict. Previously each call had its own dict. Impact: statistics reported for either call are interleaved and wrong, with no error raised.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2366,
+      "output_tokens": 1497,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 9110,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "3e58b62371b612c9"
+  },
+  "raw": {
+    "id": "msg_011CgLGGReu5v1SnJ2YsYVHd",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":377,\"severity\":\"high\",\"category\":\"concurrency\",\"description\":\"The per-call statistics dict is now shared across all calls to the same decorated function, and stats.clear() wipes it on each new call, so overlapping or nested calls corrupt each other's statistics.\",\"rationale\":\"Trigger: two threads (or a nested/recursive call) invoke the same decorated function, and the second call starts while the first is still running or after the first has returned and its stats are still being read. Mechanism: the new code calls stats.clear() on the dict that wrapped_f.statistics references and gives the new copy that same dict, so the first call's copy._local.statistics now reflects the second call's attempts and timings. Previously each call got its own dict via copy.statistics. Impact: callers reading retry.statistics (attempt_number, start_time, idle_for) from an in-flight or completed call silently see wrong values.\",\"confidence\":0.6},{\"file\":\"tenacity/asyncio/__init__.py\",\"line\":217,\"severity\":\"high\",\"category\":\"concurrency\",\"description\":\"The asyncio wrapper reuses and clears one statistics dict shared by all concurrent invocations of the same decorated coroutine function.\",\"rationale\":\"Trigger: two asyncio tasks await the same decorated coroutine function at overlapping times. Mechanism: the second invocation runs stats.clear() on the dict that the first invocation's copy is using, and then both copies write attempt counts into that single dict. Previously each call had its own dict. Impact: statistics reported for either call are interleaved and wrong, with no error raised.\",\"confidence\":0.55}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2366,
+      "output_tokens": 1497,
+      "output_tokens_details": {
+        "thinking_tokens": 952
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

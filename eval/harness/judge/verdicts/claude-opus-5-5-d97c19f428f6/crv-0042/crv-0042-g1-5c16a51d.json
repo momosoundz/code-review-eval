@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0042",
+  "gold_id": "crv-0042-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The missing or invalid CA bundle path check in cert_verify emits warnings.warn instead of raising OSError, so the failure no longer stops the request.\n- failure path: A user passes verify=\"/etc/ssl/missing.pem\" (or certifi returns an empty path); only a warning is emitted and execution continues to configure the connection with a nonexistent bundle, producing a later, misleading SSL or TypeError at connect time instead of the clear OSError.\n\nReviewer finding\n- description: When the CA bundle path is missing or does not exist, the code now only emits a warning instead of raising OSError. Execution continues with an invalid cert_loc.\n- rationale: Trigger: verify=True and no CA bundle file at cert_loc (e.g. a missing file or a path inside a zip). Mechanism: the OSError is replaced by warnings.warn, so the code goes on to set conn.ca_certs to a nonexistent path. Impact: the user sees a confusing failure later, or the warning is silently ignored, instead of a clear error. This weakens a security-relevant check. Also, `warnings` may not be imported in adapters.py, which would cause a NameError.\n",
+  "critique": "The finding describes the same mechanism as the label: the OSError for a missing or invalid CA bundle path is replaced with warnings.warn. Execution then continues and sets ca_certs to a nonexistent path, so a confusing failure happens later. The extra note about a possible NameError does not change that the core defect matches.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 912,
+    "output_tokens": 118
+  }
+}

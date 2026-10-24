@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0028",
+  "gold_id": "crv-0028-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The separator selection negates any_prefix_is_slash, picking ' / ' exactly when an option spelling already starts with a slash and '; ' otherwise.\n- failure path: An option declared as --shout/--no-shout renders in --help as '--shout; --no-shout', and a Windows-style /debug;/no-debug option renders as '/debug / /no-debug', where the slash separator is indistinguishable from the slash prefix of the names.\n\nReviewer finding\n- description: The separator logic was inverted during the refactor. The original code was `(\"; \" if any_prefix_is_slash else \" / \").join(rv)`, but the new code is `(\"; \" if not any_prefix_is_slash else \" / \").join(rv)`.\n- rationale: Trigger: any option with both primary and secondary opts, such as `--flag/--no-flag`. Before the change, the separator was \" / \" when no slash prefix was used, and \"; \" when a slash prefix was used. Now it is \"; \" for ordinary options and \" / \" for slash-prefixed ones. Help output changes from `--shout / --no-shout` to `--shout; --no-shout`, and slash-prefix options also get the wrong separator.\n",
+  "critique": "The finding points to the same negated any_prefix_is_slash condition in the separator selection. It describes the same effect: ordinary flags get '; ' and slash-prefixed options get ' / ', with the '--shout; --no-shout' example.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 914,
+    "output_tokens": 94
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 226,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "__aexit__ discards the exception arguments and calls self.__exit__(None, None, None), so the attempt is always recorded as a success even when the body raised.",
+        "rationale": "Trigger: a caller uses `async with attempt:` on an AttemptManager and the body raises ValueError. The exc_type, exc_value and traceback passed to __aexit__ are ignored. The sync __exit__ then calls retry_state.set_result(None) instead of set_exception, so the retry loop treats the failed attempt as successful and does not retry. The exception still propagates out of the block, so the caller sees an unretried failure, and the retry policy is silently bypassed.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1554,
+      "output_tokens": 886,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5552,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "ce6af1c981eb65b9"
+  },
+  "raw": {
+    "id": "msg_011CgLGWQ6XrLAaa9hUS2Z7u",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":226,\"severity\":\"high\",\"category\":\"wrong_variable_or_argument\",\"description\":\"__aexit__ discards the exception arguments and calls self.__exit__(None, None, None), so the attempt is always recorded as a success even when the body raised.\",\"rationale\":\"Trigger: a caller uses `async with attempt:` on an AttemptManager and the body raises ValueError. The exc_type, exc_value and traceback passed to __aexit__ are ignored. The sync __exit__ then calls retry_state.set_result(None) instead of set_exception, so the retry loop treats the failed attempt as successful and does not retry. The exception still propagates out of the block, so the caller sees an unretried failure, and the retry policy is silently bypassed.\",\"confidence\":0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1554,
+      "output_tokens": 886,
+      "output_tokens_details": {
+        "thinking_tokens": 610
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

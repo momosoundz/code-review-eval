@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 258,
+        "severity": "medium",
+        "category": "wrong_literal_or_default",
+        "description": "The new `min` parameter defaults to 1 second, so existing callers that never pass `min` now get waits floored at 1 second even when they configured smaller waits.",
+        "rationale": "Trigger: a caller uses wait_exponential_jitter(initial=0.1, jitter=0) or sets max below 1 without passing min. Mechanism: the return expression is now max(max(0, self.min), min(result, self.max)) with self.min defaulting to 1, so the result is raised to 1 even when the computed backoff is 0.1, and when max < 1 the result exceeds the configured maximum. Impact: retries wait longer than configured and can violate the documented maximum, a silent behavior change for existing users.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2020,
+      "output_tokens": 602,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4307,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "1182a1436f18c412"
+  },
+  "raw": {
+    "id": "msg_011CgLGUhNYpXWMwUV4Uya9n",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":258,\"severity\":\"medium\",\"category\":\"wrong_literal_or_default\",\"description\":\"The new `min` parameter defaults to 1 second, so existing callers that never pass `min` now get waits floored at 1 second even when they configured smaller waits.\",\"rationale\":\"Trigger: a caller uses wait_exponential_jitter(initial=0.1, jitter=0) or sets max below 1 without passing min. Mechanism: the return expression is now max(max(0, self.min), min(result, self.max)) with self.min defaulting to 1, so the result is raised to 1 even when the computed backoff is 0.1, and when max < 1 the result exceeds the configured maximum. Impact: retries wait longer than configured and can violate the documented maximum, a silent behavior change for existing users.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2020,
+      "output_tokens": 602,
+      "output_tokens_details": {
+        "thinking_tokens": 312
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

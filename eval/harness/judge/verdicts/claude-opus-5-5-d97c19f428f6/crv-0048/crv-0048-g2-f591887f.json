@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0048",
+  "gold_id": "crv-0048-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: _interpret_color no longer checks the 0..255 range, rejects bools or validates tuple length, and an unknown name raises KeyError instead of ValueError\n- failure path: style('x', fg=300) emits an escape with an out-of-range index instead of raising ValueError; fg=True is now accepted where it used to raise, formatting as palette index 1; an unknown color name surfaces as TypeError from the caller's except clause instead of a ValueError naming the color\n\nReviewer finding\n- description: The validation in `_interpret_color` was removed. Out-of-range ints, malformed tuples, and bools are no longer rejected.\n- rationale: Trigger: `fg=300`, `fg=(1,2)`, or `fg=(300,0,0)`. Ints and tuples are formatted directly into the escape sequence, so invalid ANSI codes are emitted with no error. A 2-element tuple raises an unpacking ValueError. An unhashable value reaching the dict lookup raises TypeError.\n",
+  "critique": "The finding identifies the removed validation in _interpret_color: the dropped 0..255 range check, bool rejection and tuple length check. It gives the same fg=300 trigger, which emits an invalid escape instead of raising ValueError. It does not mention the KeyError-on-unknown-name aspect, but the core mechanism matches.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 860,
+    "output_tokens": 126
+  }
+}

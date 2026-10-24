@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0030",
+  "gold_id": "crv-0030-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The shape check before Editor.edit_files tests only for os.PathLike and no longer wraps a plain str, so a string filename is passed on as an iterable and consumed character by character when building the editor command.\n- failure path: click.edit(filename=\"notes.txt\") launches the editor with the nine single-character files n, o, t, e, s, ., t, x, t instead of notes.txt; saving creates stray files in the working directory and the intended file is never opened.\n\nReviewer finding\n- description: The check was changed from isinstance(filename, str) to isinstance(filename, os.PathLike), so a plain str filename is no longer wrapped in a tuple before being passed to edit_files.\n- rationale: Trigger: calling click.edit(filename=\"notes.txt\") with a str path. The str is not PathLike, so it skips the wrapping and is passed directly to ed.edit_files, which iterates over it character by character, so the editor is asked to open \"n\", \"o\", \"t\", and so on. The str case is the most common use of this parameter, so the regression affects ordinary calls. Impact: the editor fails to open the intended file or opens nonexistent files, and the user's edits are not applied to the intended file.\n",
+  "critique": "The finding describes the same mechanism as the label. The check now tests only os.PathLike, so a str filename is not wrapped and edit_files iterates over it character by character. It also uses the same click.edit(filename=\"notes.txt\") trigger.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 914,
+    "output_tokens": 98
+  }
+}

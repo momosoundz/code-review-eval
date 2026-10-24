@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0014",
+  "gold_id": "crv-0014-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the wrapper now clears and reuses one statistics dict for every call instead of giving each call its own, so concurrent or nested calls of the same decorated function write into the same dict\n- failure path: two threads (or two concurrent awaits of the async wrapper) call the same decorated function; the second call's stats.clear() wipes the first call's start_time and attempt_number, and both read a merged, wrong statistics view afterwards\n\nReviewer finding\n- description: The async wrapper clears and reuses one statistics dict shared across all calls, so overlapping coroutines or nested invocations of the same decorated function overwrite each other's statistics.\n- rationale: Trigger: the same @retry-decorated coroutine function is awaited concurrently (e.g., via asyncio.gather) or recurses. Mechanism: stats.clear() runs on the shared dict for each invocation, and the copy's begin() clears it again while another invocation is still running, so statistics mix values from different calls. Impact: the statistics users read from the wrapper are silently wrong under concurrency. The original per-call rebinding avoided this.\n",
+  "critique": "The finding describes the same mechanism as the label: a single statistics dict is cleared and reused across calls. Overlapping coroutines or nested invocations then clear and overwrite each other's statistics. It names stats.clear() on the shared dict and the resulting mixed statistics, which is the same failure path, shown through the async case.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 888,
+    "output_tokens": 122
+  }
+}

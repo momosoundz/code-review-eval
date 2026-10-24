@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0043",
+  "gold_id": "crv-0043-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: _run_wait decides whether to call the wait strategy by truthiness of self.wait instead of checking for the explicit no-wait values None and 0\n- failure path: a wait strategy object that is falsy, for example a user-defined strategy subclassing list or tuple to hold its parameters, or a strategy class that defines __len__ or __bool__, is never called: `if not self.wait` takes the no-wait branch, every retry sleeps 0 seconds and the configured backoff disappears without any error; under a flaky dependency the client hammers it at full speed\n\nReviewer finding\n- description: `if not self.wait` uses truthiness to detect \"no wait\". Any wait object that defines `__len__` or `__bool__` and evaluates falsy is silently skipped, and the retry then sleeps 0 seconds.\n- rationale: Trigger: a user-supplied wait callable that is falsy, for example a callable class with `__len__` returning 0, or a `wait_combine` or `wait_chain` instance that defines `__len__`. Mechanism: the truthiness check treats it as no wait and bypasses the call. Impact: the configured backoff is silently ignored and retries run with no delay. The old check was explicit (`is None or == 0`), so this is a regression in precision.\n",
+  "critique": "The finding names the same faulty operation: `if not self.wait` relies on truthiness. It describes the same failure: a falsy wait strategy object, such as one defining `__len__` or `__bool__`, skips the call and retries sleep 0 seconds, so the backoff is silently lost.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 945,
+    "output_tokens": 110
+  }
+}

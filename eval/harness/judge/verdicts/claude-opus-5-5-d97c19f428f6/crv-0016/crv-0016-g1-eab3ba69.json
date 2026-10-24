@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0016",
+  "gold_id": "crv-0016-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The OR composition checks for retry_all when deciding whether to flatten an existing retry_any.\n- failure path: with `(A & B) | C`, the retry_all on the left is spliced into the retry_any as if it were a plain list of predicates, so the combination behaves as `A | B | C`: a retry fires when only A holds although the author required A and B together; no error is raised and the extra retries are silent\n\nReviewer finding\n- description: In retry_any.__ror__, when the left operand is a retry_all, its sub-retries are spliced into the retry_any, so `all(a,b) | any(c,d)` becomes `any(a,b,c,d)` instead of `any(all(a,b), c, d)`.\n- rationale: Trigger: a user combines an async retry_all with a retry_any via `|`, e.g. `(retry_if_a & retry_if_b) | retry_if_c`. The isinstance check at line 112 tests for retry_all, but flattening is only valid when the left operand is a retry_any. Mechanism: the all-condition is turned into an any-condition, so the retry fires when only `a` is true, not when both `a` and `b` hold. Impact: the retry policy silently retries in cases it should not, producing wrong retry behavior with no error.\n",
+  "critique": "Both describe the same bug: the OR composition checks isinstance for retry_all instead of retry_any, so a retry_all's sub-predicates get flattened into the retry_any. The result is that A&B|C behaves as A|B|C and retries silently fire when only A holds.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 941,
+    "output_tokens": 105
+  }
+}

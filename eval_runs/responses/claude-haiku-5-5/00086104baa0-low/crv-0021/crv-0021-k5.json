@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 237,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "Switching the match handling from truthiness to `is not None` means an empty-string match pattern is now compiled instead of being rejected as missing, and `re.compile(\"\").match` succeeds on any string.",
+        "rationale": "Trigger: a caller passes match=\"\" with message omitted. Before the change, the falsy check raised TypeError ('missing 1 required argument'). Now match=\"\" is compiled to an empty pattern, so _check returns True for every exception. Impact: the predicate silently retries on all exceptions, including ones the caller meant to exclude, instead of failing fast at construction.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1706,
+      "output_tokens": 764,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4750,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "485e7ce2faf84da5"
+  },
+  "raw": {
+    "id": "msg_011CgLGYrULhK3Fghtjc1Dzr",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/retry.py\",\"line\":237,\"severity\":\"medium\",\"category\":\"wrong_condition\",\"description\":\"Switching the match handling from truthiness to `is not None` means an empty-string match pattern is now compiled instead of being rejected as missing, and `re.compile(\\\"\\\").match` succeeds on any string.\",\"rationale\":\"Trigger: a caller passes match=\\\"\\\" with message omitted. Before the change, the falsy check raised TypeError ('missing 1 required argument'). Now match=\\\"\\\" is compiled to an empty pattern, so _check returns True for every exception. Impact: the predicate silently retries on all exceptions, including ones the caller meant to exclude, instead of failing fast at construction.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1706,
+      "output_tokens": 764,
+      "output_tokens_details": {
+        "thinking_tokens": 510
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

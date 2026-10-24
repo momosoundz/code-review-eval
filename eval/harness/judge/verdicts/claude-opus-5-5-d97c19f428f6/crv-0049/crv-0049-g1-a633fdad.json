@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0049",
+  "gold_id": "crv-0049-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: _encode_files only treats an object as a file when isinstance(fp, _SupportsRead) succeeds, which a wrapper that exposes read through __getattr__ fails\n- failure path: on Python 3.12 and later, isinstance against a runtime_checkable Protocol uses inspect.getattr_static and does not see attributes served by __getattr__; a file wrapper that proxies read() that way fails the check, is not read, and its contents never reach the multipart body; before 3.12 the Protocol check used hasattr and the removed `or hasattr(fp, 'read')` was redundant, so the defect only manifests on 3.12+\n\nReviewer finding\n- description: The fallback `hasattr(fp, \"read\")` was removed, so file-like objects are now recognized only via the `_SupportsRead` runtime-checkable Protocol. The Protocol's `read` signature is `read(self, length=..., /)`.\n- rationale: Trigger: a file-like object with a `read` attribute that the protocol check rejects, e.g. a non-callable `read` or an object whose `read` is not found on the type. A runtime_checkable Protocol checks the attribute's presence on the object, and `isinstance` can behave differently for such objects than `hasattr`. Those objects fall through to the later branches and are treated as plain data or raise an error, instead of being read. Impact: multipart file uploads that worked before can now fail or send the wrong body. Confidence is moderate because standard file objects still match the Protocol.\n",
+  "critique": "The finding blames the removed `hasattr(fp, 'read')` fallback: objects whose `read` the Protocol check misses, such as one whose `read` is not found on the type, now skip the file-reading branch and corrupt the multipart body. That is the same mechanism as the label, which is `isinstance` with a runtime_checkable Protocol not seeing a `read` that `hasattr` would find (served via `__getattr__`), although the finding does not name Python 3.12 or `getattr_static` explicitly.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 1021,
+    "output_tokens": 367
+  }
+}

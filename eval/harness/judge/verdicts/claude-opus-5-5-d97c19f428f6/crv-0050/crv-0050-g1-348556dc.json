@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0050",
+  "gold_id": "crv-0050-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: a Content-Type parameter without an equals sign is stored with the value True instead of being skipped\n- failure path: the header `text/html; charset` yields params['charset'] == True; get_encoding_from_headers (shown below the change) returns params['charset'].strip(...) which raises AttributeError on a bool, so reading response.text for such a response fails instead of falling back to ISO-8859-1\n\nReviewer finding\n- description: A Content-Type parameter without '=' (e.g. 'text/html; charset') is now stored as the boolean True, so the 'charset' lookup returns True and calling .strip() on it raises AttributeError.\n- rationale: Trigger: a response header 'Content-Type: text/html; charset' with no value. The new code in _parse_content_type_header sets params['charset'] = True instead of skipping the token. get_encoding_from_headers then reaches params['charset'].strip(...), which fails on a bool. Before this change the token was ignored and the function fell through to the 'text' branch and returned ISO-8859-1. The impact is an exception while reading a malformed but previously tolerated response, so the caller crashes instead of getting a fallback encoding.\n",
+  "critique": "The finding describes the same mechanism as the label. A valueless parameter is stored as True instead of being skipped, then `.strip()` is called on the bool in get_encoding_from_headers and raises AttributeError. The previous behavior fell back to ISO-8859-1.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 914,
+    "output_tokens": 104
+  }
+}

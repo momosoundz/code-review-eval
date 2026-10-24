@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0049",
+  "gold_id": "crv-0049-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: _encode_files only treats an object as a file when isinstance(fp, _SupportsRead) succeeds, which a wrapper that exposes read through __getattr__ fails\n- failure path: on Python 3.12 and later, isinstance against a runtime_checkable Protocol uses inspect.getattr_static and does not see attributes served by __getattr__; a file wrapper that proxies read() that way fails the check, is not read, and its contents never reach the multipart body; before 3.12 the Protocol check used hasattr and the removed `or hasattr(fp, 'read')` was redundant, so the defect only manifests on 3.12+\n\nReviewer finding\n- description: The `hasattr(fp, \"read\")` fallback was removed, so only objects matching the `SupportsRead` runtime protocol are read. Objects with a `read` attribute that fail the protocol check now fall through to the later branches.\n- rationale: Trigger: a file-like object passed in `files` whose `read` is not seen by the runtime-checkable protocol, for example a class that defines `read` through `__getattr__` or a custom descriptor. The `isinstance` check fails and the removed `hasattr` fallback no longer catches it. Impact: the object falls into the else branch, so its content is sent as `str(fp)` or raises, instead of the file contents.\n",
+  "critique": "The finding pins the defect on the removed hasattr(fp, 'read') fallback. With only isinstance(fp, SupportsRead) left, an object that exposes read via __getattr__ fails the check, is not read, and its contents never reach the body. This is the same faulty check and the same failure mechanism as the label. The finding does not mention the 3.12+ version dependence, but the mechanism is identical.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 964,
+    "output_tokens": 148
+  }
+}

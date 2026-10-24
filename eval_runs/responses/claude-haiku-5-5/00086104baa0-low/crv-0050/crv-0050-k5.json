@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/utils.py",
+        "line": 544,
+        "severity": "medium",
+        "category": "null_or_missing_value",
+        "description": "A Content-Type parameter without '=' (e.g. 'text/html; charset') is now stored as the boolean True, so the 'charset' lookup returns True and calling .strip() on it raises AttributeError.",
+        "rationale": "Trigger: a response header 'Content-Type: text/html; charset' with no value. The new code in _parse_content_type_header sets params['charset'] = True instead of skipping the token. get_encoding_from_headers then reaches params['charset'].strip(...), which fails on a bool. Before this change the token was ignored and the function fell through to the 'text' branch and returned ISO-8859-1. The impact is an exception while reading a malformed but previously tolerated response, so the caller crashes instead of getting a fallback encoding.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2109,
+      "output_tokens": 597,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4156,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "1afc750f3de9d94b"
+  },
+  "raw": {
+    "id": "msg_011CgLHE4rKXpPHJAbmCUXpa",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/utils.py\",\"line\":544,\"severity\":\"medium\",\"category\":\"null_or_missing_value\",\"description\":\"A Content-Type parameter without '=' (e.g. 'text/html; charset') is now stored as the boolean True, so the 'charset' lookup returns True and calling .strip() on it raises AttributeError.\",\"rationale\":\"Trigger: a response header 'Content-Type: text/html; charset' with no value. The new code in _parse_content_type_header sets params['charset'] = True instead of skipping the token. get_encoding_from_headers then reaches params['charset'].strip(...), which fails on a bool. Before this change the token was ignored and the function fell through to the 'text' branch and returned ISO-8859-1. The impact is an exception while reading a malformed but previously tolerated response, so the caller crashes instead of getting a fallback encoding.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2109,
+      "output_tokens": 597,
+      "output_tokens_details": {
+        "thinking_tokens": 291
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

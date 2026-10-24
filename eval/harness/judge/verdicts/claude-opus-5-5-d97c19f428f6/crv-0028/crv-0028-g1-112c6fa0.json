@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0028",
+  "gold_id": "crv-0028-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The separator selection negates any_prefix_is_slash, picking ' / ' exactly when an option spelling already starts with a slash and '; ' otherwise.\n- failure path: An option declared as --shout/--no-shout renders in --help as '--shout; --no-shout', and a Windows-style /debug;/no-debug option renders as '/debug / /no-debug', where the slash separator is indistinguishable from the slash prefix of the names.\n\nReviewer finding\n- description: The separator condition was inverted to `not any_prefix_is_slash`, so the separator choice is backwards: options with slash prefixes get \"; \" and ordinary options get \" / \".\n- rationale: The original code used `\"; \" if any_prefix_is_slash else \" / \"`. For a normal option such as `--verbose` with `-v`, any_prefix_is_slash is False, so the new expression yields \"; \", producing help text like `-v; --verbose` where it previously showed `-v, --verbose`-style output with \" / \". This changes the rendered help for every option with multiple spellings, and the help left column becomes wrong for the common case.\n",
+  "critique": "The finding and the label describe the same defect: the separator condition was negated to `not any_prefix_is_slash`, which swaps '; ' and ' / '. The finding's description states the swap direction backwards. Its rationale, however, states the label's direction (ordinary options get '; ') and identifies the same faulty negation.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 890,
+    "output_tokens": 328
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0014",
+  "gold_id": "crv-0014-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the wrapper now clears and reuses one statistics dict for every call instead of giving each call its own, so concurrent or nested calls of the same decorated function write into the same dict\n- failure path: two threads (or two concurrent awaits of the async wrapper) call the same decorated function; the second call's stats.clear() wipes the first call's start_time and attempt_number, and both read a merged, wrong statistics view afterwards\n\nReviewer finding\n- description: The retry wrapper now reuses one statistics dict for every call and clears it on entry, and the copy's _local.statistics is pointed at that same dict. A nested or recursive call through the same wrapped function therefore clears and overwrites the outer call's statistics while the outer call is still running.\n- rationale: Trigger: a @retry-decorated function that calls itself, or calls the same wrapped function again, while an outer call is still retrying. The inner call runs stats.clear() on the dict the outer loop is still writing attempt_number and related fields into, and both copies share that dict. Impact: the outer call's statistics are reset or replaced by the inner call's values, so wrapped_f.statistics reports wrong attempt counts. The previous code gave each call its own dict to prevent exactly this.\n",
+  "critique": "The finding names the same mechanism: one statistics dict is shared and cleared on entry instead of a fresh dict per call. Overlapping calls of the same wrapped function therefore wipe and overwrite each other's statistics. The label covers concurrent and nested calls, and the finding's nested/recursive trigger is one of those paths with the same faulty operation.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 933,
+    "output_tokens": 133
+  }
+}

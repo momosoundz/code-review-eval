@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0016",
+  "gold_id": "crv-0016-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The OR composition checks for retry_all when deciding whether to flatten an existing retry_any.\n- failure path: with `(A & B) | C`, the retry_all on the left is spliced into the retry_any as if it were a plain list of predicates, so the combination behaves as `A | B | C`: a retry fires when only A holds although the author required A and B together; no error is raised and the extra retries are silent\n\nReviewer finding\n- description: In the async retry_any.__ror__, the flatten check tests isinstance(other, retry_all) instead of retry_any. A retry_any on the left is never flattened, and a retry_all on the left is wrongly flattened into a retry_any.\n- rationale: Trigger: `retry_all(a, b) | async_retry_any(c, d)`. The code returns retry_any(a, b, c, d), which changes the semantics from (a AND b) OR c OR d to a OR b OR c OR d. The sync version of this method correctly checks retry_any. The same flaw exists for the retry_all.__rand__ check on line 134, which tests retry_all correctly, so only the __ror__ check is wrong. The user sees retries happening in cases the combined condition should not allow.\n",
+  "critique": "The finding identifies the OR composition's flatten check testing retry_all instead of retry_any. As a result, a retry_all on the left is spliced into the retry_any, turning (A AND B) OR C into A OR B OR C and causing silent extra retries. This is the same mechanism and outcome as the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 920,
+    "output_tokens": 115
+  }
+}

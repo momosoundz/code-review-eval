@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0026",
+  "gold_id": "crv-0026-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The guard uses all(...) instead of any(...) over the arguments' help attributes, so the section is gated on every argument being documented rather than on at least one.\n- failure path: A command with arguments SRC (help set) and DST (no help) prints no 'Positional arguments' section at all in --help, silently dropping the documented text; conversely a command with zero arguments satisfies all([]) and prints an empty 'Positional arguments' header on every --help.\n\nReviewer finding\n- description: The guard uses all() where the docstring intends at least one documented argument. For a command with no arguments, all() over an empty list is True, so an empty \"Positional arguments\" heading is written for every such command. When some arguments have help and others do not, all() is False and the whole section is dropped.\n- rationale: Trigger: a command that takes only options, such as @click.command() with a single @click.option, has args == [], so the condition is True. formatter.section() writes its heading unconditionally, so the help output gains an empty \"Positional arguments:\" heading. Second trigger: a command with arguments A (with help) and B (without help). all() is False, so neither argument is listed, although the title says every argument is listed. The fix is any() in place of all(). Impact: users see a spurious empty section on common commands, and partially documented commands lose their positional argument section entirely.\n",
+  "critique": "The finding identifies the same faulty operation: all() is used instead of any() over the argument help attributes. It also gives both failure modes from the label: an empty heading when there are no arguments, because all([]) is True, and the whole section dropped when only some arguments have help.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 955,
+    "output_tokens": 100
+  }
+}

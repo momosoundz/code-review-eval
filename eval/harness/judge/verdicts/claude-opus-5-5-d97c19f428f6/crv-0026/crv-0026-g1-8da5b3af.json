@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0026",
+  "gold_id": "crv-0026-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The guard uses all(...) instead of any(...) over the arguments' help attributes, so the section is gated on every argument being documented rather than on at least one.\n- failure path: A command with arguments SRC (help set) and DST (no help) prints no 'Positional arguments' section at all in --help, silently dropping the documented text; conversely a command with zero arguments satisfies all([]) and prints an empty 'Positional arguments' header on every --help.\n\nReviewer finding\n- description: When a command has no Argument parameters, all() over an empty list returns True, so an empty 'Positional arguments' heading is written.\n- rationale: Trigger: any command that defines only options and no positional arguments, which is very common. args is empty, so all() is True and formatter.section(...) is entered with no rows. The previous code only emitted the section when args was non-empty. Impact: every such command's --help output gains a stray empty 'Positional arguments:' heading.\n",
+  "critique": "The finding points at the same faulty all() guard and one of the label's two stated failure modes: all([]) returning True and producing an empty 'Positional arguments' header. It does not mention the mixed-help case, but it names the same operation and mechanism, all() used where any() was needed.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 834,
+    "output_tokens": 105
+  }
+}

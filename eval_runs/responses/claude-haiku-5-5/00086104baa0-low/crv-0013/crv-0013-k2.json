@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "The statistics dict is now shared by every call to the decorated function and is cleared on each new call, so concurrent calls from different threads overwrite each other's in-flight statistics.",
+        "rationale": "Trigger: two threads call the same decorated function at once. Mechanism: each call runs stats.clear() on the single dict that was previously a per-call copy, so one thread's begin() wipes or rewrites the counters another thread is still reading. Impact: a retry callback or code reading wrapped.statistics during a call can observe attempt_number, start_time or idle_for values belonging to a different call.",
+        "confidence": 0.5
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 218,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "The async wrapper clears and reuses one shared statistics dict across all invocations, so concurrent awaits of the same decorated coroutine corrupt each other's statistics.",
+        "rationale": "Trigger: two tasks await the same decorated async function concurrently, e.g. via asyncio.gather. Mechanism: stats.clear() on the shared dict resets state that the other in-flight call is still updating, and the dict is mutated across interleaved awaits. Impact: statistics seen by one call's callbacks or by the caller reflect the other call's attempts and timings.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2366,
+      "output_tokens": 1606,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 8221,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "3e58b62371b612c9"
+  },
+  "raw": {
+    "id": "msg_011CgLGFQuyaYTHHxp7zfDm3",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":377,\"severity\":\"medium\",\"category\":\"concurrency\",\"description\":\"The statistics dict is now shared by every call to the decorated function and is cleared on each new call, so concurrent calls from different threads overwrite each other's in-flight statistics.\",\"rationale\":\"Trigger: two threads call the same decorated function at once. Mechanism: each call runs stats.clear() on the single dict that was previously a per-call copy, so one thread's begin() wipes or rewrites the counters another thread is still reading. Impact: a retry callback or code reading wrapped.statistics during a call can observe attempt_number, start_time or idle_for values belonging to a different call.\",\"confidence\":0.5},{\"file\":\"tenacity/asyncio/__init__.py\",\"line\":218,\"severity\":\"medium\",\"category\":\"concurrency\",\"description\":\"The async wrapper clears and reuses one shared statistics dict across all invocations, so concurrent awaits of the same decorated coroutine corrupt each other's statistics.\",\"rationale\":\"Trigger: two tasks await the same decorated async function concurrently, e.g. via asyncio.gather. Mechanism: stats.clear() on the shared dict resets state that the other in-flight call is still updating, and the dict is mutated across interleaved awaits. Impact: statistics seen by one call's callbacks or by the caller reflect the other call's attempts and timings.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2366,
+      "output_tokens": 1606,
+      "output_tokens_details": {
+        "thinking_tokens": 1124
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

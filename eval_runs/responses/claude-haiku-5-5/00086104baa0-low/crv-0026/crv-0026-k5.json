@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1321,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The guard requires every argument to have help text, but the docstring says the section is written if at least one argument is documented. If any argument lacks help, the whole Positional arguments section is dropped, including documented arguments that were shown before this change.",
+        "rationale": "Trigger: a command with two positional arguments, one with help='Source file' and one with no help. The old code listed the documented one. With all(), the condition is False, so nothing is written. Impact: help output silently loses documented arguments, a regression for common commands.",
+        "confidence": 0.8
+      },
+      {
+        "file": "src/click/core.py",
+        "line": 1321,
+        "severity": "low",
+        "category": "wrong_condition",
+        "description": "When there are no Argument parameters, all() over an empty list is True, so an empty 'Positional arguments' heading is written for commands that take no positional arguments.",
+        "rationale": "Trigger: any command with only options and no arguments. The condition passes, and formatter.section emits the heading even though write_dl receives no rows. Impact: help output shows a spurious empty section on many commands.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1866,
+      "output_tokens": 986,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5977,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "f5016dccaeddfb54"
+  },
+  "raw": {
+    "id": "msg_011CgLGgpwo5eXTzP3UU9Qa7",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1321,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"The guard requires every argument to have help text, but the docstring says the section is written if at least one argument is documented. If any argument lacks help, the whole Positional arguments section is dropped, including documented arguments that were shown before this change.\",\"rationale\":\"Trigger: a command with two positional arguments, one with help='Source file' and one with no help. The old code listed the documented one. With all(), the condition is False, so nothing is written. Impact: help output silently loses documented arguments, a regression for common commands.\",\"confidence\":0.8},{\"file\":\"src/click/core.py\",\"line\":1321,\"severity\":\"low\",\"category\":\"wrong_condition\",\"description\":\"When there are no Argument parameters, all() over an empty list is True, so an empty 'Positional arguments' heading is written for commands that take no positional arguments.\",\"rationale\":\"Trigger: any command with only options and no arguments. The condition passes, and formatter.section emits the heading even though write_dl receives no rows. Impact: help output shows a spurious empty section on many commands.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1866,
+      "output_tokens": 986,
+      "output_tokens_details": {
+        "thinking_tokens": 604
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0024",
+  "gold_id": "crv-0024-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: Argument.get_help_record returns self.help unchanged, so the second element of the tuple is None for an undocumented argument even though format_arguments now feeds every record straight into formatter.write_dl without a fallback.\n- failure path: A command declares two arguments and sets help on only one; running it with --help makes write_dl measure and wrap a None description and the help command crashes with a TypeError instead of printing usage.\n\nReviewer finding\n- description: Argument.get_help_record now returns (metavar, self.help) even when help is None, contradicting its docstring's promise of an empty description. Callers such as format_options pass that None into write_dl, which will fail.\n- rationale: Trigger: a command with one positional argument that has help text and another positional argument with no help. format_options sees any(arg.help is not None) is true and builds records including (metavar, None) for the undocumented argument. write_dl then calls text wrapping on None (e.g. text.expandtabs()), raising AttributeError. The user sees a crash when running --help on a common command shape, where previously the undocumented argument was simply omitted.\n",
+  "critique": "The finding names the same faulty operation: Argument.get_help_record returns None for an undocumented argument, and a formatter then passes it to write_dl, which crashes. The trigger is also the same: one argument with help and one without, then --help. The differences are the caller name (format_options vs format_arguments) and the exception type (AttributeError vs TypeError), which are minor.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 883,
+    "output_tokens": 135
+  }
+}

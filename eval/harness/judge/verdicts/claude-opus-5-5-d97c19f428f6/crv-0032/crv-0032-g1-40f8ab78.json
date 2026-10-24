@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0032",
+  "gold_id": "crv-0032-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.\n- failure path: A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.\n\nReviewer finding\n- description: The refactor dropped the removal of `param.secondary_opts`, so help option names that collide with a secondary option of another parameter are no longer excluded.\n- rationale: Trigger: a command has a boolean flag such as `--force/--help` (secondary opt `--help`) and the help option is requested with default names including `--help`. The original code removed `--help` via `difference_update(param.secondary_opts)`. The new loop only pops `param.opts`, so `--help` stays in the result and the help option is generated with a name already claimed by the flag's secondary option. Impact: the conflicting name is registered twice, so the flag and help option clash and the user's `--help` may trigger the wrong option or fail to parse.\n",
+  "critique": "Both describe the same defect: the refactored loop drops the removal of param.secondary_opts from the help option names, so a help name that collides with another parameter's secondary option is kept and claimed twice. The finding uses a --force/--help example rather than --hint/-h, but the mechanism and failure are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 916,
+    "output_tokens": 114
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0040",
+  "gold_id": "crv-0040-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: Session.get accepts the new explicit params argument but the forwarding call self.request(\"GET\", url, **kwargs) omits it, so the value is never passed on.\n- failure path: session.get(url, {\"q\": \"x\"}) or session.get(url, params={\"q\": \"x\"}) sends a GET with no query string; the server receives the bare URL and the caller gets a response for the wrong resource with no error.\n\nReviewer finding\n- description: The new `params` argument of `Session.get` is accepted but never forwarded; the call still passes only `**kwargs` to `self.request`.\n- rationale: Trigger: a caller runs `session.get(url, params={'q': 'x'})`. Because `params` is a named parameter, it is removed from `kwargs` and is not passed on at line 671. The request is sent without the query string. The caller gets a response for the wrong resource with no error, which is a silent wrong result.\n",
+  "critique": "The finding names the same mechanism as the label. Session.get binds `params` as a named argument, so it is taken out of kwargs, and the call self.request(\"GET\", url, **kwargs) never forwards it. The result is the same in both: a GET with no query string that silently returns a response for the wrong resource.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 821,
+    "output_tokens": 115
+  }
+}

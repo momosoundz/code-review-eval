@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0046",
+  "gold_id": "crv-0046-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: Sentinel loses its __reduce_ex__, so pickling a member falls back to Enum's default reduction by value, and the value object() cannot be looked up on unpickling\n- failure path: pickle.loads(pickle.dumps(UNSET)) rebuilds the member through Enum's default reduction by value; the reconstructed object() matches no Sentinel member, so unpickling raises ValueError; any parameter default holding UNSET that crosses a pickle boundary (multiprocessing, a cache) fails to load\n\nReviewer finding\n- description: Removing the custom __reduce_ex__ means pickling a Sentinel falls back to Enum's default reduction, which rebuilds the member from its value (a fresh object()), so the unpickled value is not the UNSET singleton.\n- rationale: Trigger: pickling a structure that holds click.utils.UNSET (for example a Parameter or default value) and loading it back. Under the old code, __reduce_ex__ returned getattr(Sentinel, name), preserving identity. With the default Enum reduction, the value object() is serialized as a new object and Sentinel(value) lookup fails or yields a non-identical member, so identity checks like `value is UNSET` break. Impact: unpickled objects silently treat UNSET as a real value or raise on load.\n",
+  "critique": "The finding names the same mechanism: the removed __reduce_ex__ makes pickling fall back to Enum's by-value reduction, and a fresh object() fails the Sentinel(value) lookup on load. It hedges between raising and silently yielding a non-identical member, but it includes the raise-on-load path described in the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 959,
+    "output_tokens": 121
+  }
+}

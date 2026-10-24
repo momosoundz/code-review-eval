@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 237,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "Switching the truthiness checks to `is not None` means an empty-string `match` is now compiled into a pattern that matches every exception, where the old code treated it as absent and raised TypeError.",
+        "rationale": "Trigger: a caller passes match=\"\" with message omitted. The old check `if not message and not match` raised TypeError. The new check passes, and re.compile(\"\") matches any string at position 0, so the retry predicate returns True for every exception. Impact: the retry decorator silently retries all exceptions, including ones the caller meant to surface, instead of failing fast on invalid arguments.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1706,
+      "output_tokens": 880,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5561,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "485e7ce2faf84da5"
+  },
+  "raw": {
+    "id": "msg_011CgLGY5JzF4x1kQV14XXrz",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/retry.py\",\"line\":237,\"severity\":\"medium\",\"category\":\"wrong_condition\",\"description\":\"Switching the truthiness checks to `is not None` means an empty-string `match` is now compiled into a pattern that matches every exception, where the old code treated it as absent and raised TypeError.\",\"rationale\":\"Trigger: a caller passes match=\\\"\\\" with message omitted. The old check `if not message and not match` raised TypeError. The new check passes, and re.compile(\\\"\\\") matches any string at position 0, so the retry predicate returns True for every exception. Impact: the retry decorator silently retries all exceptions, including ones the caller meant to surface, instead of failing fast on invalid arguments.\",\"confidence\":0.55}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1706,
+      "output_tokens": 880,
+      "output_tokens_details": {
+        "thinking_tokens": 628
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

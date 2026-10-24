@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0045",
+  "gold_id": "crv-0045-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the walk over exc.__cause__ has no cycle guard, so a chain that loops back on itself never reaches None\n- failure path: an exception raised with `raise e from e`, or two exceptions that cause each other, makes retry_if_exception_cause_type spin forever at full CPU; the stop conditions never run and the caller hangs\n\nReviewer finding\n- description: The cycle guard (the `seen` set of visited exception ids) was removed from the `__cause__` chain walk, so the loop `while exc is not None` can now run forever on a circular cause chain.\n- rationale: Trigger: an exception chain with a cycle, e.g. `a.__cause__ = b; b.__cause__ = a`, where no exception in the chain matches `exception_cause_types`. Mechanism: `exc = exc.__cause__` keeps alternating between `a` and `b` and never reaches None, and the removed `seen` check was the only thing that stopped it. Impact: the retry predicate hangs in an infinite loop instead of returning False.\n",
+  "critique": "The finding describes the same defect: the __cause__ chain walk has no cycle guard, so a circular chain such as a\u2194b never reaches None and the loop runs forever. The finding's trigger and its hang impact both match the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 867,
+    "output_tokens": 89
+  }
+}

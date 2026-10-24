@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0020",
+  "gold_id": "crv-0020-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: __aexit__ delegates to __exit__ with None for the exception type, value and traceback instead of forwarding the arguments it received\n- failure path: an exception raised inside `async with attempt:` reaches __aexit__, which calls __exit__ with (None, None, None); __exit__ takes its success branch, records no failed outcome and returns None, so the exception propagates out of the async with and past the retry loop: the attempt is never recorded as failed and no retry happens\n\nReviewer finding\n- description: __aexit__ discards the actual exception arguments and calls self.__exit__(None, None, None), so the AttemptManager never sees the exception raised inside the async with block.\n- rationale: Trigger: an exception is raised inside an `async with AttemptManager(...)` block. The sync __exit__ uses exc_type/exc_value to call set_exception and record the failure for retry; passing None makes __exit__ treat the attempt as successful, so set_result(None) is recorded and the retry loop never retries. Impact: failed attempts are silently reported as successful and the exception is swallowed or handled incorrectly, producing wrong results.\n",
+  "critique": "The finding names the same faulty operation: __aexit__ passes (None, None, None) to __exit__ instead of forwarding the exception. It describes the same consequence, where __exit__ takes the success path and no failure or retry is recorded. Its claim that the exception may be \"swallowed\" differs a little from the label, which says the exception propagates, but the core defect and mechanism are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 899,
+    "output_tokens": 142
+  }
+}

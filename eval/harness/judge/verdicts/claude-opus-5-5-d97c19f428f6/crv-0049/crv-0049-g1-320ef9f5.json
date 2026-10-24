@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0049",
+  "gold_id": "crv-0049-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: _encode_files only treats an object as a file when isinstance(fp, _SupportsRead) succeeds, which a wrapper that exposes read through __getattr__ fails\n- failure path: on Python 3.12 and later, isinstance against a runtime_checkable Protocol uses inspect.getattr_static and does not see attributes served by __getattr__; a file wrapper that proxies read() that way fails the check, is not read, and its contents never reach the multipart body; before 3.12 the Protocol check used hasattr and the removed `or hasattr(fp, 'read')` was redundant, so the defect only manifests on 3.12+\n\nReviewer finding\n- description: The `hasattr(fp, \"read\")` fallback was dropped, so file-like objects are now accepted only if `isinstance(fp, _SupportsRead)` passes. That check is only reliable if the protocol is runtime-checkable and matches the object's `read` signature.\n- rationale: Trigger: a file-like object with a `read` method that fails the `_SupportsRead` runtime check, for example because it is a wrapper or proxy object. Mechanism: the `isinstance` check is false and the old `hasattr` fallback no longer runs, so the code falls through to the later branches and treats the object as bytes or str. Impact: a file upload that previously worked now raises an error or is silently mishandled. Confidence is moderate because `runtime_checkable` protocols only check that the attribute exists, which makes the regression narrower than it first looks.\n",
+  "critique": "The finding names the same faulty operation: the `hasattr(fp, 'read')` fallback was removed, so a wrapper or proxy object fails the `isinstance(fp, _SupportsRead)` check and is never read as a file. It does not identify the 3.12 getattr_static/`__getattr__` cause, but the trigger (a proxy with `read`), the operation and the outcome (the object is mishandled instead of read) are the same defect.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 1023,
+    "output_tokens": 161
+  }
+}

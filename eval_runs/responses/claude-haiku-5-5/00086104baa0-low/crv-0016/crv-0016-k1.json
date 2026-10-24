@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 112,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "In the async retry_any.__ror__, the flatten check tests isinstance(other, retry_all) instead of retry_any, so an AND-combination on the left is merged into the OR's retries.",
+        "rationale": "Trigger: an async retry_all on the left of a retry_any, e.g. (a & b) | c. retry_all.__or__ defers to c.__ror__(retry_all), which takes the isinstance(other, retry_all) branch and returns retry_any(a, b, c). Mechanism: the AND is flattened into the OR, so the result is any(a, b, c) instead of any(all(a, b), c). Impact: retries fire when only one of a or b holds, so the retry policy silently retries too often or in the wrong cases.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2615,
+      "output_tokens": 2165,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 10378,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "2a6e05b6ea9f513c"
+  },
+  "raw": {
+    "id": "msg_011CgLGPrPsq2eUrz7mYMQvn",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/asyncio/retry.py\",\"line\":112,\"severity\":\"high\",\"category\":\"wrong_condition\",\"description\":\"In the async retry_any.__ror__, the flatten check tests isinstance(other, retry_all) instead of retry_any, so an AND-combination on the left is merged into the OR's retries.\",\"rationale\":\"Trigger: an async retry_all on the left of a retry_any, e.g. (a & b) | c. retry_all.__or__ defers to c.__ror__(retry_all), which takes the isinstance(other, retry_all) branch and returns retry_any(a, b, c). Mechanism: the AND is flattened into the OR, so the result is any(a, b, c) instead of any(all(a, b), c). Impact: retries fire when only one of a or b holds, so the retry policy silently retries too often or in the wrong cases.\",\"confidence\":0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2615,
+      "output_tokens": 2165,
+      "output_tokens_details": {
+        "thinking_tokens": 1864
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

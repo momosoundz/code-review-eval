@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0032",
+  "gold_id": "crv-0032-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.\n- failure path: A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.\n\nReviewer finding\n- description: The loop now removes only param.opts from the help option names and no longer removes param.secondary_opts, which the original code did.\n- rationale: Trigger: help_option_names contains a name that is a secondary option of another parameter, such as '--no-verbose' for a boolean flag '--verbose/--no-verbose', and that flag is defined on the command. The original code dropped that name from the help names, but the new loop keeps it. The help option then claims a name the flag already uses, so the parser can route '--no-verbose' to the wrong option or raise a conflict. The user sees the flag misbehave or a startup error.\n",
+  "critique": "The finding pins the same faulty operation: the loop removes only param.opts and drops the secondary_opts removal the original code performed. It also gives the same consequence, where the help option claims a name already used as another parameter's secondary option. The example differs but the mechanism is identical.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 882,
+    "output_tokens": 103
+  }
+}

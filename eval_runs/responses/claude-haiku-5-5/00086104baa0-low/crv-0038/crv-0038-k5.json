@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 793,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "Response.__init__ now assigns self.reason from self.raw.reason, but self.raw is None when a Response is constructed directly, so this raises AttributeError.",
+        "rationale": "Trigger: any code path that calls Response() with no raw object, such as building an empty Response for tests or synthetic responses. Mechanism: the constructor reads an attribute of None at this line, before raw is populated by the adapter. Impact: instantiating Response() crashes instead of returning an object with reason unset, and the reason type was also changed to non-optional str, so the empty case is no longer represented.",
+        "confidence": 0.7
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1574,
+      "output_tokens": 790,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4385,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "91fc2c2a353fa582"
+  },
+  "raw": {
+    "id": "msg_011CgLGvb3mffJWeJbW1moDV",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/models.py\",\"line\":793,\"severity\":\"high\",\"category\":\"null_or_missing_value\",\"description\":\"Response.__init__ now assigns self.reason from self.raw.reason, but self.raw is None when a Response is constructed directly, so this raises AttributeError.\",\"rationale\":\"Trigger: any code path that calls Response() with no raw object, such as building an empty Response for tests or synthetic responses. Mechanism: the constructor reads an attribute of None at this line, before raw is populated by the adapter. Impact: instantiating Response() crashes instead of returning an object with reason unset, and the reason type was also changed to non-optional str, so the empty case is no longer represented.\",\"confidence\":0.7}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1574,
+      "output_tokens": 790,
+      "output_tokens_details": {
+        "thinking_tokens": 545
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0020",
+  "gold_id": "crv-0020-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: __aexit__ delegates to __exit__ with None for the exception type, value and traceback instead of forwarding the arguments it received\n- failure path: an exception raised inside `async with attempt:` reaches __aexit__, which calls __exit__ with (None, None, None); __exit__ takes its success branch, records no failed outcome and returns None, so the exception propagates out of the async with and past the retry loop: the attempt is never recorded as failed and no retry happens\n\nReviewer finding\n- description: __aexit__ discards the exception it receives and calls self.__exit__(None, None, None), so a failure raised inside an `async with` block is recorded as a successful attempt instead of being captured and retried.\n- rationale: Trigger: `async with AttemptManager(retry_state) as attempt: raise ValueError()` inside a retrying loop. Mechanism: __aexit__ receives exc_type=ValueError but passes None, None, None to __exit__, which calls retry_state.set_result(None) and returns None. The exception is not stored via set_exception and is not suppressed, so it propagates out of the block and bypasses the retry loop entirely. Impact: the async retry decorator/iterator does not retry the failing attempt, the retry state reports success with a None result, and the caller sees a raw exception instead of the configured retry behavior. The sync __exit__ path would have recorded the exception and suppressed it.\n",
+  "critique": "The finding names the same mechanism: __aexit__ passes (None, None, None) to __exit__ instead of forwarding the exception. __exit__ then takes its success path, records no failure and returns None, so the exception propagates and no retry happens. The extra detail about set_result(None) is consistent with the label's 'success branch'.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 989,
+    "output_tokens": 122
+  }
+}

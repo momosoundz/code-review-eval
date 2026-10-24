@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 180,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The cycle guard was removed from the __cause__ walk, so a cyclic exception chain now loops forever instead of terminating.",
+        "rationale": "Trigger: the retried function raises an exception whose __cause__ chain cycles, for example a.__cause__ = b and b.__cause__ = a, and no exception in the cycle matches exception_cause_types. Mechanism: the while loop at line 180 only exits when exc becomes None, and with a cycle it never does, so the retry predicate never returns. Impact: the caller hangs indefinitely inside the retry check instead of getting a result.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1490,
+      "output_tokens": 477,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3712,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "8d370141e2500f80"
+  },
+  "raw": {
+    "id": "msg_011CgLH5taDQS9B4h1SqTi1z",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/retry.py\",\"line\":180,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The cycle guard was removed from the __cause__ walk, so a cyclic exception chain now loops forever instead of terminating.\",\"rationale\":\"Trigger: the retried function raises an exception whose __cause__ chain cycles, for example a.__cause__ = b and b.__cause__ = a, and no exception in the cycle matches exception_cause_types. Mechanism: the while loop at line 180 only exits when exc becomes None, and with a cycle it never does, so the retry predicate never returns. Impact: the caller hangs indefinitely inside the retry check instead of getting a result.\",\"confidence\":0.6}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1490,
+      "output_tokens": 477,
+      "output_tokens_details": {
+        "thinking_tokens": 229
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

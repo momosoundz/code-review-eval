@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0032",
+  "gold_id": "crv-0032-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.\n- failure path: A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.\n\nReviewer finding\n- description: The loop now removes only param.opts from the help option names and no longer removes param.secondary_opts, which the old code also excluded.\n- rationale: If a parameter declares a secondary option that matches a help option name, for example click.option('--foo/--help'), the old code excluded '--help' from the help names but the new code keeps it. The help option is then generated with a name already used by another parameter, so the conflict the old code avoided can reappear. This needs a parameter whose secondary option collides with a help option name, which is uncommon.\n",
+  "critique": "The finding names the same mechanism: the rewritten loop drops the secondary_opts removal, so a help name that collides with a parameter's secondary option stays in the list and the generated help option conflicts with it. The example uses a different option name, but the fault is the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 853,
+    "output_tokens": 99
+  }
+}

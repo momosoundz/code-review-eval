@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 592,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing the normalization of request paths that begin with '//' means such paths are now passed unchanged to urllib3, which the removed comment says could be misinterpreted.",
+        "rationale": "Trigger: a request to a URL whose path starts with two slashes, such as http://example.com//admin, so request.path_url is '//admin'. Because the guard that rewrites it to a single leading slash is gone, the path reaches urllib3 as '//admin'. Depending on how urllib3 builds the request line, the double slash may be read as an authority-relative prefix, so the request could target the wrong host or path. The impact is a request sent to an unintended destination or path. This is inferred from the removed comment, not verified against urllib3's behavior.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1474,
+      "output_tokens": 802,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4882,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "817643e7c96487de"
+  },
+  "raw": {
+    "id": "msg_011CgLTF5g8L5DeUVX42BLTi",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/adapters.py\",\"line\":592,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"Removing the normalization of request paths that begin with '//' means such paths are now passed unchanged to urllib3, which the removed comment says could be misinterpreted.\",\"rationale\":\"Trigger: a request to a URL whose path starts with two slashes, such as http://example.com//admin, so request.path_url is '//admin'. Because the guard that rewrites it to a single leading slash is gone, the path reaches urllib3 as '//admin'. Depending on how urllib3 builds the request line, the double slash may be read as an authority-relative prefix, so the request could target the wrong host or path. The impact is a request sent to an unintended destination or path. This is inferred from the removed comment, not verified against urllib3's behavior.\",\"confidence\":0.55}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1474,
+      "output_tokens": 802,
+      "output_tokens_details": {
+        "thinking_tokens": 511
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

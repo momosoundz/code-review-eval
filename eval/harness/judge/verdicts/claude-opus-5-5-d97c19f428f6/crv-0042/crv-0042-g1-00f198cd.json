@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0042",
+  "gold_id": "crv-0042-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The missing or invalid CA bundle path check in cert_verify emits warnings.warn instead of raising OSError, so the failure no longer stops the request.\n- failure path: A user passes verify=\"/etc/ssl/missing.pem\" (or certifi returns an empty path); only a warning is emitted and execution continues to configure the connection with a nonexistent bundle, producing a later, misleading SSL or TypeError at connect time instead of the clear OSError.\n\nReviewer finding\n- description: The missing-CA-bundle check now emits a warning instead of raising OSError, so a nonexistent cert_loc is passed on to urllib3 instead of failing fast with a clear error.\n- rationale: Trigger: verify is True (or unset), cert_loc is falsy, and DEFAULT_CA_BUNDLE_PATH does not exist on disk, for example when requests runs from a zip archive where certifi.where() points inside the archive. Mechanism: the changed code only calls warnings.warn, so execution continues with an invalid path and conn.ca_certs is set to it. Impact: the user sees a generic SSL or FileNotFound error from deeper in the stack, or a warning, rather than the explicit 'Could not find a suitable TLS CA certificate bundle' OSError. The warn-instead-of-raise change is not part of the announced commit intent.\n",
+  "critique": "The finding names the same mechanism as the label: the missing CA bundle path check in cert_verify calls warnings.warn instead of raising OSError. Execution then continues with a nonexistent bundle path and fails later with a misleading error. The trigger scenario differs slightly (a default bundle path inside a zip versus a user-supplied path), but the defect is the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 976,
+    "output_tokens": 134
+  }
+}

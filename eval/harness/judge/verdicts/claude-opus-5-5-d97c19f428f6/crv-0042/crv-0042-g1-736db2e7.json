@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0042",
+  "gold_id": "crv-0042-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The missing or invalid CA bundle path check in cert_verify emits warnings.warn instead of raising OSError, so the failure no longer stops the request.\n- failure path: A user passes verify=\"/etc/ssl/missing.pem\" (or certifi returns an empty path); only a warning is emitted and execution continues to configure the connection with a nonexistent bundle, producing a later, misleading SSL or TypeError at connect time instead of the clear OSError.\n\nReviewer finding\n- description: The extract_zipped_paths call was removed, so DEFAULT_CA_BUNDLE_PATH is used directly. When the bundle lives inside a zip archive (zipapp or egg), the path does not exist on disk.\n- rationale: Trigger: requests is run from a zipapp with a bundled certifi. The path points inside the zip, so os.path.exists is false. Previously the file was extracted. Now verification fails or, combined with the warn-only change, silently proceeds without a valid CA bundle.\n",
+  "critique": "The finding is about the extract_zipped_paths call being removed, which leaves the bundle path pointing inside a zip archive. The labeled defect is the CA bundle check in cert_verify emitting a warning instead of raising OSError. The finding mentions the warn-only change only in passing, as something that makes its own issue worse, so it describes a different root cause.",
+  "verdict": "no_match",
+  "usage": {
+    "input_tokens": 858,
+    "output_tokens": 134
+  }
+}

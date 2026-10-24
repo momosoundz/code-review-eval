@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3395,
+        "severity": "medium",
+        "category": "wrong_operator",
+        "description": "The separator condition was inverted to `not any_prefix_is_slash`, so ordinary options are joined with \"; \" and slash-prefixed options with \" / \", the reverse of the original behavior.",
+        "rationale": "Trigger: any option such as `--verbose` with `-v` and no slash prefix. The new expression evaluates to \"; \" because any_prefix_is_slash is False, so the help left column renders as `-v; --verbose` instead of `-v, --verbose`. This changes help output for nearly every option, which users and docs tests would observe.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2052,
+      "output_tokens": 453,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 2742,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "89fb7d0aa8b11cc7"
+  },
+  "raw": {
+    "id": "msg_011CgLGizJffUDn6AZ8jJtjg",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":3395,\"severity\":\"medium\",\"category\":\"wrong_operator\",\"description\":\"The separator condition was inverted to `not any_prefix_is_slash`, so ordinary options are joined with \\\"; \\\" and slash-prefixed options with \\\" / \\\", the reverse of the original behavior.\",\"rationale\":\"Trigger: any option such as `--verbose` with `-v` and no slash prefix. The new expression evaluates to \\\"; \\\" because any_prefix_is_slash is False, so the help left column renders as `-v; --verbose` instead of `-v, --verbose`. This changes help output for nearly every option, which users and docs tests would observe.\",\"confidence\":0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2052,
+      "output_tokens": 453,
+      "output_tokens_details": {
+        "thinking_tokens": 215
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

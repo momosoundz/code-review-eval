@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0024",
+  "gold_id": "crv-0024-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: Argument.get_help_record returns self.help unchanged, so the second element of the tuple is None for an undocumented argument even though format_arguments now feeds every record straight into formatter.write_dl without a fallback.\n- failure path: A command declares two arguments and sets help on only one; running it with --help makes write_dl measure and wrap a None description and the help command crashes with a TypeError instead of printing usage.\n\nReviewer finding\n- description: get_help_record is documented to give an undocumented argument an empty description, but it returns self.make_metavar(ctx), self.help. When help is None, the tuple's second element is None rather than \"\".\n- rationale: Trigger: a command where at least one Argument has help set and another has help=None. format_help_text then calls formatter.write_dl with a (metavar, None) row. write_dl handles the second element as a string (wrapping/measuring), so it raises a TypeError or AttributeError and --help crashes. The old code substituted \"\" for this case.\n",
+  "critique": "The finding names the same mechanism: get_help_record returns self.help unchanged, so an undocumented argument yields None, and write_dl then crashes while wrapping or measuring that None. It also gives the same trigger, a mix of documented and undocumented arguments with --help. It attributes the call to format_help_text rather than format_arguments, but the faulty operation and the failure are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 848,
+    "output_tokens": 140
+  }
+}

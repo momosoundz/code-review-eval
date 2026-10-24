@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0032",
+  "gold_id": "crv-0032-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.\n- failure path: A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.\n\nReviewer finding\n- description: The loop no longer removes a parameter's secondary_opts from the help option names, so a help name that is also a secondary option of another parameter (e.g. a flag declared as \"--x/-h\") is now kept as a help name.\n- rationale: Trigger: a command has a parameter whose secondary_opts includes a default help name such as \"-h\". Before this change that name was removed from the help names, so no conflict arose. After the change, the help option keeps \"-h\" as well, so the name is claimed twice and the parser or help behavior can conflict or resolve to the wrong option. Impact: the user may see a conflicting-option error or have \"-h\" trigger help instead of the intended flag. I am not certain the removal was intended, which is why confidence is moderate.\n",
+  "critique": "The finding pins down the same mechanism as the label: the rewritten loop no longer removes secondary_opts from the help names. It also gives the same failure: a flag declared like '--x/-h' keeps -h as a help name, so `-h` is claimed twice and can trigger help instead of the flag.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 925,
+    "output_tokens": 113
+  }
+}

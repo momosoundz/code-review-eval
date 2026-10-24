@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1321,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The guard `all(arg.help is not None for arg in args)` hides the whole Positional arguments section unless every argument has help. The docstring says the section is written if at least one argument is documented.",
+        "rationale": "Trigger: a command with two positional arguments, where only one has help text. all() returns False, so the section is skipped and the documented argument never appears in help. The same expression is also True for a command with no arguments, so an empty 'Positional arguments' heading is written. Impact: users lose documented positional arguments from --help, and commands without arguments get a spurious empty section.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1866,
+      "output_tokens": 787,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5029,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "f5016dccaeddfb54"
+  },
+  "raw": {
+    "id": "msg_011CgLGgTVCRobREAVUY6bov",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1321,\"severity\":\"high\",\"category\":\"wrong_operator\",\"description\":\"The guard `all(arg.help is not None for arg in args)` hides the whole Positional arguments section unless every argument has help. The docstring says the section is written if at least one argument is documented.\",\"rationale\":\"Trigger: a command with two positional arguments, where only one has help text. all() returns False, so the section is skipped and the documented argument never appears in help. The same expression is also True for a command with no arguments, so an empty 'Positional arguments' heading is written. Impact: users lose documented positional arguments from --help, and commands without arguments get a spurious empty section.\",\"confidence\":0.85}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1866,
+      "output_tokens": 787,
+      "output_tokens_details": {
+        "thinking_tokens": 550
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

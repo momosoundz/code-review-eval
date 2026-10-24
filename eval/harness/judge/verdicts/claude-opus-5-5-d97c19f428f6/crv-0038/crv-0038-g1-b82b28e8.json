@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0038",
+  "gold_id": "crv-0038-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: Response.__init__ reads self.raw.reason to initialize reason, but raw has no underlying response object yet at construction time, so the attribute access dereferences None.\n- failure path: Any call that builds a Response, such as every adapter.send or a plain Response(), raises AttributeError ('NoneType' object has no attribute 'reason') before the object is populated, so no request can complete.\n\nReviewer finding\n- description: Response.__init__ now reads self.raw.reason, but self.raw is None on a freshly constructed Response. The adapter sets raw and reason after construction, so the new line is likely to raise.\n- rationale: Trigger: any bare `requests.Response()`, which is common in tests and mocks, or any code path that builds a Response before assigning raw. `self.raw` is initialized to None before this line, so `None.reason` raises AttributeError. Even when raw is set, urllib3 raw.reason can be None, so the `str` type is not honored. Impact: constructing Response crashes.\n",
+  "critique": "The finding and the label describe the same mechanism. Response.__init__ dereferences self.raw.reason while raw is None at construction, which raises AttributeError and crashes every Response construction. The extra note about urllib3 reason being None is incidental and does not change this.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 856,
+    "output_tokens": 102
+  }
+}

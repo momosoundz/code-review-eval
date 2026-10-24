@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0026",
+  "gold_id": "crv-0026-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The guard uses all(...) instead of any(...) over the arguments' help attributes, so the section is gated on every argument being documented rather than on at least one.\n- failure path: A command with arguments SRC (help set) and DST (no help) prints no 'Positional arguments' section at all in --help, silently dropping the documented text; conversely a command with zero arguments satisfies all([]) and prints an empty 'Positional arguments' header on every --help.\n\nReviewer finding\n- description: The guard uses all() where the docstring describes an at-least-one-documented rule. If any positional argument lacks help, the whole Positional arguments section is hidden, even when other arguments have help text.\n- rationale: Trigger: a command with two arguments, one with help='file to read' and one with no help. Previously the documented argument was listed. Now all() is False, so no section is written and the help text disappears. The same guard also makes an empty section appear for commands with no arguments, since all() of an empty list is True and the heading is written with an empty body. Impact: help output loses documented positional arguments, and commands with no arguments show an empty heading.\n",
+  "critique": "The finding identifies the same mechanism: all() is used where any() is needed. It describes both failure modes, a missing section when only some arguments have help and an empty header for zero arguments because all([]) is True.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 888,
+    "output_tokens": 81
+  }
+}

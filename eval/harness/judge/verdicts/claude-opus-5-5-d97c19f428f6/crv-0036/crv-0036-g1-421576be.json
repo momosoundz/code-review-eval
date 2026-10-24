@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0036",
+  "gold_id": "crv-0036-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The HeadersType alias and Request.headers annotation are widened from Mapping[str, str | bytes] to Mapping[str, object], so the static check that header values are text or bytes before they reach the wire is removed.\n- failure path: A caller passes headers={\"X-Count\": 3} or a list-valued header; the type checker accepts it and the non-string value reaches header preparation at runtime, where it is rejected (or serialized unexpectedly) instead of being caught at the API boundary.\n\nReviewer finding\n- description: HeadersType was widened from MutableMapping[str, str | bytes] to Mapping[str, object], which loosens the type contract for headers.\n- rationale: Type-only change: no runtime path is altered, and the widened alias means static checking no longer rejects non-string header values that the runtime code later expects to be str or bytes. This is a type-level concern rather than a demonstrated behavioral defect.\n",
+  "critique": "The finding names the same change: HeadersType is widened to Mapping[str, object]. It describes the same consequence, that static checking no longer rejects non-string header values the runtime expects to be str or bytes. Downplaying it as type-only does not change that the mechanism matches the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 828,
+    "output_tokens": 106
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0014",
+  "gold_id": "crv-0014-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the wrapper now clears and reuses one statistics dict for every call instead of giving each call its own, so concurrent or nested calls of the same decorated function write into the same dict\n- failure path: two threads (or two concurrent awaits of the async wrapper) call the same decorated function; the second call's stats.clear() wipes the first call's start_time and attempt_number, and both read a merged, wrong statistics view afterwards\n\nReviewer finding\n- description: The wrapper now clears and reuses one statistics dict shared by every call. Concurrent or nested calls to the same decorated function therefore clear and overwrite each other's statistics, so the values read from the wrapper can belong to a different call.\n- rationale: Trigger: two threads call the same @retry-decorated function at once, or a retried function recurses into itself. Mechanism: each call runs stats.clear() on the single shared dict, and copy's begin() clears it again mid-run, so attempt_number and related fields from one call are overwritten by another. Impact: users reading wrapped_f.statistics or the retry state see silently wrong statistics. The original code gave each call its own dict by rebinding, which avoided this.\n",
+  "critique": "The finding describes the same mechanism as the label: one shared statistics dict is cleared and reused on every call. Concurrent or nested calls of the same decorated function then wipe and overwrite each other's start_time and attempt_number fields, producing wrong statistics. It also notes that the original per-call rebinding avoided this.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 909,
+    "output_tokens": 120
+  }
+}

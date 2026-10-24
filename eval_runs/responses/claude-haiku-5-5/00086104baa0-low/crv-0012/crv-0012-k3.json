@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 213,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The early-return shortcut fires when the exponent is below the threshold where the backoff would reach max, so it returns the maximum wait during the early attempts instead of the small exponential value.",
+        "rationale": "Trigger: wait_exponential(multiplier=1, max=100, exp_base=2) on attempt 1 gives exponent 0, which is less than log2(100) \u2248 6.6, so the new branch returns max(0, min)=0 vs max=100 and returns 100 instead of 1. The original code computes multiplier*exp_base**exponent and clamps it to max, so early attempts wait only briefly. Mechanism: the comparison is inverted; the shortcut should apply when exponent >= log(max/multiplier, exp_base). Impact: every retry waits the full max delay from the first attempt, causing excessive latency and wrong backoff schedules for all users of wait_exponential with a max.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1695,
+      "output_tokens": 744,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4250,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "9b6bc2ac461b1171"
+  },
+  "raw": {
+    "id": "msg_011CgLGDufZHHmfpuoxyq9RR",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\": [{\"file\": \"tenacity/wait.py\", \"line\": 213, \"severity\": \"high\", \"category\": \"wrong_condition\", \"description\": \"The early-return shortcut fires when the exponent is below the threshold where the backoff would reach max, so it returns the maximum wait during the early attempts instead of the small exponential value.\", \"rationale\": \"Trigger: wait_exponential(multiplier=1, max=100, exp_base=2) on attempt 1 gives exponent 0, which is less than log2(100) \u2248 6.6, so the new branch returns max(0, min)=0 vs max=100 and returns 100 instead of 1. The original code computes multiplier*exp_base**exponent and clamps it to max, so early attempts wait only briefly. Mechanism: the comparison is inverted; the shortcut should apply when exponent >= log(max/multiplier, exp_base). Impact: every retry waits the full max delay from the first attempt, causing excessive latency and wrong backoff schedules for all users of wait_exponential with a max.\", \"confidence\": 0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1695,
+      "output_tokens": 744,
+      "output_tokens_details": {
+        "thinking_tokens": 386
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

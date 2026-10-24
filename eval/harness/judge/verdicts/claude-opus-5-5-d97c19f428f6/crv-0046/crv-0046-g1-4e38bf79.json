@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0046",
+  "gold_id": "crv-0046-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: Sentinel loses its __reduce_ex__, so pickling a member falls back to Enum's default reduction by value, and the value object() cannot be looked up on unpickling\n- failure path: pickle.loads(pickle.dumps(UNSET)) rebuilds the member through Enum's default reduction by value; the reconstructed object() matches no Sentinel member, so unpickling raises ValueError; any parameter default holding UNSET that crosses a pickle boundary (multiprocessing, a cache) fails to load\n\nReviewer finding\n- description: Removing the custom __reduce_ex__ means pickling a Sentinel member now uses Enum's default reduction, which pickles the internal object() value and rebuilds the member by value.\n- rationale: Under the trigger of pickling UNSET or FLAG_NEEDS_VALUE (for example, a pickled Click parameter or context that holds the sentinel as a default), the default reduction serializes a fresh object() as the value. On unpickling, Sentinel(value) looks up a value that does not match the singleton's identity and raises ValueError, or yields a member that no longer compares identical to UNSET, so the identity checks used throughout Click fail. The impact is a crash or silently broken sentinel comparisons after a pickle round-trip.\n",
+  "critique": "The finding pins the cause on the removed __reduce_ex__, which makes pickling fall back to Enum's by-value reduction of an object() value. It also says the lookup on unpickling fails with ValueError. This is the same mechanism and failure as the label; the extra mention of a possible identity mismatch does not change the core defect.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 954,
+    "output_tokens": 123
+  }
+}

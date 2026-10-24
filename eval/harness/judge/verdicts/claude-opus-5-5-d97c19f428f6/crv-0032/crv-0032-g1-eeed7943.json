@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0032",
+  "gold_id": "crv-0032-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.\n- failure path: A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.\n\nReviewer finding\n- description: The loop that removed each parameter's secondary_opts from the help option names was dropped, so only primary opts are now excluded. A help name that is a secondary option of another parameter is no longer filtered out.\n- rationale: Trigger: a boolean flag such as '--color/--no-color' is defined and help_option_names includes '--no-color'. The old code removed '--no-color' via param.secondary_opts. The new code only pops param.opts, so '--no-color' stays in the result and is added as a help option that collides with the flag's secondary option. Impact: the parser can route '--no-color' to the help option or report a conflict, a behavior regression. The new docstring also says names reserved by another parameter are dropped, which is no longer true for secondary names.\n",
+  "critique": "The finding describes the same mechanism as the label: the rewrite removes only primary opts and no longer removes secondary_opts from the help names, so a help name that is another parameter's secondary option survives and collides with it. The finding's example ('--no-color') differs from the label's '-h', but the faulty operation and the way it fails are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 927,
+    "output_tokens": 123
+  }
+}

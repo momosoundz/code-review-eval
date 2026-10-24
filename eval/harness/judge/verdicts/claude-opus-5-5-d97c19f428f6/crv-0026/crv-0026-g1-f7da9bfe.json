@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0026",
+  "gold_id": "crv-0026-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The guard uses all(...) instead of any(...) over the arguments' help attributes, so the section is gated on every argument being documented rather than on at least one.\n- failure path: A command with arguments SRC (help set) and DST (no help) prints no 'Positional arguments' section at all in --help, silently dropping the documented text; conversely a command with zero arguments satisfies all([]) and prints an empty 'Positional arguments' header on every --help.\n\nReviewer finding\n- description: The guard uses all(arg.help is not None ...) but the new docstring and the commit intent say the section is written if at least one argument is documented. When some arguments have help and others do not, the whole Positional arguments section is now suppressed.\n- rationale: Trigger: a command with two positional arguments where only one has help text. Previously format_arguments wrote the section listing the documented argument. Now all() is False because the other argument's help is None, so the section is skipped and the documented argument disappears from the help output. The mechanism is the all() condition contradicting the docstring's 'if at least one is documented'. Impact: users running --help lose documented positional arguments silently.\n",
+  "critique": "The finding identifies the same faulty operation: the guard uses all() where any() is intended. It describes the same failure path, where a mix of documented and undocumented arguments suppresses the section and drops the documented one. It does not mention the empty-args case, but the core mechanism and primary trigger match.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 895,
+    "output_tokens": 110
+  }
+}

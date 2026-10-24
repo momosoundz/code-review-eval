@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/sessions.py",
+        "line": 671,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "The new `params` argument of `Session.get` is accepted but never forwarded to `self.request`, so the query parameters are silently discarded.",
+        "rationale": "Trigger: a caller runs `session.get(url, params={\"q\": \"x\"})`. The `params` value binds to the new named parameter and is not placed in `kwargs`, so `self.request(\"GET\", url, **kwargs)` runs without it. The request goes out without the query string, and the caller gets a response for the wrong resource or an error with no warning. This is a silent wrong result on a common API call.",
+        "confidence": 0.93
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1792,
+      "output_tokens": 412,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3125,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "902eaaa51a47b53b"
+  },
+  "raw": {
+    "id": "msg_011CgLGwrdASFN9e33coc5BL",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\": [{\"file\": \"src/requests/sessions.py\", \"line\": 671, \"severity\": \"high\", \"category\": \"wrong_variable_or_argument\", \"description\": \"The new `params` argument of `Session.get` is accepted but never forwarded to `self.request`, so the query parameters are silently discarded.\", \"rationale\": \"Trigger: a caller runs `session.get(url, params={\\\"q\\\": \\\"x\\\"})`. The `params` value binds to the new named parameter and is not placed in `kwargs`, so `self.request(\\\"GET\\\", url, **kwargs)` runs without it. The request goes out without the query string, and the caller gets a response for the wrong resource or an error with no warning. This is a silent wrong result on a common API call.\", \"confidence\": 0.93}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1792,
+      "output_tokens": 412,
+      "output_tokens_details": {
+        "thinking_tokens": 158
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

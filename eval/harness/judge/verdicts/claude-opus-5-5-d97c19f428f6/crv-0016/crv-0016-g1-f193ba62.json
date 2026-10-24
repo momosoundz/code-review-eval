@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0016",
+  "gold_id": "crv-0016-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The OR composition checks for retry_all when deciding whether to flatten an existing retry_any.\n- failure path: with `(A & B) | C`, the retry_all on the left is spliced into the retry_any as if it were a plain list of predicates, so the combination behaves as `A | B | C`: a retry fires when only A holds although the author required A and B together; no error is raised and the extra retries are silent\n\nReviewer finding\n- description: retry_any.__ror__ checks isinstance(other, retry_all) but then flattens other's retries into a retry_any, so an AND-combined condition is turned into an OR.\n- rationale: Trigger: evaluating retry_all(A, B) | retry_any(C, D) in the asyncio module. retry_base.__or__ delegates to retry_any.__ror__ with other=retry_all(A, B), which takes the isinstance(other, retry_all) branch and builds retry_any(A, B, C, D). Mechanism: the result is A or B or C or D, but the intended meaning is (A and B) or C or D. Impact: the retry policy retries in cases it should not, or stops retrying in cases it should, silently changing behavior. The isinstance check should be retry_any, as in the synchronous retry.py.\n",
+  "critique": "The finding matches the label's mechanism. The OR composition wrongly checks for retry_all and flattens it into a retry_any, so A AND B becomes A OR B. Both describe silent extra retries; the finding's example uses retry_any(C, D) on the right, but it is the same faulty branch.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 936,
+    "output_tokens": 113
+  }
+}

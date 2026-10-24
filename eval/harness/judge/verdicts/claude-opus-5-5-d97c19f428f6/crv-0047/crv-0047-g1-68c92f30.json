@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0047",
+  "gold_id": "crv-0047-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: an optional argument's metavar is wrapped in brackets without checking whether the type already bracketed it\n- failure path: an optional Choice argument renders in the usage line as [[foo|bar|baz]] with two pairs of brackets instead of [foo|bar|baz]\n\nReviewer finding\n- description: The removed `already_bracketed` guard means an optional argument whose type metavar already has brackets is now wrapped a second time, giving `[[VAR]]`.\n- rationale: Trigger: an optional Argument (required=False) whose `type.get_metavar` returns a bracketed string, for example a custom ParamType. Mechanism: `var = f\"[{var}]\"` runs unconditionally for non-required arguments, so the existing brackets are not detected. Impact: usage and help text shows doubled brackets such as `[[VAR]]`, a regression from the previous behavior.\n",
+  "critique": "The finding describes the same mechanism as the label. It says optional arguments get their metavar wrapped in brackets unconditionally, without checking whether it was already bracketed, which produces doubled brackets in the usage line. The example uses a custom ParamType rather than Choice, but the faulty operation and the failure are identical.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 819,
+    "output_tokens": 119
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0028",
+  "gold_id": "crv-0028-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The separator selection negates any_prefix_is_slash, picking ' / ' exactly when an option spelling already starts with a slash and '; ' otherwise.\n- failure path: An option declared as --shout/--no-shout renders in --help as '--shout; --no-shout', and a Windows-style /debug;/no-debug option renders as '/debug / /no-debug', where the slash separator is indistinguishable from the slash prefix of the names.\n\nReviewer finding\n- description: The separator condition was inverted when moving the join into get_help_spec. The original chose \"; \" when any_prefix_is_slash was true and \" / \" otherwise. The new code uses \"; \" when the flag is false and \" / \" when it is true, so the help spelling separators are swapped for every option.\n- rationale: Trigger: any option rendered in help, such as a plain `--verbose`/`-v` option (flag false) or a slash-prefixed `--shout/--no-shout` option (flag true). Mechanism: the ternary branches are swapped relative to the original line. Impact: `--help` output shows `-v; --verbose` instead of `-v / --verbose` for ordinary options, and slash options get the wrong separator, which changes user-visible help text.\n",
+  "critique": "Both the finding and the label place the defect in the inverted ternary on any_prefix_is_slash: it picks ' / ' when a spelling starts with a slash and '; ' otherwise, so the separators are swapped in help output. The finding wrongly calls --shout/--no-shout slash-prefixed, but that is a slip in the example, not a different mechanism.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 927,
+    "output_tokens": 257
+  }
+}

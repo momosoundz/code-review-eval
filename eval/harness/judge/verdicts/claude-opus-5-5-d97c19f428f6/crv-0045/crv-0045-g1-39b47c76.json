@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0045",
+  "gold_id": "crv-0045-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the walk over exc.__cause__ has no cycle guard, so a chain that loops back on itself never reaches None\n- failure path: an exception raised with `raise e from e`, or two exceptions that cause each other, makes retry_if_exception_cause_type spin forever at full CPU; the stop conditions never run and the caller hangs\n\nReviewer finding\n- description: The cycle-detection guard was removed from the __cause__ chain walk, so a cyclic cause chain now makes the while loop run forever.\n- rationale: Trigger: an exception whose __cause__ chain loops back on itself, such as e.__cause__ = e, or e1.__cause__ = e2 with e2.__cause__ = e1, raised from a retried function. Mechanism: the loop only stops when exc becomes None, and with a cycle it never does, so the retry predicate never returns. Impact: the retrying call hangs indefinitely instead of deciding whether to retry. Such cycles need explicit manual assignment, so the trigger is uncommon.\n",
+  "critique": "The finding describes the same defect as the label. The __cause__ walk has no cycle guard, so a self-referencing or mutual cause chain never reaches None, the loop never ends, and the retry predicate hangs. Its remark that the trigger is uncommon changes severity, not the mechanism.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 867,
+    "output_tokens": 111
+  }
+}

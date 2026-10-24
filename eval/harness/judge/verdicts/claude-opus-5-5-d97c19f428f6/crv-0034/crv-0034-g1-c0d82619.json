@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0034",
+  "gold_id": "crv-0034-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: After stripping ANSI codes the prompt text is also passed through str.strip(), which removes the whitespace at the end of the prompt that separates it from the user's typed input.\n- failure path: click.prompt(\"Name\") builds the prompt 'Name: '; when the stream does not support color (piped output, CliRunner, NO_COLOR) the prompt is shown as 'Name:' with the cursor glued to the colon, while on a color-capable terminal the same call keeps the trailing space, so transcripts differ between the two environments.\n\nReviewer finding\n- description: The new code calls .strip() on the prompt text, which removes trailing whitespace as well as the ANSI codes, so a prompt such as \"Name: \" is passed to input() as \"Name:\".\n- rationale: Trigger: prompt(\"Name: \") or confirm(\"Continue? \") runs while the destination stream is not a TTY, so should_strip_ansi returns true even if the text has no ANSI codes. Mechanism: strip_ansi(text).strip() drops the trailing space, so the prompt is shown with no separator before the cursor. Impact: non-TTY and CliRunner output changes for every prompt that ends in a space, and tests that compare that output will fail. Only the ANSI removal was intended, so the whitespace trim is an unintended side effect.\n",
+  "critique": "The finding points to the same cause: .strip() after strip_ansi in the non-color path removes the trailing space, so 'Name: ' turns into 'Name:' when output goes to a non-TTY or CliRunner. That is the same faulty operation, failing the same way.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 961,
+    "output_tokens": 103
+  }
+}

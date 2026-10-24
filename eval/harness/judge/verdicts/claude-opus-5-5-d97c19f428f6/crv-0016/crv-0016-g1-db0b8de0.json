@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0016",
+  "gold_id": "crv-0016-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The OR composition checks for retry_all when deciding whether to flatten an existing retry_any.\n- failure path: with `(A & B) | C`, the retry_all on the left is spliced into the retry_any as if it were a plain list of predicates, so the combination behaves as `A | B | C`: a retry fires when only A holds although the author required A and B together; no error is raised and the extra retries are silent\n\nReviewer finding\n- description: In async retry_any.__ror__, the flatten check tests isinstance(other, retry_all), but it should test retry_any. If `other` is a retry_all, its retries are spliced into a retry_any, which changes the semantics from AND to OR.\n- rationale: Trigger: `retry_all(a, b) | async_retry_any(c)`. The result is retry_any(a, b, c), which retries when a OR b OR c. The correct result is retry_any(retry_all(a, b), c). Impact: silent wrong retry decisions. The same bug is in the async retry_all.__rand__ at line 134, which checks retry_all and is correct. The sync version at tenacity/retry.py line 280 correctly checks retry_any.\n",
+  "critique": "The finding identifies the same mechanism. The OR composition (__ror__) tests isinstance(other, retry_all) when deciding whether to flatten, so a retry_all's predicates get spliced into a retry_any. That turns (A & B) | C into A | B | C and produces silent extra retries. It matches the label's root cause and failure path.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 907,
+    "output_tokens": 127
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0047",
+  "gold_id": "crv-0047-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: an optional argument's metavar is wrapped in brackets without checking whether the type already bracketed it\n- failure path: an optional Choice argument renders in the usage line as [[foo|bar|baz]] with two pairs of brackets instead of [foo|bar|baz]\n\nReviewer finding\n- description: The removed `already_bracketed` check means a metavar already wrapped in brackets is now wrapped a second time when the argument is optional.\n- rationale: Trigger: an optional Argument whose type's get_metavar returns a bracketed string, or a custom type with metavar like \"[FILE]\", with required=False. The code now produces \"[[FILE]]\" in usage and help output. The same applies to a deprecated argument, since the \"!\" is appended after the bracket check was removed, which would give \"[[FILE]!]\".\n",
+  "critique": "The finding says an optional argument's metavar gets wrapped in brackets with no check for existing brackets, which produces double brackets in usage. That is the labeled mechanism. Its example uses a custom bracketed metavar instead of Choice, but it covers any type whose get_metavar returns a bracketed string, and Choice is one of those.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 795,
+    "output_tokens": 125
+  }
+}

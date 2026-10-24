@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0022",
+  "gold_id": "crv-0022-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The exception-message predicate requires the regular expression to match the entire exception message.\n- failure path: Given an exception message with a matching prefix followed by additional diagnostic text, the retry condition returns false and Tenacity propagates the exception without retrying.\n\nReviewer finding\n- description: The match check changed from re.match (prefix match) to fullmatch (whole-string match), which the commit title does not mention.\n- rationale: Trigger: retry_if_exception_message(match=\"Connection\") applied to an exception whose str is \"Connection refused\". Before, self.match.match succeeded on the prefix and the retry fired. Now fullmatch requires the entire string to match, so it returns False and the exception is not retried. Any existing user pattern that relied on prefix matching silently stops retrying, which is a silent behavior regression.\n",
+  "critique": "The finding names the same mechanism as the label: the switch to fullmatch makes the regex match the whole message, so a message with a matching prefix plus extra text (\"Connection refused\") returns False and the exception is not retried.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 795,
+    "output_tokens": 88
+  }
+}

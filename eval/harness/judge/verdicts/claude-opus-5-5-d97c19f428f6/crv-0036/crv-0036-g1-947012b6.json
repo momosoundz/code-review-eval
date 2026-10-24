@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0036",
+  "gold_id": "crv-0036-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The HeadersType alias and Request.headers annotation are widened from Mapping[str, str | bytes] to Mapping[str, object], so the static check that header values are text or bytes before they reach the wire is removed.\n- failure path: A caller passes headers={\"X-Count\": 3} or a list-valued header; the type checker accepts it and the non-string value reaches header preparation at runtime, where it is rejected (or serialized unexpectedly) instead of being caught at the API boundary.\n\nReviewer finding\n- description: The commit moves headers back to Mapping, but HeadersType was changed to Mapping[str, object], where the old alias used str | bytes values. Header values of any type now type-check.\n- rationale: Trigger: a caller passes headers={'X-Count': 5} or a None value. Previously the type checker rejected this. Now it passes, and at runtime check_header_validity raises InvalidHeader for non-str/bytes values. Users lose static checking for a real runtime error. Restoring Mapping[str, str | bytes] would match the title.\n",
+  "critique": "The finding names the same change: HeadersType is widened from Mapping[str, str | bytes] to Mapping[str, object]. It also gives the same consequence, where non-str/bytes values pass the type checker and then fail at runtime in header validation.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 874,
+    "output_tokens": 96
+  }
+}

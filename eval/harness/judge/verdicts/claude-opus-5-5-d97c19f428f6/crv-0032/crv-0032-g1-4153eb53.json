@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0032",
+  "gold_id": "crv-0032-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.\n- failure path: A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.\n\nReviewer finding\n- description: The loop now only removes each parameter's primary `opts`, dropping the earlier removal of `secondary_opts`. A help option name that matches a parameter's secondary option (for example `--no-verbose` from `--verbose/--no-verbose`) is no longer excluded.\n- rationale: Trigger: a command has a flag `--verbose/--no-verbose` and `help_option_names` includes `--no-verbose`. Before the change, `--no-verbose` was removed from the help names, so it was not claimed twice. Now it stays, so the help option is registered with a name the flag already uses. Impact: the parser sees a conflicting option name, so one of the two options silently stops working.\n",
+  "critique": "The finding names the same mechanism: the loop removes only primary opts and no longer removes secondary_opts, so a help name matching a secondary option stays and conflicts. The example uses a different option, but the faulty operation and the way it fails are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 908,
+    "output_tokens": 95
+  }
+}

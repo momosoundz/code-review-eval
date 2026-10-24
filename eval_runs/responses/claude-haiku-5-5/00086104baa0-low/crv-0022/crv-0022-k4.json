@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 244,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "Changing `self.match.match(...)` to `self.match.fullmatch(...)` silently changes matching semantics: a pattern that previously matched a prefix of the exception string now requires the entire string to match.",
+        "rationale": "Trigger: retry_if_exception_message(match=\"Connection\") and an exception with str \"Connection refused\". The old re.match code returned True, so the retry happened. With fullmatch the check returns False, so the retry predicate no longer fires and the exception is not retried. Users who relied on prefix/partial matching get silently different retry behavior with no error raised.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1732,
+      "output_tokens": 797,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4773,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "51789677b9874d69"
+  },
+  "raw": {
+    "id": "msg_011CgLGaH9gr5r1hf4s5dnef",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/retry.py\",\"line\":244,\"severity\":\"high\",\"category\":\"wrong_operator\",\"description\":\"Changing `self.match.match(...)` to `self.match.fullmatch(...)` silently changes matching semantics: a pattern that previously matched a prefix of the exception string now requires the entire string to match.\",\"rationale\":\"Trigger: retry_if_exception_message(match=\\\"Connection\\\") and an exception with str \\\"Connection refused\\\". The old re.match code returned True, so the retry happened. With fullmatch the check returns False, so the retry predicate no longer fires and the exception is not retried. Users who relied on prefix/partial matching get silently different retry behavior with no error raised.\",\"confidence\":0.85}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1732,
+      "output_tokens": 797,
+      "output_tokens_details": {
+        "thinking_tokens": 549
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

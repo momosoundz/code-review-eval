@@ -1,0 +1,72 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 218,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "The wrapper's statistics dict is cleared and then shared by every call, so concurrent awaits of the same decorated function write into one dict and reset each other's statistics.",
+        "rationale": "Trigger: two coroutines await the same decorated function at the same time. Mechanism: each call runs stats.clear() on the shared wrapper dict and then assigns that dict to its copy's _local.statistics, so attempt_number and start_time from one call are overwritten by the other. Impact: statistics read from the wrapper (or from retry_state) are silently wrong. The original code gave each call its own copy.statistics dict, which avoided this.",
+        "confidence": 0.6
+      },
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "The sync wrapper clears and reuses one shared statistics dict across calls, so concurrent threads calling the same decorated function corrupt each other's statistics.",
+        "rationale": "Trigger: two threads call the same decorated function at once. Mechanism: stats.clear() and the shared dict assignment on lines 377-379 let both calls write to the same dict, which the original per-call copy.statistics avoided. Impact: stats such as attempt_number are interleaved or reset, giving silently wrong values.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2371,
+      "output_tokens": 2201,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 10734,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "9d8434df28d15f00"
+  },
+  "raw": {
+    "id": "msg_011CgLGHqWPBPx4vNiZ7nhB1",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/asyncio/__init__.py\",\"line\":218,\"severity\":\"medium\",\"category\":\"concurrency\",\"description\":\"The wrapper's statistics dict is cleared and then shared by every call, so concurrent awaits of the same decorated function write into one dict and reset each other's statistics.\",\"rationale\":\"Trigger: two coroutines await the same decorated function at the same time. Mechanism: each call runs stats.clear() on the shared wrapper dict and then assigns that dict to its copy's _local.statistics, so attempt_number and start_time from one call are overwritten by the other. Impact: statistics read from the wrapper (or from retry_state) are silently wrong. The original code gave each call its own copy.statistics dict, which avoided this.\",\"confidence\":0.6},{\"file\":\"tenacity/__init__.py\",\"line\":377,\"severity\":\"medium\",\"category\":\"concurrency\",\"description\":\"The sync wrapper clears and reuses one shared statistics dict across calls, so concurrent threads calling the same decorated function corrupt each other's statistics.\",\"rationale\":\"Trigger: two threads call the same decorated function at once. Mechanism: stats.clear() and the shared dict assignment on lines 377-379 let both calls write to the same dict, which the original per-call copy.statistics avoided. Impact: stats such as attempt_number are interleaved or reset, giving silently wrong values.\",\"confidence\":0.55}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2371,
+      "output_tokens": 2201,
+      "output_tokens_details": {
+        "thinking_tokens": 1726
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

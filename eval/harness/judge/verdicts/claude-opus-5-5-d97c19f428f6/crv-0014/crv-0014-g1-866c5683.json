@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0014",
+  "gold_id": "crv-0014-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The copied retry instance receives the original instance\u2019s statistics dictionary instead of the wrapper\u2019s shared dictionary.\n- failure path: When the wrapped function runs, updates go to the original retry object\u2019s statistics while decorators still expose the separate wrapper dictionary, so the observed statistics remain empty or stale.\n\nReviewer finding\n- description: The sync wrapper assigns `copy._local.statistics = self._local.statistics`, so the copy keeps its own stats dict rather than the shared `stats` dict. The async path assigns `stats` to both. As a result `wrapped_f.statistics` is cleared on each call but never updated during retries.\n- rationale: Trigger: call any function decorated with sync @retry. `stats.clear()` empties the dict that `wrapped_f.statistics` points to. `copy._local.statistics` is set to `self._local.statistics`, which is the previous dict and not `stats`. The retry loop writes attempt_number and other values to that dict, so `wrapped_f.statistics` stays empty. This defeats the purpose of the change, and `fn.statistics` shows `{}` after the call. The same line also hands every call the same prior dict, which breaks isolation between nested or recursive calls.\n",
+  "critique": "The finding identifies the same mechanism. The copy is given `self._local.statistics`, the original instance's dict, instead of the shared `stats` dict. Updates therefore go to the wrong dict, and `wrapped_f.statistics` stays empty.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 935,
+    "output_tokens": 99
+  }
+}

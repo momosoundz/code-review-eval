@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0016",
+  "gold_id": "crv-0016-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The OR composition checks for retry_all when deciding whether to flatten an existing retry_any.\n- failure path: with `(A & B) | C`, the retry_all on the left is spliced into the retry_any as if it were a plain list of predicates, so the combination behaves as `A | B | C`: a retry fires when only A holds although the author required A and B together; no error is raised and the extra retries are silent\n\nReviewer finding\n- description: The async retry_any.__ror__ flattens when `other` is a retry_all, merging its sub-retries into an OR group. That changes the meaning of the expression.\n- rationale: Trigger: `(retry_if_a & retry_if_b) | retry_if_c` in the asyncio module, where the left side is a retry_all. The left operand goes to retry_any.__ror__ with other=retry_all, so it returns retry_any(A, B, C). The intended result is any(all(A, B), C). A retry that should require both A and B now fires when only A holds, so retries happen when they should not. The sync retry.py version checks isinstance(other, retry_any) correctly, so the two modules diverge.\n",
+  "critique": "The finding names the same faulty check: the OR composition flattens when the other operand is a retry_all instead of a retry_any. It also gives the same consequence, `(A & B) | C` behaving as `A | B | C`, so retries fire when only A holds. The mechanism and the failure path both match the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 895,
+    "output_tokens": 113
+  }
+}

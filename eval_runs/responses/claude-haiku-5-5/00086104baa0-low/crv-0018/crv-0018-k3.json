@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 258,
+        "severity": "high",
+        "category": "wrong_literal_or_default",
+        "description": "The new `min` parameter defaults to 1 second, so existing callers that rely on the default now get a 1-second floor on every wait. Before this change the effective floor was 0.",
+        "rationale": "Trigger: any caller such as wait_exponential_jitter(initial=0.1) or wait_exponential_jitter(initial=0.01) that does not pass min. Mechanism: the return expression max(max(0, self.min), min(result, self.max)) now clamps every result up to self.min=1, so the sub-second backoffs the caller configured are silently replaced by 1-second waits. Impact: retry timing changes for existing users after upgrade, with the configured initial value ignored whenever it is below 1 second.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2020,
+      "output_tokens": 680,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4474,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "1182a1436f18c412"
+  },
+  "raw": {
+    "id": "msg_011CgLGTzrybbTnT3KPJDFxo",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":258,\"severity\":\"high\",\"category\":\"wrong_literal_or_default\",\"description\":\"The new `min` parameter defaults to 1 second, so existing callers that rely on the default now get a 1-second floor on every wait. Before this change the effective floor was 0.\",\"rationale\":\"Trigger: any caller such as wait_exponential_jitter(initial=0.1) or wait_exponential_jitter(initial=0.01) that does not pass min. Mechanism: the return expression max(max(0, self.min), min(result, self.max)) now clamps every result up to self.min=1, so the sub-second backoffs the caller configured are silently replaced by 1-second waits. Impact: retry timing changes for existing users after upgrade, with the configured initial value ignored whenever it is below 1 second.\",\"confidence\":0.8}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2020,
+      "output_tokens": 680,
+      "output_tokens_details": {
+        "thinking_tokens": 390
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

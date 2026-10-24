@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0043",
+  "gold_id": "crv-0043-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: _run_wait decides whether to call the wait strategy by truthiness of self.wait instead of checking for the explicit no-wait values None and 0\n- failure path: a wait strategy object that is falsy, for example a user-defined strategy subclassing list or tuple to hold its parameters, or a strategy class that defines __len__ or __bool__, is never called: `if not self.wait` takes the no-wait branch, every retry sleeps 0 seconds and the configured backoff disappears without any error; under a flaky dependency the client hammers it at full speed\n\nReviewer finding\n- description: `if not self.wait` uses truthiness to detect \"no wait\", which is not equivalent to the removed `wait is None or wait == 0` check. Any wait object that defines `__bool__` or `__len__` returning falsy is silently treated as no wait.\n- rationale: Trigger: a user passes a wait callable whose instance is falsy, for example a custom class defining `__len__` or `__bool__`, or a wait_combine of an empty tuple, as in `wait_combine()`. The retry loop then skips calling it and sets upcoming_sleep to 0.0, so the user sees retries with no delay and no error. Another effect is that `self.wait` can now be None or 0 with the `wait_none` normalization removed, and any code that reads `retry.wait` expecting a callable gets None or 0 instead.\n",
+  "critique": "The finding names the same faulty check: `if not self.wait` relies on truthiness rather than an explicit None/0 test. It gives the same failure: a falsy strategy object (one defining __bool__ or __len__) is skipped, so retries sleep 0 with no error. The extra point about normalization is additional, but the core mechanism matches.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 985,
+    "output_tokens": 126
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0012",
+  "gold_id": "crv-0012-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The exponential cap check uses the reversed comparison and returns the cap while the computed delay is still below it.\n- failure path: With a retry attempt whose exponent is below the cap threshold, the wait strategy immediately returns the maximum delay instead of the smaller exponential delay.\n\nReviewer finding\n- description: The shortcut condition is inverted: it returns self.max when exponent is below the threshold log(max/multiplier, exp_base), i.e. when the computed backoff is still under the cap, instead of when it has reached the cap.\n- rationale: Trigger: wait_exponential(multiplier=1, max=100, exp_base=2) on the first retry (attempt_number=1, exponent=0). The threshold is log(100,2)\u22486.64, and 0<6.64, so the new branch returns max(0,min,100)=100 instead of the expected 1*2**0=1. The original code would have returned the small computed value. Early retries therefore wait the full max, and the backoff curve is wrong for nearly every attempt before the cap is reached; the operator sees much longer waits and reduced retry throughput.\n",
+  "critique": "The finding describes the same inverted cap comparison: when the exponent is below the threshold, the code returns max even though the computed delay is still under the cap. This matches the labeled root cause and failure path.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 892,
+    "output_tokens": 79
+  }
+}

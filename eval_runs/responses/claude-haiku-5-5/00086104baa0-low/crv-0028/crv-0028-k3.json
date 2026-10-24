@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3395,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The separator condition was inverted to `not any_prefix_is_slash`, so the separator choice is backwards: options with slash prefixes get \"; \" and ordinary options get \" / \".",
+        "rationale": "The original code used `\"; \" if any_prefix_is_slash else \" / \"`. For a normal option such as `--verbose` with `-v`, any_prefix_is_slash is False, so the new expression yields \"; \", producing help text like `-v; --verbose` where it previously showed `-v, --verbose`-style output with \" / \". This changes the rendered help for every option with multiple spellings, and the help left column becomes wrong for the common case.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2052,
+      "output_tokens": 514,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3407,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "89fb7d0aa8b11cc7"
+  },
+  "raw": {
+    "id": "msg_011CgLGijrm17GdkLSssPpmJ",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":3395,\"severity\":\"high\",\"category\":\"wrong_operator\",\"description\":\"The separator condition was inverted to `not any_prefix_is_slash`, so the separator choice is backwards: options with slash prefixes get \\\"; \\\" and ordinary options get \\\" / \\\".\",\"rationale\":\"The original code used `\\\"; \\\" if any_prefix_is_slash else \\\" / \\\"`. For a normal option such as `--verbose` with `-v`, any_prefix_is_slash is False, so the new expression yields \\\"; \\\", producing help text like `-v; --verbose` where it previously showed `-v, --verbose`-style output with \\\" / \\\". This changes the rendered help for every option with multiple spellings, and the help left column becomes wrong for the common case.\",\"confidence\":0.85}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2052,
+      "output_tokens": 514,
+      "output_tokens_details": {
+        "thinking_tokens": 244
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

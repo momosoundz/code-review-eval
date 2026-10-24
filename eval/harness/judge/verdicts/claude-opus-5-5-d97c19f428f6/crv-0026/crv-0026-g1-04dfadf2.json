@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0026",
+  "gold_id": "crv-0026-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The guard uses all(...) instead of any(...) over the arguments' help attributes, so the section is gated on every argument being documented rather than on at least one.\n- failure path: A command with arguments SRC (help set) and DST (no help) prints no 'Positional arguments' section at all in --help, silently dropping the documented text; conversely a command with zero arguments satisfies all([]) and prints an empty 'Positional arguments' header on every --help.\n\nReviewer finding\n- description: The guard `all(arg.help is not None for arg in args)` is vacuously true when the command has no Argument parameters, so the 'Positional arguments' heading is now written with no entries beneath it.\n- rationale: Trigger: any command that defines no click.Argument, such as a plain @click.command() with only options, whose --help is rendered. With args empty, all() returns True, records is empty, and formatter.section still writes the heading, since HelpFormatter.section emits its header unconditionally. Mechanism: the old code only opened the section when args was non-empty; the new guard drops that check. Impact: every such command's help output gains a stray 'Positional arguments:' heading with nothing under it, a visible regression on a common path.\n",
+  "critique": "The finding identifies the same faulty guard, `all(...)` over the arguments' help attributes. It describes one of the label's two failure paths: `all([])` is vacuously true, so an empty 'Positional arguments' heading is printed. It does not mention the mixed-help case, but it names the same faulty operation and a failure mode the label lists.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 919,
+    "output_tokens": 127
+  }
+}

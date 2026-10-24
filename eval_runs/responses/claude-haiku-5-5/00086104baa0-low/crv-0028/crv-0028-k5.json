@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3395,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The separator condition in get_help_spec was inverted during the move: it now uses \"; \" when any_prefix_is_slash is false and \" / \" when it is true. The original code had the opposite mapping, so the help spelling for every option changes.",
+        "rationale": "Trigger: any option with ordinary prefixes, such as --verbose with -v, where any_prefix_is_slash is False. The original code joined the spellings with \" / \" in that case, and the new code joins them with \"; \". Slash-prefixed options are also flipped. The left column of every option's help record in --help output therefore changes text, which is user-visible and breaks any tooling that parses it.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2052,
+      "output_tokens": 682,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4391,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "89fb7d0aa8b11cc7"
+  },
+  "raw": {
+    "id": "msg_011CgLGjBydpRx2etLeJr8Mj",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":3395,\"severity\":\"high\",\"category\":\"wrong_operator\",\"description\":\"The separator condition in get_help_spec was inverted during the move: it now uses \\\"; \\\" when any_prefix_is_slash is false and \\\" / \\\" when it is true. The original code had the opposite mapping, so the help spelling for every option changes.\",\"rationale\":\"Trigger: any option with ordinary prefixes, such as --verbose with -v, where any_prefix_is_slash is False. The original code joined the spellings with \\\" / \\\" in that case, and the new code joins them with \\\"; \\\". Slash-prefixed options are also flipped. The left column of every option's help record in --help output therefore changes text, which is user-visible and breaks any tooling that parses it.\",\"confidence\":0.85}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2052,
+      "output_tokens": 682,
+      "output_tokens_details": {
+        "thinking_tokens": 415
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

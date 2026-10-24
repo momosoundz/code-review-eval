@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0014",
+  "gold_id": "crv-0014-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The copied retry instance receives the original instance\u2019s statistics dictionary instead of the wrapper\u2019s shared dictionary.\n- failure path: When the wrapped function runs, updates go to the original retry object\u2019s statistics while decorators still expose the separate wrapper dictionary, so the observed statistics remain empty or stale.\n\nReviewer finding\n- description: The sync wrapper sets `copy._local.statistics = self._local.statistics` instead of the shared `stats` dict. The async version correctly uses `stats`.\n- rationale: Trigger: any call to a function decorated with sync @retry. `self._local.statistics` is the thread-local dict, which may be the original `self.statistics` or a stale or fresh dict from an earlier call. The copy therefore records attempt statistics into a dict other than `wrapped_f.statistics`. The `stats` dict that was just cleared stays empty, so users reading `f.statistics`, including through outer wrappers, see `{}` instead of attempt_number and similar fields. This defeats the fix for #519 and also breaks existing behavior.\n",
+  "critique": "The finding says the copy is assigned the original instance's `self._local.statistics` instead of the shared `stats` dict. As a result, updates go elsewhere and the exposed `wrapped_f.statistics` stays empty. This is the same faulty assignment and the same failure mechanism as the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 884,
+    "output_tokens": 113
+  }
+}

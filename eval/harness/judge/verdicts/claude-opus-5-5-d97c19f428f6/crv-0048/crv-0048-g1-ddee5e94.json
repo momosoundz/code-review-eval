@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0048",
+  "gold_id": "crv-0048-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: style() tests fg and bg for truthiness instead of `is not None`, so the 256-color index 0 is skipped\n- failure path: click.style('x', fg=0) or bg=0, meaning black, applies no color at all and the text renders in the terminal default; the caller sees no error\n\nReviewer finding\n- description: The error type for an unknown color changed from ValueError to TypeError, which breaks callers that catch ValueError.\n- rationale: Trigger: fg='notacolor'. Previously this raised ValueError, now TypeError, so existing `except ValueError` handlers and tests no longer catch it.\n",
+  "critique": "The finding is about the exception type raised for an invalid color name changing from ValueError to TypeError. The labeled defect is a truthiness check that silently skips color index 0. These are different operations with different failure modes.",
+  "verdict": "no_match",
+  "usage": {
+    "input_tokens": 729,
+    "output_tokens": 85
+  }
+}

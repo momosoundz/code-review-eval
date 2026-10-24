@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0026",
+  "gold_id": "crv-0026-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The guard uses all(...) instead of any(...) over the arguments' help attributes, so the section is gated on every argument being documented rather than on at least one.\n- failure path: A command with arguments SRC (help set) and DST (no help) prints no 'Positional arguments' section at all in --help, silently dropping the documented text; conversely a command with zero arguments satisfies all([]) and prints an empty 'Positional arguments' header on every --help.\n\nReviewer finding\n- description: The condition `all(arg.help is not None for arg in args)` is vacuously true when a command has no positional arguments, so the 'Positional arguments' heading is now emitted for every such command.\n- rationale: Trigger: any command with no Argument parameters, such as a plain option-only command. args is empty, so all() returns True and formatter.section(...) runs with an empty records list. formatter.section writes the heading unconditionally, so the help output gains an empty 'Positional arguments:' header. The old code only opened the section when there were records. This affects a very common path and changes help output for most commands.\n",
+  "critique": "The finding names the same faulty all(...) guard over argument help attributes. It describes the vacuous-truth case, where zero arguments print an empty 'Positional arguments' header, and that case is explicitly part of the label's failure path. It does not mention the mixed-help case, but the mechanism and the faulty operation are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 874,
+    "output_tokens": 121
+  }
+}

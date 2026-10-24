@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/sessions.py",
+        "line": 671,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "The new `params` argument of `Session.get` is accepted but never forwarded; the call still passes only `**kwargs` to `self.request`.",
+        "rationale": "Trigger: a caller runs `session.get(url, params={'q': 'x'})`. Because `params` is a named parameter, it is removed from `kwargs` and is not passed on at line 671. The request is sent without the query string. The caller gets a response for the wrong resource with no error, which is a silent wrong result.",
+        "confidence": 0.95
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1792,
+      "output_tokens": 387,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3191,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "902eaaa51a47b53b"
+  },
+  "raw": {
+    "id": "msg_011CgLGxKj4zoi1jTC9xkwu2",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\": [{\"file\": \"src/requests/sessions.py\", \"line\": 671, \"severity\": \"high\", \"category\": \"wrong_variable_or_argument\", \"description\": \"The new `params` argument of `Session.get` is accepted but never forwarded; the call still passes only `**kwargs` to `self.request`.\", \"rationale\": \"Trigger: a caller runs `session.get(url, params={'q': 'x'})`. Because `params` is a named parameter, it is removed from `kwargs` and is not passed on at line 671. The request is sent without the query string. The caller gets a response for the wrong resource with no error, which is a silent wrong result.\", \"confidence\": 0.95}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1792,
+      "output_tokens": 387,
+      "output_tokens_details": {
+        "thinking_tokens": 164
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/evaluation.py",
+        "line": 305,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The regression check compares the signed delta against max_drop directly (delta < max_drop), so it fails whenever delta is below a positive threshold, including any improvement or any drop smaller than max_drop.",
+        "rationale": "Trigger: a new run has hit@5_delta = +0.01 (improvement) or -0.02 (small drop), and the user runs with --compare and --max-drop 0.03. Mechanism: 0.01 < 0.03 and -0.02 < 0.03 are both true, so regression() returns a message and main raises SystemExit. The intended condition is delta < -max_drop. Impact: the CI gate exits non-zero on runs that did not regress, blocking merges, and the message reports a negative 'drop' for improvements.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 2188,
+      "output_tokens": 737,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4247,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "4ce81462437325bd"
+  },
+  "raw": {
+    "id": "msg_011CgJa9x7rrHEhXSTZ13ZWS",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/evaluation.py\",\"line\":305,\"severity\":\"high\",\"category\":\"wrong_operator\",\"description\":\"The regression check compares the signed delta against max_drop directly (delta < max_drop), so it fails whenever delta is below a positive threshold, including any improvement or any drop smaller than max_drop.\",\"rationale\":\"Trigger: a new run has hit@5_delta = +0.01 (improvement) or -0.02 (small drop), and the user runs with --compare and --max-drop 0.03. Mechanism: 0.01 < 0.03 and -0.02 < 0.03 are both true, so regression() returns a message and main raises SystemExit. The intended condition is delta < -max_drop. Impact: the CI gate exits non-zero on runs that did not regress, blocking merges, and the message reports a negative 'drop' for improvements.\",\"confidence\":0.9}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 2188,
+      "output_tokens": 737,
+      "output_tokens_details": {
+        "thinking_tokens": 439
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

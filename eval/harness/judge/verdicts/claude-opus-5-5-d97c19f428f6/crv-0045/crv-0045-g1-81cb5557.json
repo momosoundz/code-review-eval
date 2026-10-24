@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0045",
+  "gold_id": "crv-0045-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the walk over exc.__cause__ has no cycle guard, so a chain that loops back on itself never reaches None\n- failure path: an exception raised with `raise e from e`, or two exceptions that cause each other, makes retry_if_exception_cause_type spin forever at full CPU; the stop conditions never run and the caller hangs\n\nReviewer finding\n- description: The while loop walking the __cause__ chain no longer tracks visited exceptions, so a cyclic __cause__ chain makes it loop forever when no cause matches the configured types.\n- rationale: Trigger: the retried function raises an exception whose __cause__ chain forms a cycle (e.g. a.__cause__ = b and b.__cause__ = a, which Python permits when set manually) and none of the causes is an instance of exception_cause_types. The loop then keeps reassigning exc to __cause__ forever, since the removed seen-set was the only termination guard for that case. Impact: the retry predicate never returns, hanging the caller's thread instead of retrying or re-raising.\n",
+  "critique": "The finding identifies the same faulty operation: the while loop walking __cause__ in the cause-type predicate has no visited/cycle guard. It also names the same failure, where a cyclic chain such as mutual causes loops forever and the caller hangs. That matches the labeled root cause and failure path.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 873,
+    "output_tokens": 112
+  }
+}

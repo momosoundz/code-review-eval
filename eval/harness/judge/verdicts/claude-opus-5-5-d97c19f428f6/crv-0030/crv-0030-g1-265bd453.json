@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0030",
+  "gold_id": "crv-0030-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The shape check before Editor.edit_files tests only for os.PathLike and no longer wraps a plain str, so a string filename is passed on as an iterable and consumed character by character when building the editor command.\n- failure path: click.edit(filename=\"notes.txt\") launches the editor with the nine single-character files n, o, t, e, s, ., t, x, t instead of notes.txt; saving creates stray files in the working directory and the intended file is never opened.\n\nReviewer finding\n- description: The wrap check was changed from `isinstance(filename, str)` to `isinstance(filename, os.PathLike)`, so a plain `str` filename is no longer wrapped in a tuple before being passed to `edit_files`.\n- rationale: Trigger: `click.edit(filename=\"notes.txt\")`. A str is not PathLike, so `filename` stays a str and is passed to `ed.edit_files`, which iterates it character by character. The editor is then launched on single-character paths such as 'n', 'o', 't'. The user sees the wrong files opened or created instead of notes.txt, a regression from the previous behavior.\n",
+  "critique": "The finding names the same mechanism as the label: the check only tests os.PathLike, so a plain str is never wrapped and edit_files iterates it character by character. It also gives the same trigger and the same outcome, the editor opening single-character files.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 891,
+    "output_tokens": 93
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0042",
+  "gold_id": "crv-0042-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The missing or invalid CA bundle path check in cert_verify emits warnings.warn instead of raising OSError, so the failure no longer stops the request.\n- failure path: A user passes verify=\"/etc/ssl/missing.pem\" (or certifi returns an empty path); only a warning is emitted and execution continues to configure the connection with a nonexistent bundle, producing a later, misleading SSL or TypeError at connect time instead of the clear OSError.\n\nReviewer finding\n- description: A missing CA bundle file now produces only a warning instead of raising OSError, so the failure is deferred and the code continues with a nonexistent certificate path.\n- rationale: Trigger: verify is set to a path that does not exist, or the default bundle is missing. Mechanism: the explicit existence check now warns and execution proceeds with an invalid cert_loc. Impact: the user loses the clear up-front error and instead sees a later, less direct SSL or file error from the transport layer.\n",
+  "critique": "The finding describes the same mechanism as the label: the CA bundle existence check now issues a warning instead of raising OSError. Execution then continues with the invalid path, and the clear error is replaced by a later, misleading SSL error at connect time.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 848,
+    "output_tokens": 94
+  }
+}

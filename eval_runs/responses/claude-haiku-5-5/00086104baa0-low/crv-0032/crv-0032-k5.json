@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1189,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "The loop no longer removes a parameter's secondary_opts from the help option names, so a help name that is also a secondary option of another parameter (e.g. a flag declared as \"--x/-h\") is now kept as a help name.",
+        "rationale": "Trigger: a command has a parameter whose secondary_opts includes a default help name such as \"-h\". Before this change that name was removed from the help names, so no conflict arose. After the change, the help option keeps \"-h\" as well, so the name is claimed twice and the parser or help behavior can conflict or resolve to the wrong option. Impact: the user may see a conflicting-option error or have \"-h\" trigger help instead of the intended flag. I am not certain the removal was intended, which is why confidence is moderate.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1715,
+      "output_tokens": 772,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5803,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "2514beb431c2b241"
+  },
+  "raw": {
+    "id": "msg_011CgLGp4aXWKLM3qLW3yRgi",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/click/core.py\",\"line\":1189,\"severity\":\"low\",\"category\":\"logic_other\",\"description\":\"The loop no longer removes a parameter's secondary_opts from the help option names, so a help name that is also a secondary option of another parameter (e.g. a flag declared as \\\"--x/-h\\\") is now kept as a help name.\",\"rationale\":\"Trigger: a command has a parameter whose secondary_opts includes a default help name such as \\\"-h\\\". Before this change that name was removed from the help names, so no conflict arose. After the change, the help option keeps \\\"-h\\\" as well, so the name is claimed twice and the parser or help behavior can conflict or resolve to the wrong option. Impact: the user may see a conflicting-option error or have \\\"-h\\\" trigger help instead of the intended flag. I am not certain the removal was intended, which is why confidence is moderate.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1715,
+      "output_tokens": 772,
+      "output_tokens_details": {
+        "thinking_tokens": 472
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

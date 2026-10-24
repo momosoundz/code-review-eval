@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0012",
+  "gold_id": "crv-0012-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The exponential cap check uses the reversed comparison and returns the cap while the computed delay is still below it.\n- failure path: With a retry attempt whose exponent is below the cap threshold, the wait strategy immediately returns the maximum delay instead of the smaller exponential delay.\n\nReviewer finding\n- description: The early-return condition is inverted. `exponent < log(max/multiplier, exp_base)` holds exactly when `multiplier * exp_base**exponent < max`, i.e. when the exponential result is still below the cap, so the code returns the maximum wait in the cases where it should compute the normal value.\n- rationale: Trigger: WaitExponential(multiplier=1, max=100, exp_base=2) on the first attempt, so exponent=0 and log2(100)\u22486.64, making 0 < 6.64 true. The code then returns max(0, min, 100) = 100 instead of the correct 1. Mechanism: the shortcut fires for small attempts, where the result is far below max, and skips the computation. Impact: every early retry waits the full max delay, and backoff is effectively disabled for the common case, silently changing retry timing.\n",
+  "critique": "The finding describes the labeled defect: the cap check's comparison is inverted, so the code returns max while the exponential delay is still below the cap. It also gives a concrete trigger, early attempts returning 100 instead of 1, which matches the labeled failure path.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 906,
+    "output_tokens": 100
+  }
+}

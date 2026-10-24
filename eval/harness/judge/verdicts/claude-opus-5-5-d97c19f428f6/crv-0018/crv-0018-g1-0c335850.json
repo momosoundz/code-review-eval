@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0018",
+  "gold_id": "crv-0018-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The new minimum wait defaults to one second instead of zero.\n- failure path: With default options, an early exponential result below one second is raised to a one-second delay, slowing retries that previously had no configured floor.\n\nReviewer finding\n- description: The new `min` parameter defaults to 1, so existing callers of wait_exponential_jitter now get a minimum wait of 1 second without opting in. Previously the floor was 0.\n- rationale: Trigger: wait_exponential_jitter(initial=0.1, max=10), or any config with initial below 1 and the default min. The return value is now max(1, ...), so waits that used to be around 0.1s become 1s. Retry timing changes silently, and tests that expect short waits may slow down or fail.\n",
+  "critique": "The finding points to the same cause: the new min defaults to 1 instead of 0. It also describes the same effect, where exponential waits below one second under the defaults are clamped up to 1s.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 771,
+    "output_tokens": 76
+  }
+}
