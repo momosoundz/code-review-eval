@@ -6,7 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
 
-from eval.harness.config import FP_SEVERITIES, LINE_TOLERANCE
+from eval.harness.config import GATED_SEVERITIES, LINE_TOLERANCE
 from eval.harness.dataset import GoldFinding
 from reviewer.config import NON_GATED_CATEGORIES
 
@@ -58,18 +58,25 @@ def eligible_pairs(
     return sorted(pairs, key=lambda p: (p[2], p[1], p[0]))
 
 
-def _counts_as_fp(finding: dict[str, Any]) -> bool:
-    return finding["severity"] in FP_SEVERITIES and finding["category"] not in NON_GATED_CATEGORIES
+def counts_toward_precision(finding: dict[str, Any]) -> bool:
+    """A finding enters precision@>=medium, as TP or FP, at a gated severity and category."""
+    return (
+        finding["severity"] in GATED_SEVERITIES and finding["category"] not in NON_GATED_CATEGORIES
+    )
 
 
 def _pair(
     findings: list[dict[str, Any]], golds: list[GoldFinding], judge: Judge, tol: int
 ) -> _Pairing:
-    """Greedy one-to-one pairing. The judge decides matches and duplicates alike."""
+    """Greedy one-to-one pairing. The judge decides matches and duplicates alike.
+
+    A finding judged a duplicate of an already matched gold keeps trying its remaining
+    eligible golds; it is a duplicate only when none of them matches.
+    """
     state = _Pairing()
     by_id = {g.gold_id: g for g in golds}
     for index, gold_id, _ in eligible_pairs(findings, golds, tol):
-        if index in state.matched.values() or index in state.duplicates:
+        if index in state.matched.values():
             continue
         verdict = judge(findings[index], by_id[gold_id])
         if verdict == "unknown":
@@ -78,6 +85,7 @@ def _pair(
             state.duplicates.add(index)
         elif verdict == "match":
             state.matched[gold_id] = index
+            state.duplicates.discard(index)
     return state
 
 
@@ -91,7 +99,7 @@ def match_case(
 
     A finding earns at most one TP and a gold is matched at most once. A second finding the
     judge also matches to an already matched gold is a duplicate (noise). An unmatched finding
-    is an FP when its severity is in ``FP_SEVERITIES`` and its category is gated, otherwise
+    is an FP when its severity is in ``GATED_SEVERITIES`` and its category is gated, otherwise
     noise. A finding whose only verdicts were ``unknown`` is neither TP nor FP; it is listed in
     ``unknown_pairs`` for human review.
     """
@@ -105,7 +113,7 @@ def match_case(
             outcome.noise += 1
         elif index in state.unknown:
             outcome.unknown_pairs += [(index, g) for g in state.unknown[index]]
-        elif _counts_as_fp(finding):
+        elif counts_toward_precision(finding):
             outcome.fp += 1
         else:
             outcome.noise += 1

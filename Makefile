@@ -1,4 +1,4 @@
-.PHONY: check lint types test review validate-dataset eval score compare
+.PHONY: check lint types test review validate-dataset eval score compare report
 
 UV := uv run
 RUN ?= baseline
@@ -33,11 +33,18 @@ validate-dataset:
 
 eval:  ## collect K runs per case into the raw cache, then score (needs ANTHROPIC_API_KEY)
 	$(UV) python -m eval.harness.collect --run $(RUN) --k $(K)
-	$(UV) python -m eval.harness.score --run $(RUN)
+	$(UV) python -m eval.harness.score --run $(RUN) --online
 
-score:  ## re-score a run offline from the committed caches (no API key)
+score:  ## re-score a run offline from the committed caches; never calls the API
 	$(UV) python -m eval.harness.score --run $(RUN)
 
 compare:  ## make compare A=baseline B=exp1
 	$(UV) python -m eval.harness.compare --a $(A) --b $(B)
 
+
+report:  ## make report RUN=exp1 [BASELINE=baseline]
+ifdef BASELINE
+	$(UV) python -m eval.harness.report --run $(RUN) --baseline $(BASELINE)
+else
+	$(UV) python -m eval.harness.report --run $(RUN)
+endif

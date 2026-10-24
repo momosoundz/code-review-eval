@@ -175,3 +175,22 @@ def test_gold_with_a_second_location_in_another_file() -> None:
         (0, "g1", 1)
     ]
     assert eligible_pairs([finding(file="src/other.py", line=55)], [gold], tolerance=3) == []
+
+
+def test_duplicate_verdict_does_not_steal_a_finding_from_its_other_gold() -> None:
+    """X matches only A; Y matches A and B. Y must end on B, not as a duplicate of A."""
+    gold_b = GoldFinding(
+        "g2", (("app/orders.py", ((43, 43),)),), "boundary", "medium", "b", "b", False
+    )
+    x, y = finding(line=41, description="x"), finding(line=42, description="y")
+
+    def judge(f: dict, g: GoldFinding) -> str:
+        return (
+            "match"
+            if (f["description"], g.gold_id) in {("x", "g1"), ("y", "g1"), ("y", "g2")}
+            else "no_match"
+        )
+
+    outcome = match_case([x, y], [GOLD, gold_b], judge)
+    assert outcome.matched == {"g1": 0, "g2": 1}
+    assert outcome.tp == 2 and outcome.fn == 0 and outcome.duplicates == 0

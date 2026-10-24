@@ -4,17 +4,21 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import sys
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
 from eval.harness.collect import response_path
-from eval.harness.config import FP_SEVERITIES, LINE_TOLERANCE, MIN_SLICE_SIZE, RUNS_DIR
+from eval.harness.config import (
+    GATE_METRIC,
+    LINE_TOLERANCE,
+    MIN_SLICE_SIZE,
+    RUNS_DIR,
+)
 from eval.harness.dataset import CASES_DIR, Case, GoldFinding, gold_hash, load_dataset
 from eval.harness.judge import Judge, JudgeResponseError, JudgeUnavailableError
-from eval.harness.match import match_case
+from eval.harness.match import counts_toward_precision, match_case
 from eval.harness.stats import wilson
 
 CaseJudge = Callable[[str, dict[str, Any], GoldFinding], str]
@@ -37,7 +41,11 @@ def _row(case: Case, k: int, result: dict[str, Any], judge: CaseJudge, tolerance
         findings, list(case.expected_findings), lambda f, g: judge(case.case_id, f, g), tolerance
     )
     highs = [g.gold_id for g in case.high_gold]
-    tp_medium_plus = sum(findings[i]["severity"] in FP_SEVERITIES for i in outcome.matched.values())
+    gated = [g.gold_id for g in case.gated_gold]
+    lows = [g.gold_id for g in case.low_gold]
+    recall_gated = None if not gated else float(all(g in outcome.matched for g in gated))
+    recall_low = None if not lows else sum(g in outcome.matched for g in lows) / len(lows)
+    tp_medium_plus = sum(counts_toward_precision(findings[i]) for i in outcome.matched.values())
     recall_high = None if not highs else float(all(g in outcome.matched for g in highs))
     return {
         "case_id": case.case_id,
@@ -60,6 +68,8 @@ def _row(case: Case, k: int, result: dict[str, Any], judge: CaseJudge, tolerance
         if not case.expected_findings
         else outcome.tp / len(case.expected_findings),
         "recall_high": recall_high,
+        "recall_medium_plus": recall_gated,
+        "recall_low": recall_low,
         "clean_alarm": int(case.is_clean and outcome.fp > 0),
         "elapsed_ms": result["elapsed_ms"],
         "output_tokens": result["usage"]["output_tokens"],
@@ -103,8 +113,10 @@ def _per_case(rows: list[dict[str, Any]], key: str) -> dict[str, list[float]]:
 def _rate(rows: list[dict[str, Any]], key: str, k: int) -> dict[str, Any]:
     """Mean over cases of the per-case mean over K, plus all-K and any-K rates.
 
-    The Wilson interval is over the raw (case, run) outcomes; it treats runs as independent,
-    which overstates certainty, and is descriptive only. Inference lives in the paired bootstrap.
+    ``wilson_case_runs`` is over the raw (case, run) outcomes and treats runs as independent,
+    which overstates certainty: descriptive only. ``wilson_cases`` is over cases, counting a case
+    as a success when any of its K runs succeeded; it is the interval the floors use.
+    Inference lives in the paired bootstrap.
     """
     per_case = _per_case(rows, key)
     means = [sum(v) / len(v) for v in per_case.values()]
@@ -118,6 +130,7 @@ def _rate(rows: list[dict[str, Any]], key: str, k: int) -> dict[str, Any]:
         "n_cases": len(means),
         "k": k,
         "wilson_case_runs": [round(x, 4) for x in wilson(round(sum(outcomes)), len(outcomes))],
+        "wilson_cases": [round(x, 4) for x in wilson(round(sum(any_k)), len(any_k))],
         "gates": len(means) >= MIN_SLICE_SIZE,
     }
 
@@ -159,8 +172,11 @@ def summarize(
         "k": k,
         "judge": judge or {},
         "line_tolerance": tolerance,
+        "gate_metric": GATE_METRIC,
+        "recall_medium_plus": _rate(rows, "recall_medium_plus", k),
         "recall_high": _rate(rows, "recall_high", k),
         "recall_all": _rate(rows, "recall_all", k),
+        "recall_low": _rate(rows, "recall_low", k),
         "precision_medium_plus": _precision(rows),
         "clean_fp_rate": _rate([r for r in rows if r["is_clean"]], "clean_alarm", k),
         "no_output_rate": round(sum(r["no_output"] for r in rows) / n, 4) if n else None,
@@ -185,7 +201,7 @@ def write_outputs(
 
 
 def main(argv: list[str] | None = None) -> int:
-    """CLI: ``--run NAME [--online]``. Offline unless an API key is present or ``--online``."""
+    """CLI: ``--run NAME [--online]``. Offline unless ``--online``: no key is read from the env."""
     parser = argparse.ArgumentParser(description="Score a collected run.")
     parser.add_argument("--run", required=True)
     parser.add_argument("--online", action="store_true", help="allow judge calls for new pairs")
@@ -193,8 +209,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--runs-dir", type=Path, default=RUNS_DIR)
     parser.add_argument("--cases-dir", type=Path, default=CASES_DIR)
     args = parser.parse_args(argv)
-    offline = not (args.online or os.environ.get("ANTHROPIC_API_KEY"))
-    judge = Judge(offline=offline)
+    judge = Judge(offline=not args.online)
     try:
         cases = load_dataset(args.cases_dir)
         manifest = _load_manifest(args.run, args.runs_dir)
@@ -219,9 +234,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     summary["gold_hash"] = current
     write_outputs(args.run, rows, summary, args.runs_dir)
-    rh, pr, cf = summary["recall_high"], summary["precision_medium_plus"], summary["clean_fp_rate"]
+    rh = summary["recall_medium_plus"]
+    pr, cf = summary["precision_medium_plus"], summary["clean_fp_rate"]
     print(
-        f"{summary['n_cases']} cases x K={manifest['k']}: recall_high {rh['mean']} "
+        f"{summary['n_cases']} cases x K={manifest['k']}: recall_medium_plus {rh['mean']} "
         f"(all K {rh['all_k']}, n={rh['n_cases']}), precision@>=medium {pr['value']} "
         f"({pr['tp']}/{pr['tp'] + pr['fp']}), clean FP rate {cf['mean']} (n={cf['n_cases']}), "
         f"no_output {summary['no_output_rate']}, judge calls {judge.calls}"

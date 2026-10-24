@@ -28,6 +28,7 @@ def row(
             "is_clean": is_clean,
             "recall_high": recall_high,
             "recall_all": recall_high,
+            "recall_medium_plus": recall_high,
             "clean_alarm": int(is_clean and fp > 0),
             "tp": tp,
             "tp_medium_plus": tp,
@@ -41,19 +42,34 @@ def row(
 
 
 def write_run(
-    runs: Path, name: str, rows: list[dict], gold_hash: str = "g", judge: str = "j"
+    runs: Path,
+    name: str,
+    rows: list[dict],
+    *,
+    gold_hash: str = "g",
+    judge: str = "j",
+    clean: dict | None = None,
+    summary_gold_hash: str | None = None,
 ) -> None:
     (runs / name).mkdir(parents=True)
     (runs / name / "scored.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows))
     (runs / name / "summary.json").write_text(
         json.dumps(
             {
+                "gold_hash": summary_gold_hash or gold_hash,
                 "k": 2,
                 "n_cases": 40,
                 "judge": {"model": "m", "prompt_hash": judge},
                 "line_tolerance": 3,
                 "precision_medium_plus": {"value": 0.9, "tp": 27, "fp": 3, "wilson": [0.74, 0.97]},
-                "clean_fp_rate": {"mean": 0.05, "n_cases": 20, "wilson_case_runs": [0.01, 0.17]},
+                "clean_fp_rate": clean
+                or {
+                    "mean": 0.05,
+                    "any_k": 0.05,
+                    "n_cases": 20,
+                    "wilson_case_runs": [0.01, 0.17],
+                    "wilson_cases": [0.01, 0.24],
+                },
                 "recall_high": {"mean": 0.75, "n_cases": 20},
             }
         )
@@ -102,7 +118,7 @@ def test_tiny_sample_is_inconclusive_even_when_identical(tmp_path: Path) -> None
     write_run(tmp_path, "b", baseline_rows())
     out = compare_runs("a", "b", runs_dir=tmp_path, resamples=300)
     assert out["verdict"] == "INCONCLUSIVE"
-    assert out["recall_high"]["delta"] == 0.0
+    assert out["gate_metric"]["delta"] == 0.0
     assert out["lost_cases"] == [] and out["gained_cases"] == []
 
 
@@ -112,12 +128,41 @@ def test_lost_case_is_named(tmp_path: Path) -> None:
     for r in cand:
         if r["case_id"] == "c1":
             r["recall_high"] = 0.0
+            r["recall_all"] = 0.0
+            r["recall_medium_plus"] = 0.0
             r["tp"] = 0
     write_run(tmp_path, "b", cand)
     out = compare_runs("a", "b", runs_dir=tmp_path, resamples=300)
     assert out["lost_cases"] == [{"case_id": "c1", "baseline": 1.0, "candidate": 0.0}]
-    assert out["recall_high"]["delta"] < 0
-    assert out["verdict"] in ("INCONCLUSIVE", "FAIL")
+    assert out["gate_metric"]["delta"] < 0
+    assert out["verdict"] == "INCONCLUSIVE"
+
+
+def test_conclusive_recall_drop_fails(tmp_path: Path) -> None:
+    write_run(tmp_path, "a", big_rows())
+    write_run(tmp_path, "b", big_rows(flip={f"c{i}" for i in range(20)}))
+    out = compare_runs("a", "b", runs_dir=tmp_path, resamples=300)
+    assert out["verdict"] == "FAIL"
+    assert out["gate_metric"]["ci95"][1] < -0.10
+
+
+def test_clean_floor_is_judged_per_case_not_per_run(tmp_path: Path) -> None:
+    """Six clean cases alarming once in K=5 is a 30% case rate even when the run mean is 6%."""
+    baseline = {"mean": 0.0, "any_k": 0.0, "n_cases": 20, "wilson_cases": [0.0, 0.1611]}
+    candidate = {"mean": 0.06, "any_k": 0.30, "n_cases": 20, "wilson_cases": [0.1455, 0.5188]}
+    write_run(tmp_path, "a", big_rows(), clean=baseline)
+    write_run(tmp_path, "b", big_rows(), clean=candidate)
+    out = compare_runs("a", "b", runs_dir=tmp_path, resamples=300)
+    assert out["floors"]["clean_fp_rate"]["ok"] is False
+    assert out["floors"]["clean_fp_rate"]["candidate"] == 0.30
+    assert out["verdict"] == "INCONCLUSIVE"
+
+
+def test_refuses_summary_scored_under_another_gold(tmp_path: Path) -> None:
+    write_run(tmp_path, "a", baseline_rows(), gold_hash="g1")
+    write_run(tmp_path, "b", baseline_rows(), gold_hash="g1", summary_gold_hash="g0")
+    with pytest.raises(ValueError, match="rescore"):
+        compare_runs("a", "b", runs_dir=tmp_path, resamples=10)
 
 
 def test_gained_case_is_named(tmp_path: Path) -> None:
@@ -126,6 +171,8 @@ def test_gained_case_is_named(tmp_path: Path) -> None:
     for r in cand:
         if r["case_id"] == "c3":
             r["recall_high"] = 1.0
+            r["recall_all"] = 1.0
+            r["recall_medium_plus"] = 1.0
     write_run(tmp_path, "b", cand)
     out = compare_runs("a", "b", runs_dir=tmp_path, resamples=300)
     assert out["gained_cases"][0]["case_id"] == "c3"

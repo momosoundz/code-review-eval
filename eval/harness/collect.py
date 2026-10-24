@@ -13,8 +13,9 @@ from typing import Any
 
 from eval.harness.config import BUDGET_USD, PRICES_PER_MTOK, RUNS_DIR
 from eval.harness.dataset import Case, gold_hash, load_dataset
-from reviewer.config import CONTEXT_MODE, EFFORT, MODEL
-from reviewer.review import ReviewResult, prompt_id, review_diff
+from reviewer.config import CONTEXT_MODE, CONTEXT_MODES, EFFORT, MODEL
+from reviewer.diffs import number_diff
+from reviewer.review import ReviewResult, input_sha256, prompt_id, review_diff
 
 
 class BudgetExceededError(RuntimeError):
@@ -31,6 +32,7 @@ class CollectSettings:
 
     model: str = MODEL
     effort: str = EFFORT
+    context_mode: str = CONTEXT_MODE
     budget_usd: float = BUDGET_USD
     runs_dir: Path = RUNS_DIR
 
@@ -62,11 +64,24 @@ def _cached_cost(path: Path, model: str) -> float:
     return estimate_cost(model, json.loads(path.read_text())["result"]["usage"])
 
 
+def _check_cached_input(path: Path, case: Case, settings: CollectSettings) -> None:
+    """A stored response must come from the same input we would send now, or it is stale."""
+    stored = json.loads(path.read_text())["result"].get("input_sha256")
+    expected = input_sha256(number_diff(case.diff).text, settings.context_mode, case.commit_title)
+    if stored and stored != expected:
+        msg = (
+            f"{path} was produced from a different input (title or diff changed); "
+            "move it aside or use a new case id"
+        )
+        raise FileExistsError(msg)
+
+
 def _write_manifest(out: Path, manifest: dict[str, Any]) -> None:
     """Write the manifest, refusing to replace one that describes a different run shape."""
     if out.exists():
         previous = json.loads(out.read_text())
-        same = all(previous.get(k) == manifest[k] for k in ("k", "case_ids", "prompt_id", "model"))
+        keys = ("k", "case_ids", "prompt_id", "reviewer_version", "model")
+        same = all(previous.get(k) == manifest[k] for k in keys)
         if not same:
             msg = (
                 f"{out} already describes a different run (k, cases or reviewer); pick a new --run"
@@ -87,8 +102,10 @@ def git_sha() -> str:
     return out.stdout.strip()
 
 
-def _collect_one(path: Path, case: Case, model: str, effort: str) -> ReviewResult:
-    result, raw = review_diff(case.diff, model, effort, CONTEXT_MODE)
+def _collect_one(path: Path, case: Case, settings: CollectSettings) -> ReviewResult:
+    result, raw = review_diff(
+        case.diff, settings.model, settings.effort, settings.context_mode, case.commit_title
+    )
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({"result": asdict(result), "raw": raw}, indent=2) + "\n")
     return result
@@ -105,18 +122,20 @@ def collect_run(
     """
     settings = settings or CollectSettings()
     model, effort, budget_usd = settings.model, settings.effort, settings.budget_usd
-    version = reviewer_version(CONTEXT_MODE, effort)
+    version = reviewer_version(settings.context_mode, effort)
     started = datetime.now(UTC)
+    without_title = [c.case_id for c in cases if not c.commit_title]
     calls = hits = no_output = 0
     cost = spent_now = 0.0
     for case in cases:
         for i in range(1, k + 1):
             path = response_path(settings.runs_dir, model, version, case.case_id, i)
             if path.exists():
+                _check_cached_input(path, case, settings)
                 hits += 1
                 cost += _cached_cost(path, model)
                 continue
-            result = _collect_one(path, case, model, effort)
+            result = _collect_one(path, case, settings)
             calls += 1
             no_output += int(result.no_output)
             spent_now += estimate_cost(model, result.usage)
@@ -131,9 +150,10 @@ def collect_run(
         "run": run,
         "model": model,
         "effort": effort,
-        "prompt_id": prompt_id(CONTEXT_MODE),
+        "prompt_id": prompt_id(settings.context_mode),
         "reviewer_version": version,
-        "context_mode": CONTEXT_MODE,
+        "context_mode": settings.context_mode,
+        "cases_without_title": without_title if settings.context_mode != "hunk_only" else [],
         "k": k,
         "split": sorted({c.split for c in cases}),
         "case_ids": [c.case_id for c in cases],
@@ -159,13 +179,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--split", default="release")
     parser.add_argument("--model", default=MODEL)
     parser.add_argument("--effort", default=EFFORT)
+    parser.add_argument("--context-mode", default=CONTEXT_MODE, choices=CONTEXT_MODES)
     args = parser.parse_args(argv)
     cases = [c for c in load_dataset() if c.active and c.split == args.split]
     if not cases:
         print(f"no active cases in split {args.split!r}", file=sys.stderr)
         return 1
     try:
-        settings = CollectSettings(model=args.model, effort=args.effort)
+        settings = CollectSettings(
+            model=args.model, effort=args.effort, context_mode=args.context_mode
+        )
         manifest = collect_run(args.run, args.k, cases, settings)
     except (BudgetExceededError, FileExistsError, UnknownModelError) as exc:
         print(f"stopped: {exc}", file=sys.stderr)
@@ -174,6 +197,12 @@ def main(argv: list[str] | None = None) -> int:
         f"{manifest['calls_made']} call(s), {manifest['cache_hits']} cached, "
         f"{manifest['no_output']} no_output, est. {manifest['cost_usd']:.3f} USD"
     )
+    if manifest["cases_without_title"]:
+        print(
+            f"warning: {len(manifest['cases_without_title'])} case(s) have no commit title and "
+            "were reviewed as hunk_only",
+            file=sys.stderr,
+        )
     return 0
 
 

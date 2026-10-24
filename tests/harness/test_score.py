@@ -3,8 +3,9 @@ from pathlib import Path
 
 import pytest
 
+from eval.harness import score
 from eval.harness.collect import response_path, reviewer_version
-from eval.harness.dataset import GoldFinding, load_dataset
+from eval.harness.dataset import GoldFinding, gold_hash, load_dataset
 from eval.harness.score import score_run, summarize, write_outputs
 from tests.conftest import gold, meta, write_case
 
@@ -109,6 +110,8 @@ def test_summary_metrics(world: tuple[Path, Path]) -> None:
     rows = score_run("baseline", load_dataset(cases), always, runs_dir=runs)
     summary = summarize(rows, load_dataset(cases), k=2)
     assert summary["recall_high"]["mean"] == 0.5
+    assert summary["recall_medium_plus"]["n_cases"] == 2
+    assert summary["recall_low"]["n_cases"] == 0
     assert summary["recall_high"]["all_k"] == 0.0
     assert summary["recall_high"]["n_cases"] == 1
     assert summary["clean_fp_rate"]["mean"] == 0.5
@@ -135,3 +138,42 @@ def test_missing_response_is_an_error(world: tuple[Path, Path]) -> None:
     write_manifest(runs, "partial", ["crv-0001", "crv-0002", "crv-0003"], k=3)
     with pytest.raises(FileNotFoundError, match="crv-0001"):
         score_run("partial", load_dataset(cases), always, runs_dir=runs)
+
+
+def test_cli_scores_offline_even_with_an_api_key_in_the_environment(
+    world: tuple[Path, Path], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    cases, runs = world
+    seen: list[bool] = []
+
+    class SpyJudge:
+        model = "m"
+        prompt_hash = "h"
+        calls = 0
+
+        def __init__(self, offline: bool = False) -> None:
+            seen.append(offline)
+
+        def decide(self, case_id: str, f: dict, g: GoldFinding) -> str:
+            return "match"
+
+    manifest_path = runs / "baseline" / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["gold_hash"] = gold_hash(load_dataset(cases))
+    manifest_path.write_text(json.dumps(manifest))
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test")
+    monkeypatch.setattr(score, "Judge", SpyJudge)
+    argv = ["--run", "baseline", "--runs-dir", str(runs), "--cases-dir", str(cases)]
+    assert score.main(argv) == 0
+    assert seen == [True]
+
+
+def test_matched_maintainability_finding_does_not_count_as_precision_tp(
+    world: tuple[Path, Path],
+) -> None:
+    cases, runs = world
+    write_response(runs, "crv-0002", 1, [finding(severity="medium", category="maintainability")])
+    rows = score_run("baseline", load_dataset(cases), always, runs_dir=runs)
+    row = next(r for r in rows if r["case_id"] == "crv-0002" and r["k"] == 1)
+    assert row["tp"] == 1
+    assert row["tp_medium_plus"] == 0

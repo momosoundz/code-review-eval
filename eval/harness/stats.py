@@ -100,7 +100,7 @@ def paired_bootstrap(
 
 
 def verdict(
-    delta_low: float,
+    delta_ci: tuple[float, float],
     floors_ok: bool,
     floors_broken: bool,
     families: int,
@@ -108,11 +108,15 @@ def verdict(
 ) -> Verdict:
     """PASS, FAIL or INCONCLUSIVE from the gate interval, the floor checks and the sample size.
 
-    ``floors_broken`` means a floor is below its threshold with its interval excluding the
-    baseline value; ``floors_ok`` means every floor holds with its interval. Fewer than
+    ``delta_ci`` is the bootstrap interval of the delta. FAIL when it sits entirely below
+    ``-max_drop`` (the drop is demonstrated, not suspected) or when a floor is broken: below
+    its threshold with its interval excluding the baseline value. PASS when the lower bound
+    clears the margin and every floor holds with its interval (``floors_ok``). Fewer than
     ``MIN_SLICE_SIZE`` families can never PASS: the bootstrap has nothing to resample.
+    Everything else is INCONCLUSIVE.
     """
-    if floors_broken:
+    delta_low, delta_high = delta_ci
+    if floors_broken or delta_high < -max_drop:
         return Verdict.FAIL
     if families >= MIN_SLICE_SIZE and delta_low >= -max_drop and floors_ok:
         return Verdict.PASS

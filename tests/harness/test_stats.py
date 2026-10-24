@@ -61,27 +61,37 @@ def test_paired_bootstrap_requires_same_cases() -> None:
 
 
 def test_verdict_pass_when_lower_bound_within_margin() -> None:
-    v = verdict(-0.05, floors_ok=True, floors_broken=False, families=30, max_drop=0.10)
+    v = verdict((-0.05, 0.10), floors_ok=True, floors_broken=False, families=30, max_drop=0.10)
     assert v is Verdict.PASS
 
 
 def test_verdict_inconclusive_when_ci_crosses_margin() -> None:
-    v = verdict(-0.19, floors_ok=True, floors_broken=False, families=30, max_drop=0.10)
+    v = verdict((-0.19, 0.02), floors_ok=True, floors_broken=False, families=30, max_drop=0.10)
     assert v is Verdict.INCONCLUSIVE
 
 
 def test_verdict_fail_when_floor_broken() -> None:
-    v = verdict(0.0, floors_ok=False, floors_broken=True, families=30, max_drop=0.10)
+    v = verdict((0.0, 0.1), floors_ok=False, floors_broken=True, families=30, max_drop=0.10)
     assert v is Verdict.FAIL
 
 
 def test_verdict_inconclusive_when_floor_uncertain() -> None:
-    v = verdict(0.0, floors_ok=False, floors_broken=False, families=30, max_drop=0.10)
+    v = verdict((0.0, 0.1), floors_ok=False, floors_broken=False, families=30, max_drop=0.10)
     assert v is Verdict.INCONCLUSIVE
 
 
+def test_verdict_fails_when_the_whole_interval_is_below_the_margin() -> None:
+    v = verdict((-0.40, -0.12), floors_ok=True, floors_broken=False, families=30, max_drop=0.10)
+    assert v is Verdict.FAIL
+
+
+def test_verdict_tiny_sample_still_fails_on_a_conclusive_drop() -> None:
+    v = verdict((-0.60, -0.20), floors_ok=True, floors_broken=False, families=2, max_drop=0.10)
+    assert v is Verdict.FAIL
+
+
 def test_verdict_never_passes_on_a_tiny_sample() -> None:
-    v = verdict(0.0, floors_ok=True, floors_broken=False, families=2, max_drop=0.10)
+    v = verdict((0.0, 0.1), floors_ok=True, floors_broken=False, families=2, max_drop=0.10)
     assert v is Verdict.INCONCLUSIVE
 
 

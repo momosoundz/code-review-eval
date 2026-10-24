@@ -34,7 +34,7 @@ Hard limits, enforced by ruff: functions under 100 lines, cyclomatic complexity 
 - A refusal or invalid JSON is `no_output` and scores as a miss. A single finding outside the diff is dropped and listed, not a reason to void the review.
 - Gold cases are never deleted; they are deprecated with a reason. Any change to a scoring field is a new `gold_hash`, and runs with different hashes are not comparable. Label corrections are recorded in `eval/labels/errata.md`; the review files there are never edited.
 - Matching does not depend on category. A defect of an unforeseen type is labeled `other` and scored like any other.
-- Fewer than 20 families can never produce a `PASS`. Slices under 20 cases are reported with intervals and never gate.
+- The gate metric is `GATE_METRIC` in `eval/harness/config.py` (per-case recall over gold defects of severity medium or high; low defects have their own recall and never count as a miss); `recall_high` is a diagnostic until the set has 20 families with high-severity defects. Fewer than 20 families can never produce a `PASS`. Slices under 20 cases are reported with intervals and never gate.
 
 ## How a change lands
 
