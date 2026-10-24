@@ -52,6 +52,8 @@ The clean floor needs 20 declarable controls and the set has 19 after crv-0055. 
 
 ## How the human labels
 
+**Pair labels for the judge calibration (2026-10-24):** of the 102 pairs in `eval/labels/pair-labels.jsonl`, the human read and decided 25; a Codex session (GPT-6 Sol), given the same two texts and the same question and nothing else, decided the remaining 77 after the human saw it agree with him on every one of the 25. The records do not mark which 25 were the human's. The calibration therefore measures the Opus judge against a rater from a different model family, anchored by 25 human checks, not against 102 human labels.
+
 The human adjudicator works with two independent model sessions (one Codex, one Claude) that are not connected to this repository or its runs. Each session receives the same material the human sees, scores it on its own, then the two are made to argue their disagreements; the human reads both and decides. The label is the human's; the sessions are a second and third reading, not raters. This is disclosed because one of the sessions shares a model family with the match judge, and because it means the "single rater" is a human with model assistance, not an unaided human.
 
 ## Freezing

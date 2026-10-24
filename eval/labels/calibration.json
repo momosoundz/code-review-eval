@@ -1,0 +1,58 @@
+{
+  "judge_version": "claude-opus-5-5-d97c19f428f6",
+  "confusion": {
+    "tp": 71,
+    "fn": 1,
+    "tn": 29,
+    "fp": 1
+  },
+  "rates": {
+    "n": 102,
+    "ppv": 0.9861111111111112,
+    "ppv_wilson": [
+      0.9254339777605758,
+      0.9975440481442419
+    ],
+    "npv": 0.9666666666666667,
+    "npv_wilson": [
+      0.8332960885388428,
+      0.9940914096838022
+    ],
+    "tpr": 0.9983722928064385,
+    "tnr": 0.7704797047970481,
+    "weights": {
+      "match": 8.63888888888889,
+      "no_match": 1.0
+    },
+    "kappa_sample": 0.9527777777777777,
+    "kappa": 0.8498034946093791
+  },
+  "unsure": 0,
+  "runs": [
+    {
+      "run": "baseline-n49",
+      "observed": 0.713,
+      "corrected": 0.6288332556903738
+    },
+    {
+      "run": "exp1-title-n49",
+      "observed": 0.6609,
+      "corrected": 0.5610698887974013
+    },
+    {
+      "run": "exp2a-title-verified-n49",
+      "observed": 0.7217,
+      "corrected": 0.6401488275131928
+    },
+    {
+      "run": "exp2c-sonnet-n49",
+      "observed": 0.8261,
+      "corrected": 0.775935689387019
+    },
+    {
+      "run": "exp2d-sonnet-title-verified-n49",
+      "observed": 0.7913,
+      "corrected": 0.7306734020957436
+    }
+  ]
+}

@@ -14,6 +14,7 @@ from eval.harness.collect import (
     reviewer_version,
 )
 from eval.harness.dataset import load_dataset
+from reviewer.config import CONTEXT_MODE
 from reviewer.diffs import number_diff
 from reviewer.review import ReviewResult, input_sha256
 from tests.conftest import gold, meta, write_case
@@ -81,7 +82,7 @@ def test_collect_writes_one_response_per_case_and_run(
         response_path(
             runs,
             "claude-haiku-5-5",
-            reviewer_version("hunk_only", "low"),
+            reviewer_version(CONTEXT_MODE, "low"),
             "crv-0002",
             1,
         ).read_text()
@@ -114,7 +115,7 @@ def test_collect_never_overwrites_existing_entries(
         response_path(
             runs,
             "claude-haiku-5-5",
-            reviewer_version("hunk_only", "low"),
+            reviewer_version(CONTEXT_MODE, "low"),
             "crv-0001",
             1,
         ).read_text()
@@ -138,7 +139,7 @@ def test_no_output_is_recorded_not_skipped(
         response_path(
             runs,
             "claude-haiku-5-5",
-            reviewer_version("hunk_only", "low"),
+            reviewer_version(CONTEXT_MODE, "low"),
             "crv-0002",
             1,
         ).read_text()

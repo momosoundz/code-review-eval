@@ -139,7 +139,7 @@ def ask(prompt: str, choices: str) -> str:
     """Read one key from ``choices``; repeat until valid."""
     while True:
         answer = input(f"{prompt} [{choices}] ").strip().lower()
-        if answer and answer in choices:
+        if len(answer) == 1 and answer in choices:
             return answer
         print(f"  answer one of: {', '.join(choices)}")
 
