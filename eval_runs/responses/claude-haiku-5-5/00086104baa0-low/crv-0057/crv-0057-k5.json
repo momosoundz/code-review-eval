@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 195,
+        "severity": "low",
+        "category": "error_handling",
+        "description": "Re-raising the underlying cause with `from None` overwrites the cause's own `__cause__` and sets `__suppress_context__` on the original exception object, erasing its existing exception chain.",
+        "rationale": "Trigger: a retried function raises TryAgain inside an except block, and the original exception already has a __cause__ or __context__ chain, with retries exhausted and reraise enabled. Mechanism: `raise cause from None` assigns cause.__cause__ = None and suppresses context on that same object. Impact: the traceback the user sees for the real error loses its chained history, which makes debugging harder.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1589,
+      "output_tokens": 1183,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 6596,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "cb60a5a69c49fd43"
+  },
+  "raw": {
+    "id": "msg_011CgMPz5SUNTyMxT5kz2NcL",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":195,\"severity\":\"low\",\"category\":\"error_handling\",\"description\":\"Re-raising the underlying cause with `from None` overwrites the cause's own `__cause__` and sets `__suppress_context__` on the original exception object, erasing its existing exception chain.\",\"rationale\":\"Trigger: a retried function raises TryAgain inside an except block, and the original exception already has a __cause__ or __context__ chain, with retries exhausted and reraise enabled. Mechanism: `raise cause from None` assigns cause.__cause__ = None and suppresses context on that same object. Impact: the traceback the user sees for the real error loses its chained history, which makes debugging harder.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1589,
+      "output_tokens": 1183,
+      "output_tokens_details": {
+        "thinking_tokens": 931
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

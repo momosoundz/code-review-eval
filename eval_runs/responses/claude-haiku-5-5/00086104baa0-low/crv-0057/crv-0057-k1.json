@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 195,
+        "severity": "low",
+        "category": "wrong_variable_or_argument",
+        "description": "When the last attempt raised TryAgain with a __cause__ or __context__, reraise now raises that inner exception instead of TryAgain, and does so with 'from None', which hides the link back to the TryAgain.",
+        "rationale": "Trigger: a Retrying with reraise=True whose function does 'except ValueError: raise TryAgain' on its final attempt. Mechanism: the new branch raises the ValueError instead of TryAgain, and 'from None' suppresses the chain. Impact: callers that catch TryAgain no longer see it, and the traceback no longer shows that the retry sentinel was raised.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1589,
+      "output_tokens": 1106,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5915,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "cb60a5a69c49fd43"
+  },
+  "raw": {
+    "id": "msg_011CgMPxNvdq33xrnesD9T5f",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":195,\"severity\":\"low\",\"category\":\"wrong_variable_or_argument\",\"description\":\"When the last attempt raised TryAgain with a __cause__ or __context__, reraise now raises that inner exception instead of TryAgain, and does so with 'from None', which hides the link back to the TryAgain.\",\"rationale\":\"Trigger: a Retrying with reraise=True whose function does 'except ValueError: raise TryAgain' on its final attempt. Mechanism: the new branch raises the ValueError instead of TryAgain, and 'from None' suppresses the chain. Impact: callers that catch TryAgain no longer see it, and the traceback no longer shows that the retry sentinel was raised.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1589,
+      "output_tokens": 1106,
+      "output_tokens_details": {
+        "thinking_tokens": 843
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

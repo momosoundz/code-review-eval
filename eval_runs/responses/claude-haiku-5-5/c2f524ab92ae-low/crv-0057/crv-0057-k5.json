@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 195,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "Re-raising the cause with `from None` overwrites the cause's own `__cause__` and sets `__suppress_context__`, so the original exception's chain is discarded.",
+        "rationale": "Trigger: the retried function raises ValueError explicitly `from` a KeyError, then raises TryAgain in an except block. Mechanism: `raise cause from None` sets ValueError.__cause__ to None and suppresses context, so the KeyError link is removed from the exception that gets re-raised. Impact: the operator's traceback loses the root-cause chain that the user's code originally attached, making the failure harder to diagnose.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1713,
+      "output_tokens": 1056,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5927,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "76db95b6130b4f43"
+  },
+  "raw": {
+    "id": "msg_011CgMQHDFkDzJQYmahjjR93",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\": [{\"file\": \"tenacity/__init__.py\", \"line\": 195, \"severity\": \"low\", \"category\": \"logic_other\", \"description\": \"Re-raising the cause with `from None` overwrites the cause's own `__cause__` and sets `__suppress_context__`, so the original exception's chain is discarded.\", \"rationale\": \"Trigger: the retried function raises ValueError explicitly `from` a KeyError, then raises TryAgain in an except block. Mechanism: `raise cause from None` sets ValueError.__cause__ to None and suppresses context, so the KeyError link is removed from the exception that gets re-raised. Impact: the operator's traceback loses the root-cause chain that the user's code originally attached, making the failure harder to diagnose.\", \"confidence\": 0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1713,
+      "output_tokens": 1056,
+      "output_tokens_details": {
+        "thinking_tokens": 792
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

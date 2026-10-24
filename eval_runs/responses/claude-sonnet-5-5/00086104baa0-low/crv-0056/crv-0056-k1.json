@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 213,
+        "severity": "medium",
+        "category": "boundary",
+        "description": "The overflow short-circuit now computes math.log(self.multiplier, self.exp_base) separately. This raises ValueError when multiplier <= 0, and the old combined form could do the same, but the new form also behaves differently for some multiplier values.",
+        "rationale": "Trigger: wait_exponential(multiplier=0) with finite max and exp_base>1. math.log(0, base) raises ValueError (math domain error) inside the condition, which sits outside the try block that follows. The original max/multiplier would raise ZeroDivisionError for the same input. Impact: an exception on a path that is perhaps meant to be guarded, with only the exception type changed.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1497,
+      "output_tokens": 268,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3885,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "172d45cba4138995"
+  },
+  "raw": {
+    "id": "msg_011CgMQP6TsYqv4TVZQyHp2E",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/wait.py\",\"line\":213,\"severity\":\"medium\",\"category\":\"boundary\",\"description\":\"The overflow short-circuit now computes math.log(self.multiplier, self.exp_base) separately. This raises ValueError when multiplier <= 0, and the old combined form could do the same, but the new form also behaves differently for some multiplier values.\",\"rationale\":\"Trigger: wait_exponential(multiplier=0) with finite max and exp_base>1. math.log(0, base) raises ValueError (math domain error) inside the condition, which sits outside the try block that follows. The original max/multiplier would raise ZeroDivisionError for the same input. Impact: an exception on a path that is perhaps meant to be guarded, with only the exception type changed.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1497,
+      "output_tokens": 268,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/utils.py",
+        "line": 857,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "After stripping leading dots, the code prepends a dot and uses endswith for suffix matching. Entries given as host:port (e.g. \"example.com:8080\") now only match subdomains such as \"foo.example.com:8080\"; this may be intended. A more significant issue is that IP/CIDR-like or non-dot-bounded entries change behavior. The previous code matched \"notexample.com\" against the entry \"example.com\"; the new code does not, which is the bpo-39057 intent.",
+        "rationale": "This mirrors the upstream CPython fix, so the behavior is likely intentional. Trigger: no_proxy=\"example.com\" with URL host \"notexample.com\" is now not bypassed, which matches upstream. No concrete defect was found, so the finding is low confidence.",
+        "confidence": 0.05
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1660,
+      "output_tokens": 316,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3934,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "21913c7b3a6afad6"
+  },
+  "raw": {
+    "id": "msg_011CgMQZcFoKwjBwD5Bf5mvq",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/utils.py\",\"line\":857,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"After stripping leading dots, the code prepends a dot and uses endswith for suffix matching. Entries given as host:port (e.g. \\\"example.com:8080\\\") now only match subdomains such as \\\"foo.example.com:8080\\\"; this may be intended. A more significant issue is that IP/CIDR-like or non-dot-bounded entries change behavior. The previous code matched \\\"notexample.com\\\" against the entry \\\"example.com\\\"; the new code does not, which is the bpo-39057 intent.\",\"rationale\":\"This mirrors the upstream CPython fix, so the behavior is likely intentional. Trigger: no_proxy=\\\"example.com\\\" with URL host \\\"notexample.com\\\" is now not bypassed, which matches upstream. No concrete defect was found, so the finding is low confidence.\",\"confidence\":0.05}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1660,
+      "output_tokens": 316,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

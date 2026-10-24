@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 195,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "Re-raising the cause with `from None` overwrites the cause's own `__cause__` with None and sets `__suppress_context__`, which discards the original exception's chained traceback information.",
+        "rationale": "Trigger: a function raises ValueError inside an except block that handles a KeyError, then the code raises TryAgain from that block, so the ValueError has its own __cause__ or __context__. Mechanism: `raise cause from None` mutates the existing ValueError object, setting its __cause__ to None and suppressing its context, before re-raising it. Impact: the user's traceback no longer shows the chained KeyError that explains the underlying failure, so the diagnostic information is lost.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1662,
+      "output_tokens": 815,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5010,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "f79ca9b404be85ef"
+  },
+  "raw": {
+    "id": "msg_011CgMQ6iaoKieQcgKdk2hzd",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":195,\"severity\":\"low\",\"category\":\"logic_other\",\"description\":\"Re-raising the cause with `from None` overwrites the cause's own `__cause__` with None and sets `__suppress_context__`, which discards the original exception's chained traceback information.\",\"rationale\":\"Trigger: a function raises ValueError inside an except block that handles a KeyError, then the code raises TryAgain from that block, so the ValueError has its own __cause__ or __context__. Mechanism: `raise cause from None` mutates the existing ValueError object, setting its __cause__ to None and suppressing its context, before re-raising it. Impact: the user's traceback no longer shows the chained KeyError that explains the underlying failure, so the diagnostic information is lost.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1662,
+      "output_tokens": 815,
+      "output_tokens_details": {
+        "thinking_tokens": 539
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

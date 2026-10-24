@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/utils.py",
+        "line": 854,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The new code strips the leading dot from each no_proxy entry and then always prepends one before the endswith check. This changes the matching rules. A bare entry like `example.com` used to match `notexample.com` by raw suffix, and it now matches only the exact host or a subdomain. Any code or tests that relied on the old suffix behavior will see different results.",
+        "rationale": "Trigger: no_proxy=example.com with a request to notexample.com. Before the change, the raw endswith check bypassed the proxy. Now `.example.com` is not a suffix of `notexample.com`, so the request goes through the proxy. Entries like `.example.com` also now match the bare `example.com`, which they did not match before. The behavior change is arguably a fix and was probably intended, so confidence is low.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1545,
+      "output_tokens": 307,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 3606,
+    "model": "claude-sonnet-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "073a541f84e3f4ff"
+  },
+  "raw": {
+    "id": "msg_011CgMQUzEFGvZs18YaqgHbn",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"src/requests/utils.py\",\"line\":854,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"The new code strips the leading dot from each no_proxy entry and then always prepends one before the endswith check. This changes the matching rules. A bare entry like `example.com` used to match `notexample.com` by raw suffix, and it now matches only the exact host or a subdomain. Any code or tests that relied on the old suffix behavior will see different results.\",\"rationale\":\"Trigger: no_proxy=example.com with a request to notexample.com. Before the change, the raw endswith check bypassed the proxy. Now `.example.com` is not a suffix of `notexample.com`, so the request goes through the proxy. Entries like `.example.com` also now match the bare `example.com`, which they did not match before. The behavior change is arguably a fix and was probably intended, so confidence is low.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-sonnet-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1545,
+      "output_tokens": 307,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

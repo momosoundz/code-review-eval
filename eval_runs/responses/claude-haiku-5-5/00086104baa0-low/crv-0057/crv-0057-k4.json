@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 195,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "When reraise is set and the final attempt raised TryAgain inside an except block, the code now raises the original underlying exception instead of TryAgain, and does so with 'from None', which overwrites that exception's __cause__ and suppresses its context.",
+        "rationale": "Trigger: a function catches ValueError and raises TryAgain inside the except block, with stop_after_attempt(2) and reraise=True. Mechanism: exc.__context__ is the ValueError, so line 195 raises that ValueError with 'from None', changing its __cause__ and __suppress_context__ on the user's object. Impact: callers that catch TryAgain no longer see it, and the exception type and traceback chain they receive change silently, which is a public behavior change not implied by the diff.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1589,
+      "output_tokens": 1078,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 6390,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "00086104baa0",
+    "context_used": "hunk_only",
+    "input_sha256": "cb60a5a69c49fd43"
+  },
+  "raw": {
+    "id": "msg_011CgMPyc89eCqkzzzLFjgUu",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":195,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"When reraise is set and the final attempt raised TryAgain inside an except block, the code now raises the original underlying exception instead of TryAgain, and does so with 'from None', which overwrites that exception's __cause__ and suppresses its context.\",\"rationale\":\"Trigger: a function catches ValueError and raises TryAgain inside the except block, with stop_after_attempt(2) and reraise=True. Mechanism: exc.__context__ is the ValueError, so line 195 raises that ValueError with 'from None', changing its __cause__ and __suppress_context__ on the user's object. Impact: callers that catch TryAgain no longer see it, and the exception type and traceback chain they receive change silently, which is a public behavior change not implied by the diff.\",\"confidence\":0.5}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1589,
+      "output_tokens": 1078,
+      "output_tokens_details": {
+        "thinking_tokens": 776
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

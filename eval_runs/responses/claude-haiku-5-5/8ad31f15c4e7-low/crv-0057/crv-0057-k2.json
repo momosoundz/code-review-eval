@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 195,
+        "severity": "low",
+        "category": "other",
+        "description": "`raise cause.with_traceback(...) from None` sets `cause.__cause__` to None and `__suppress_context__` to True on the user's original exception object, discarding any chain the underlying exception already had.",
+        "rationale": "Trigger: a function raises TryAgain inside an except block, and the caught exception itself has a __cause__ or __context__ chain, such as a wrapped library error. Mechanism: the `from None` assignment mutates that original exception's chaining attributes before it is re-raised. Impact: the traceback the operator sees for the underlying error loses its earlier causal frames, making diagnosis harder. This is a limited-impact effect that only shows up when the caught exception already carries a chain.",
+        "confidence": 0.4
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1662,
+      "output_tokens": 958,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 5716,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "f79ca9b404be85ef"
+  },
+  "raw": {
+    "id": "msg_011CgMQ76EYEpBY8Z8z5qGHs",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\": [{\"file\": \"tenacity/__init__.py\", \"line\": 195, \"severity\": \"low\", \"category\": \"other\", \"description\": \"`raise cause.with_traceback(...) from None` sets `cause.__cause__` to None and `__suppress_context__` to True on the user's original exception object, discarding any chain the underlying exception already had.\", \"rationale\": \"Trigger: a function raises TryAgain inside an except block, and the caught exception itself has a __cause__ or __context__ chain, such as a wrapped library error. Mechanism: the `from None` assignment mutates that original exception's chaining attributes before it is re-raised. Impact: the traceback the operator sees for the underlying error loses its earlier causal frames, making diagnosis harder. This is a limited-impact effect that only shows up when the caught exception already carries a chain.\", \"confidence\": 0.4}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1662,
+      "output_tokens": 958,
+      "output_tokens_details": {
+        "thinking_tokens": 669
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}

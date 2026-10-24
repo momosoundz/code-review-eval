@@ -1,0 +1,63 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 195,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Re-raising the underlying cause with `from None` overwrites that exception's own `__cause__` and sets `__suppress_context__`, so its original chained exception is hidden from the traceback.",
+        "rationale": "Trigger: the retried function raises TryAgain from inside an except block, and the original exception was itself chained from an earlier error (for example, a wrapped library exception with its own __cause__). Mechanism: `raise cause.with_traceback(...) from None` sets cause.__cause__ to None and suppresses context on that object, discarding the chain that existed before. Impact: when the final exception is shown, the operator sees only the top-level error and loses the root-cause chain that the original code would have displayed.",
+        "confidence": 0.45
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 1662,
+      "output_tokens": 695,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 4374,
+    "model": "claude-haiku-5-5",
+    "prompt_id": "8ad31f15c4e7",
+    "context_used": "hunk_plus_title",
+    "input_sha256": "f79ca9b404be85ef"
+  },
+  "raw": {
+    "id": "msg_011CgMQ8MDDvAtVzzKr83PTU",
+    "container": null,
+    "content": [
+      {
+        "citations": null,
+        "text": "{\"findings\":[{\"file\":\"tenacity/__init__.py\",\"line\":195,\"severity\":\"medium\",\"category\":\"logic_other\",\"description\":\"Re-raising the underlying cause with `from None` overwrites that exception's own `__cause__` and sets `__suppress_context__`, so its original chained exception is hidden from the traceback.\",\"rationale\":\"Trigger: the retried function raises TryAgain from inside an except block, and the original exception was itself chained from an earlier error (for example, a wrapped library exception with its own __cause__). Mechanism: `raise cause.with_traceback(...) from None` sets cause.__cause__ to None and suppresses context on that object, discarding the chain that existed before. Impact: when the final exception is shown, the operator sees only the top-level error and loses the root-cause chain that the original code would have displayed.\",\"confidence\":0.45}]}",
+        "type": "text"
+      }
+    ],
+    "diagnostics": null,
+    "model": "claude-haiku-5-5",
+    "role": "assistant",
+    "stop_details": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 0,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "inference_geo": "global",
+      "input_tokens": 1662,
+      "output_tokens": 695,
+      "output_tokens_details": {
+        "thinking_tokens": 411
+      },
+      "server_tool_use": null,
+      "service_tier": "standard",
+      "speed": "standard"
+    }
+  }
+}
