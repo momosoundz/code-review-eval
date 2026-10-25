@@ -1,0 +1,43 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_utils.py",
+        "line": 21,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing the custom __reduce_ex__ means pickling a Sentinel member now uses Enum's default reduction, which pickles the internal object() value and rebuilds the member by value.",
+        "rationale": "Under the trigger of pickling UNSET or FLAG_NEEDS_VALUE (for example, a pickled Click parameter or context that holds the sentinel as a default), the default reduction serializes a fresh object() as the value. On unpickling, Sentinel(value) looks up a value that does not match the singleton's identity and raises ValueError, or yields a member that no longer compares identical to UNSET, so the identity checks used throughout Click fail. The impact is a crash or silently broken sentinel comparisons after a pickle round-trip.",
+        "confidence": 0.5
+      },
+      {
+        "file": "src/click/_utils.py",
+        "line": 15,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing `__reduce_ex__` breaks pickle round trips for both sentinels because their enum values are plain `object()` instances.",
+        "rationale": "When `UNSET`, `FLAG_NEEDS_VALUE`, or an object containing either sentinel is pickled and then unpickled, Enum's default reducer reconstructs the member by value. Unpickling creates a different object that matches neither enum value, causing `ValueError`. The removed reducer reconstructed by member name and avoided this failure.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 48525,
+      "output_tokens": 1544,
+      "cache_read_input_tokens": 27776
+    },
+    "elapsed_ms": 15068,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8a3cd15243ee2240"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

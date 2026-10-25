@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 193,
+        "severity": "medium",
+        "category": "wrong_operator",
+        "description": "Using `or` to select the cause skips an explicitly chained exception if that exception is falsy. Check whether `__cause__` is `None` instead.",
+        "rationale": "If an exception class defines `__bool__` to return False (or `__len__` to return zero), `raise TryAgain() from original_error` reaches this code with a valid but falsy cause. The expression selects `__context__` instead, so exhausted retries surface a different exception or retain TryAgain rather than reraising the explicitly supplied cause.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 15118,
+      "output_tokens": 286,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 13178,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "76db95b6130b4f43"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17024-e5a0-7b33-897f-0af546c441fb"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 15118,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 286,
+          "reasoning_output_tokens": 128
+        }
+      }
+    ]
+  }
+}

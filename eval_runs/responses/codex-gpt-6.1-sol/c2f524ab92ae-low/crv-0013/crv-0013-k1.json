@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 378,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "Reusing the wrapper's statistics dictionary removes per-call isolation for recursive and overlapping calls. The same change in the async wrapper also lets concurrent tasks overwrite each other's retry statistics.",
+        "rationale": "When a retry-decorated function recursively calls itself, the inner invocation clears the dictionary still used by the outer invocation and assigns it to its own retry controller. If the inner call takes three attempts while the outer succeeds on its first attempt, the outer call's final statistics incorrectly report three attempts. Concurrent async calls likewise clear and update the same dictionary, producing statistics that mix separate calls; previously each copy had its own dictionary.",
+        "confidence": 0.98
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 47670,
+      "output_tokens": 482,
+      "cache_read_input_tokens": 31360
+    },
+    "elapsed_ms": 21661,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "71abc98a95e33cc0"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1700c-5826-7800-8c13-d155b263ba52"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 47670,
+          "cached_input_tokens": 31360,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 482,
+          "reasoning_output_tokens": 150
+        }
+      }
+    ]
+  }
+}

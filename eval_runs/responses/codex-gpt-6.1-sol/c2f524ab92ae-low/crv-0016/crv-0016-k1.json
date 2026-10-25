@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 112,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The async OR operator flattens a left-hand retry_all into retry_any, changing conjunctions into disjunctions. The type check should target retry_any.",
+        "rationale": "For async retry_all(a, b) | retry_any(c), where a returns true and b and c return false, this branch constructs retry_any(a, b, c). The expression consequently returns true instead of false, causing an operation to be retried when the configured conditions reject retrying.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 31917,
+      "output_tokens": 423,
+      "cache_read_input_tokens": 28160
+    },
+    "elapsed_ms": 19629,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "54bc3d49e9eef4a3"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1701d-11bd-7f61-8260-11d0b0fea9ed"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'cat tenacity/asyncio/retry.py'",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'cat tenacity/asyncio/retry.py'",
+          "aggregated_output": "cat: tenacity/asyncio/retry.py: No such file or directory\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 31917,
+          "cached_input_tokens": 28160,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 423,
+          "reasoning_output_tokens": 222
+        }
+      }
+    ]
+  }
+}

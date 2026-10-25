@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0048",
+  "gold_id": "crv-0048-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: _interpret_color no longer checks the 0..255 range, rejects bools or validates tuple length, and an unknown name raises KeyError instead of ValueError\n- failure path: style('x', fg=300) emits an escape with an out-of-range index instead of raising ValueError; fg=True is now accepted where it used to raise, formatting as palette index 1; an unknown color name surfaces as TypeError from the caller's except clause instead of a ValueError naming the color\n\nReviewer finding\n- description: Invalid numeric colors now produce ANSI sequences instead of being rejected.\n- rationale: For example, style('text', fg=256) now emits an out-of-range palette sequence, whereas it previously raised ValueError. Removing the component validation likewise accepts RGB values outside 0\u2013255, allowing invalid colors to reach the terminal and produce ignored or unintended styling.\n",
+  "critique": "The finding names the missing 0..255 range check in color interpretation, which lets fg=256 emit an out-of-range escape sequence instead of raising ValueError. That is the label's core mechanism and failure path. It omits the bool and unknown-name aspects, but the part it does describe is the same defect.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 818,
+    "output_tokens": 113
+  }
+}

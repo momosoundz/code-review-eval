@@ -1,0 +1,58 @@
+{
+  "result": {
+    "findings": [],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30255,
+      "output_tokens": 356,
+      "cache_read_input_tokens": 27392
+    },
+    "elapsed_ms": 19666,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "bd29b6db18fe012b"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17027-02de-7260-b470-f0c513058836"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"ls -a; sed -n '140,240p' tenacity/wait.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"ls -a; sed -n '140,240p' tenacity/wait.py\"",
+          "aggregated_output": ".\n..\nschema.json\nsed: tenacity/wait.py: No such file or directory\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30255,
+          "cached_input_tokens": 27392,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 356,
+          "reasoning_output_tokens": 275
+        }
+      }
+    ]
+  }
+}

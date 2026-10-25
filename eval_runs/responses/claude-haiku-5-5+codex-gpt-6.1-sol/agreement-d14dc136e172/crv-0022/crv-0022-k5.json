@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 244,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The match check changed from re.match (prefix match) to fullmatch (whole-string match), which the commit title does not mention.",
+        "rationale": "Trigger: retry_if_exception_message(match=\"timeout\") and an exception whose str is \"timeout after 5s\". Before this change, match() succeeds and the retry happens. After it, fullmatch() fails, so the exception is not retried. Any existing pattern that relied on a prefix or partial match now silently stops retrying, and callers see the original exception raised with no retries.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 17652,
+      "output_tokens": 850,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 10958,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "agreement:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "4107f170dc778f1a"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

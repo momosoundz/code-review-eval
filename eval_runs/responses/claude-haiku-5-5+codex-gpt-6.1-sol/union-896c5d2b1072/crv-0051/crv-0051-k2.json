@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 257,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The new `enabled` option is only checked in decorator wrappers, so direct retry-controller calls ignore `enabled=False`. Apply the flag in the controller execution paths as well.",
+        "rationale": "Calling `Retrying(enabled=False, stop=stop_after_attempt(3))(f)` with a function that raises still executes the existing retry loop, invoking the function three times and ultimately raising RetryError instead of invoking it once and propagating its exception. Direct calls through AsyncRetrying have the same problem because the added checks only run in wraps-generated functions.",
+        "confidence": 0.93
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 34880,
+      "output_tokens": 651,
+      "cache_read_input_tokens": 28288
+    },
+    "elapsed_ms": 16499,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "f1b4531906b79320"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

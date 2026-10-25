@@ -1,0 +1,90 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 226,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "`__aexit__` discards the exception raised inside the async context by passing three `None` values to `__exit__`. Forward `exc_type`, `exc_value`, and `traceback` so failed attempts are recorded and suppressed for retry.",
+        "rationale": "When an operation raises inside `async with attempt`, this call makes `__exit__` record a successful result of `None` instead of the exception. It also returns `None`, allowing the original exception to escape the context immediately, so a retryable failure terminates the retry loop without retrying.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 45783,
+      "output_tokens": 283,
+      "cache_read_input_tokens": 30080
+    },
+    "elapsed_ms": 13109,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "3040043f88ebe9e3"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1701e-606f-7be3-afe6-d5b9aafcd9b1"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '170,235p' tenacity/__init__.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '170,235p' tenacity/__init__.py\"",
+          "aggregated_output": "sed: tenacity/__init__.py: No such file or directory\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -la'",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -la'",
+          "aggregated_output": "total 8\ndrwx------@   3 miguelelhaiek  staff     96 Oct 24 19:53 .\ndrwx------@ 320 miguelelhaiek  staff  10240 Oct 24 19:53 ..\n-rw-r--r--@   1 miguelelhaiek  staff    812 Oct 24 19:53 schema.json\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 45783,
+          "cached_input_tokens": 30080,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 283,
+          "reasoning_output_tokens": 18
+        }
+      }
+    ]
+  }
+}

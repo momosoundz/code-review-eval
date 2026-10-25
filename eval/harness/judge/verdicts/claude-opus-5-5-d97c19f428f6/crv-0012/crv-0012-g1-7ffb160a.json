@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0012",
+  "gold_id": "crv-0012-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The exponential cap check uses the reversed comparison and returns the cap while the computed delay is still below it.\n- failure path: With a retry attempt whose exponent is below the cap threshold, the wait strategy immediately returns the maximum delay instead of the smaller exponential delay.\n\nReviewer finding\n- description: The threshold comparison is reversed, returning the maximum wait before the exponential result reaches the cap.\n- rationale: With multiplier=1, max=60, exp_base=2 and attempt_number=1, the condition evaluates as 0 < log\u2082(60), so the method returns 60 instead of 1. Ordinary early retries therefore wait the maximum duration; the shortcut should apply when the exponent reaches or exceeds the threshold.\n",
+  "critique": "The finding identifies the same reversed threshold comparison in the exponential cap check. Like the label, it describes early retries returning the maximum delay instead of the smaller exponential value, and its worked example matches the label's failure path.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 778,
+    "output_tokens": 88
+  }
+}

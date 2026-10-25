@@ -1,0 +1,55 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The cutoff comparison is reversed: it returns the maximum wait when the exponential result is below the cap.",
+        "rationale": "With multiplier=1, max=60, exp_base=2 and attempt_number=1, the condition evaluates as 0 < log\u2082(60), so the function returns 60 instead of 1. Ordinary capped exponential retries therefore wait the maximum duration from their first attempt. The shortcut should apply when the exponent reaches or exceeds the threshold.",
+        "confidence": 1.0
+      },
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "medium",
+        "category": "boundary",
+        "description": "The new logarithm can raise ValueError when the positive max/multiplier ratio underflows to zero.",
+        "rationale": "With multiplier=1e308, max=1e-100, min=0, exp_base=2 and attempt_number=1, max/multiplier rounds to zero and math.log raises ValueError outside the try block. Previously the calculation returned the capped wait of 1e-100; now retry processing crashes.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30616,
+      "output_tokens": 557,
+      "cache_read_input_tokens": 15104
+    },
+    "elapsed_ms": 22447,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a7694e2c1dc3fa55"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1700b-c231-7921-a2e8-fc991a03a15f"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30616,
+          "cached_input_tokens": 15104,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 557,
+          "reasoning_output_tokens": 256
+        }
+      }
+    ]
+  }
+}

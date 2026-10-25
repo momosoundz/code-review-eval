@@ -1,0 +1,58 @@
+{
+  "result": {
+    "findings": [],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30920,
+      "output_tokens": 110,
+      "cache_read_input_tokens": 15232
+    },
+    "elapsed_ms": 9743,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "5c76834ec43029ed"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17021-0e0b-74e2-ba19-58ff16d1c457"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'headers|HeadersType' src/requests/models.py src/requests/sessions.py src/requests/_types.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'headers|HeadersType' src/requests/models.py src/requests/sessions.py src/requests/_types.py\"",
+          "aggregated_output": "rg: src/requests/models.py: No such file or directory (os error 2)\nrg: src/requests/sessions.py: No such file or directory (os error 2)\nrg: src/requests/_types.py: No such file or directory (os error 2)\n",
+          "exit_code": 2,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30920,
+          "cached_input_tokens": 15232,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 110,
+          "reasoning_output_tokens": 15
+        }
+      }
+    ]
+  }
+}

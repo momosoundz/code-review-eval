@@ -1,0 +1,112 @@
+{
+  "result": {
+    "findings": [],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 66264,
+      "output_tokens": 491,
+      "cache_read_input_tokens": 47872
+    },
+    "elapsed_ms": 25159,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a45ce775840951fc"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1701d-8af5-7642-bd78-377e88c83bbf"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"cat tenacity/asyncio/retry.py; sed -n '1,100p' tenacity/retry.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"cat tenacity/asyncio/retry.py; sed -n '1,100p' tenacity/retry.py\"",
+          "aggregated_output": "cat: tenacity/asyncio/retry.py: No such file or directory\nsed: tenacity/retry.py: No such file or directory\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -la'",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -la'",
+          "aggregated_output": "total 8\ndrwx------@   3 miguelelhaiek  staff     96 Oct 24 19:52 .\ndrwx------@ 320 miguelelhaiek  staff  10240 Oct 24 19:52 ..\n-rw-r--r--@   1 miguelelhaiek  staff    812 Oct 24 19:52 schema.json\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "exec-420e98d3-1de3-479e-9317-7e858996db3d",
+          "type": "web_search",
+          "query": "",
+          "action": {
+            "type": "other"
+          }
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "exec-420e98d3-1de3-479e-9317-7e858996db3d",
+          "type": "web_search",
+          "query": "https://raw.githubusercontent.com/jd/tenacity/main/tenacity/asyncio/retry.py",
+          "action": {
+            "type": "open_page",
+            "url": "https://raw.githubusercontent.com/jd/tenacity/main/tenacity/asyncio/retry.py"
+          },
+          "results": [
+            {
+              "type": "text_result",
+              "domain": "raw.githubusercontent.com",
+              "ref_id": "turn0view0",
+              "snippet": "Total lines: 138",
+              "url": "https://raw.githubusercontent.com/jd/tenacity/main/tenacity/asyncio/retry.py"
+            }
+          ]
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 66264,
+          "cached_input_tokens": 47872,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 491,
+          "reasoning_output_tokens": 313
+        }
+      }
+    ]
+  }
+}

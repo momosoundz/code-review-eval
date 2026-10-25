@@ -1,0 +1,78 @@
+{
+  "baseline": "baseline",
+  "candidate": "exp2a-title-verified",
+  "verdict": "PASS",
+  "gate": {
+    "metric": "recall_medium_plus",
+    "max_drop": 0.1,
+    "min_families": 20,
+    "rule": "PASS: families >= min_families and ci_low >= -max_drop and floors ok; FAIL: ci_high < -max_drop or a floor broken; else INCONCLUSIVE"
+  },
+  "gate_metric": {
+    "delta": 0.0083,
+    "ci95": [
+      -0.0696,
+      0.0833
+    ],
+    "families": 23,
+    "resamples": 10000,
+    "n_cases": 24
+  },
+  "floors": {
+    "precision": {
+      "baseline": 0.9038,
+      "candidate": 0.9697,
+      "ok": true,
+      "enough_findings": true
+    },
+    "clean_fp_rate": {
+      "baseline": 0.05,
+      "candidate": 0.05,
+      "unit": "share of clean cases alarming in any of K runs",
+      "ok": true,
+      "enough_cases": true
+    }
+  },
+  "lost_cases": [
+    {
+      "case_id": "crv-0016",
+      "baseline": 0.8,
+      "candidate": 0.2
+    },
+    {
+      "case_id": "crv-0024",
+      "baseline": 1.0,
+      "candidate": 0.8
+    },
+    {
+      "case_id": "crv-0057",
+      "baseline": 0.4,
+      "candidate": 0.2
+    }
+  ],
+  "gained_cases": [
+    {
+      "case_id": "crv-0026",
+      "baseline": 0.8,
+      "candidate": 1.0
+    },
+    {
+      "case_id": "crv-0042",
+      "baseline": 0.6,
+      "candidate": 1.0
+    },
+    {
+      "case_id": "crv-0046",
+      "baseline": 0.8,
+      "candidate": 1.0
+    },
+    {
+      "case_id": "crv-0052",
+      "baseline": 0.0,
+      "candidate": 0.4
+    }
+  ],
+  "new_clean_alarms": [],
+  "baseline_prompt_id": "00086104baa0",
+  "candidate_prompt_id": "c2f524ab92ae"
+}

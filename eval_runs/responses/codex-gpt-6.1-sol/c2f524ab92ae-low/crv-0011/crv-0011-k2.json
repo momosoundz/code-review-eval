@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "medium",
+        "category": "boundary",
+        "description": "The new logarithm can raise ValueError when max / multiplier underflows to zero, aborting retries for previously valid configurations.",
+        "rationale": "For wait_exponential(multiplier=1e200, max=1e-200), all preceding guards pass, but the division produces 0.0 and math.log raises a domain error. Previously, the first attempt returned the capped wait of 1e-200; now wait calculation crashes.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 46783,
+      "output_tokens": 567,
+      "cache_read_input_tokens": 31104
+    },
+    "elapsed_ms": 23788,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "1411fba03c0901df"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1700a-1203-75e3-829c-e72771c6e744"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 46783,
+          "cached_input_tokens": 31104,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 567,
+          "reasoning_output_tokens": 234
+        }
+      }
+    ]
+  }
+}

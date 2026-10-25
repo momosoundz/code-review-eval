@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 304,
+        "severity": "medium",
+        "category": "error_handling",
+        "description": "Replacing the exception with a warning allows an invalid CA bundle path to pass certificate configuration. Preserve the OSError for missing certificate bundles.",
+        "rationale": "When an HTTPS request specifies a nonexistent verify path, this branch now emits a warning and continues instead of raising OSError. The request proceeds to connection setup and fails later during TLS configuration, changing the exception callers receive and breaking handlers that rely on the existing OSError.",
+        "confidence": 0.98
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30520,
+      "output_tokens": 388,
+      "cache_read_input_tokens": 15104
+    },
+    "elapsed_ms": 19327,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "c36073f1ad756e56"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17022-4f67-7a41-a42e-b44838ab450c"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '260,340p' src/requests/adapters.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '260,340p' src/requests/adapters.py\"",
+          "aggregated_output": "sed: src/requests/adapters.py: No such file or directory\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30520,
+          "cached_input_tokens": 15104,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 388,
+          "reasoning_output_tokens": 196
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 304,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The missing-CA-bundle check now emits warnings.warn instead of raising OSError, so the request continues with a nonexistent certificate path. This change is not described by the commit title, which only mentions removing the extraction call.",
+        "rationale": "Trigger: a CA bundle path that does not exist reaches this check, for example a verify= path that was deleted or a DEFAULT_CA_BUNDLE_PATH that certifi did not install. Mechanism: the code only warns and proceeds with cert_loc set to the missing path. Impact: callers that previously got an immediate, clear OSError now get a warning and then a later, less clear TLS or file error from the transport layer, or no error at all where the TLS setup tolerates a missing bundle.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 32395,
+      "output_tokens": 1428,
+      "cache_read_input_tokens": 27520
+    },
+    "elapsed_ms": 19808,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "c36073f1ad756e56"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

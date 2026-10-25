@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3576,
+        "severity": "low",
+        "category": "wrong_condition",
+        "description": "Optional arguments whose type returns a bracketed metavar now receive duplicate brackets in help output.",
+        "rationale": "For an optional Choice argument, such as click.Argument(['mode'], type=click.Choice(['a', 'b'])), the type returns '[a|b]'. Unconditionally wrapping that value produces '[[a|b]]' in usage output instead of '[a|b]'; the removed already_bracketed guard prevented this.",
+        "confidence": 0.98
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30127,
+      "output_tokens": 308,
+      "cache_read_input_tokens": 27264
+    },
+    "elapsed_ms": 14708,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "4d5ad745af65283e"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17024-74cf-7cd1-9ac1-a785e7986d79"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'def get_metavar|already_bracketed|\\\\[.*\\\\].*metavar|metavar.*\\\\[' src/click tests | head -100\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'def get_metavar|already_bracketed|\\\\[.*\\\\].*metavar|metavar.*\\\\[' src/click tests | head -100\"",
+          "aggregated_output": "rg: src/click: No such file or directory (os error 2)\nrg: tests: No such file or directory (os error 2)\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30127,
+          "cached_input_tokens": 27264,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 308,
+          "reasoning_output_tokens": 89
+        }
+      }
+    ]
+  }
+}

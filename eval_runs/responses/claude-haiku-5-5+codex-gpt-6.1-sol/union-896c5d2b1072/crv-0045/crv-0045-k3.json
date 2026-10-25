@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 180,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The cycle guard was removed from the walk over the exception __cause__ chain, so a circular chain now loops forever.",
+        "rationale": "Trigger: the raised exception has a cyclic __cause__ chain (for example a.__cause__ = b and b.__cause__ = a, or e.__cause__ = e) and no exception in the cycle matches exception_cause_types. Mechanism: the while loop at line 180 never reaches None and the seen set that previously stopped revisits is gone, so each iteration repeats the same objects indefinitely. Impact: the retry predicate hangs the calling thread instead of returning, which stalls the program.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 16444,
+      "output_tokens": 740,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 12044,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8d370141e2500f80"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

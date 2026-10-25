@@ -1,0 +1,43 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "high",
+        "category": "logic_other",
+        "description": "The wrapper now clears and reuses the single statistics dict shared by all calls to the same decorated function, instead of giving each call its own dict. A nested or concurrent call of the same function overwrites and clears the statistics of the call still in progress.",
+        "rationale": "Trigger: a @retry-decorated function that calls itself (recursion) or is called concurrently from another thread. The inner call runs stats.clear() on the same dict that the outer call's self._local.statistics points to, so the outer call's attempt_number and other stats are reset or replaced by the inner call's values. Impact: retry statistics read by the caller after or during the call are wrong, which the original copy-per-call design was meant to prevent.",
+        "confidence": 0.6
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 218,
+        "severity": "high",
+        "category": "logic_other",
+        "description": "The async wrapper clears and reuses one shared statistics dict across calls, so concurrent or nested awaits of the same decorated coroutine corrupt each other's statistics.",
+        "rationale": "Trigger: the same @retry-decorated coroutine is awaited concurrently in asyncio tasks, or it awaits itself recursively. Each call runs stats.clear() on the same dict that other in-flight calls read and write through their local statistics, so one call's attempt counts and timings are reset or mixed with another's. Impact: statistics observed by callers are silently wrong.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 33944,
+      "output_tokens": 2173,
+      "cache_read_input_tokens": 15488
+    },
+    "elapsed_ms": 31740,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "71abc98a95e33cc0"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

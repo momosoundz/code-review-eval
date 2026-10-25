@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 257,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The enabled flag is checked only by decorated wrappers, so calling Retrying(enabled=False) directly still retries. AsyncRetrying has the same gap.",
+        "rationale": "For example, Retrying(enabled=False, stop=stop_after_attempt(3))(f), where f raises ValueError, enters the unchanged retry loop and calls f three times before raising RetryError. Users of the direct-call API therefore still experience repeated calls and retry delays despite explicitly disabling retries.",
+        "confidence": 0.97
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 34847,
+      "output_tokens": 634,
+      "cache_read_input_tokens": 28160
+    },
+    "elapsed_ms": 18672,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "f1b4531906b79320"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

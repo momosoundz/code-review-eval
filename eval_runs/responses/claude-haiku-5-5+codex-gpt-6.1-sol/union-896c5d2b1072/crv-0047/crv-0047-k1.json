@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3576,
+        "severity": "low",
+        "category": "wrong_condition",
+        "description": "Optional arguments whose type returns a bracketed metavar now receive duplicate brackets in help output.",
+        "rationale": "For an optional Choice argument, such as click.Argument(['mode'], type=click.Choice(['a', 'b'])), the type returns '[a|b]'. Unconditionally wrapping that value produces '[[a|b]]' in usage output instead of '[a|b]'; the removed already_bracketed guard prevented this.",
+        "confidence": 0.98
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 31638,
+      "output_tokens": 679,
+      "cache_read_input_tokens": 27264
+    },
+    "elapsed_ms": 14708,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "4d5ad745af65283e"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

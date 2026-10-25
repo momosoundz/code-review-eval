@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0057",
+  "gold_id": "crv-0057-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the implicit __context__ of a TryAgain is treated as the cause of the retry, although a bare TryAgain raised inside an unrelated except block carries that block's exception as context\n- failure path: a caller does `try: raise OSError('outer') except OSError: f()` where f is retried with reraise=True and raises bare TryAgain; after the attempts are exhausted the caller receives OSError('outer') instead of TryAgain, so `except TryAgain` handlers no longer run and the reported failure is an unrelated exception\n\nReviewer finding\n- description: Select the explicit cause using an `is not None` check. Using `or` discards a cause whose exception class defines false truthiness.\n- rationale: If an exception subclass implements `__bool__` to return False, `raise TryAgain() from FalsyError()` outside an except block sets a valid cause but no context. This expression evaluates to None, so reraise() raises TryAgain instead of the underlying FalsyError; when context exists, it can instead raise the wrong exception.\n",
+  "critique": "The label is about wrongly falling back to the implicit __context__ when TryAgain is raised inside an unrelated except block. The finding is about `or` treating a falsy __cause__ as absent. It mentions the context fallback only incidentally, as a consequence of the falsy-cause case, and does not say that using __context__ at all is wrong.",
+  "verdict": "no_match",
+  "usage": {
+    "input_tokens": 863,
+    "output_tokens": 128
+  }
+}

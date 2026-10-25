@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The early-return condition is inverted. It returns the max wait when exponent is below the threshold, which is when the computed exponential value is still under max, instead of when it has reached max.",
+        "rationale": "Trigger: wait_exponential(multiplier=1, max=10, exp_base=2) on attempt 1 gives exponent 0, and log(10, 2) is about 3.32, so 0 < 3.32 holds and the code returns 10. The correct wait is multiplier * 2**0 = 1. Early attempts therefore sleep for the maximum, and the wait grows only after the cap is reached, which inverts the intended backoff. Users see retries spaced at max from the first attempt, with the exponential ramp missing.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 17023,
+      "output_tokens": 864,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 12338,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a7694e2c1dc3fa55"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

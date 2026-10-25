@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 226,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "__aexit__ discards the exception arguments it receives and calls self.__exit__(None, None, None), so the sync exit path never sees the real exception.",
+        "rationale": "Trigger: an exception is raised inside `async with AttemptManager(...)`. The sync __exit__ branch shown at lines 214-215 records a successful result (set_result(None)) when no exception is passed, so the failed attempt is recorded as a success instead of set_exception(...) with the real exc info. Mechanism: the retry state never records the failure, so the retry logic does not treat the attempt as failed and does not retry it. Impact: a transient failure inside an async retry block is silently treated as success, and the retry behaviour the library exists to provide is lost.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 32078,
+      "output_tokens": 1225,
+      "cache_read_input_tokens": 27392
+    },
+    "elapsed_ms": 15257,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "3040043f88ebe9e3"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

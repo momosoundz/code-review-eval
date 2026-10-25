@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0049",
+  "gold_id": "crv-0049-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: _encode_files only treats an object as a file when isinstance(fp, _SupportsRead) succeeds, which a wrapper that exposes read through __getattr__ fails\n- failure path: on Python 3.12 and later, isinstance against a runtime_checkable Protocol uses inspect.getattr_static and does not see attributes served by __getattr__; a file wrapper that proxies read() that way fails the check, is not read, and its contents never reach the multipart body; before 3.12 the Protocol check used hasattr and the removed `or hasattr(fp, 'read')` was redundant, so the defect only manifests on 3.12+\n\nReviewer finding\n- description: Removing the `hasattr` fallback breaks uploads of file-like proxies that expose `read` through `__getattr__` on Python 3.12+. These objects support reading but fail the runtime protocol check.\n- rationale: Pass a proxy wrapping `io.BytesIO` whose `__getattr__` delegates to the wrapped stream as a multipart file. On Python 3.12+, runtime protocol checks use static attribute lookup, so `isinstance(fp, _SupportsRead)` returns false although `fp.read()` works. The proxy is consequently passed as multipart data instead of being read, causing upload preparation to fail with a TypeError.\n",
+  "critique": "Both describe the same mechanism: dropping the hasattr fallback in favor of the isinstance(_SupportsRead) check. On 3.12+ that check uses static lookup and misses read() served by __getattr__, so the file is not read. The finding's stated consequence (a TypeError rather than missing contents) differs slightly, but the faulty operation and the way it fails are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 965,
+    "output_tokens": 141
+  }
+}

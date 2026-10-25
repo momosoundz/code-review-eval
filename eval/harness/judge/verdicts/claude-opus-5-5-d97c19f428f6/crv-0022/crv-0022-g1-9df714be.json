@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0022",
+  "gold_id": "crv-0022-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The exception-message predicate requires the regular expression to match the entire exception message.\n- failure path: Given an exception message with a matching prefix followed by additional diagnostic text, the retry condition returns false and Tenacity propagates the exception without retrying.\n\nReviewer finding\n- description: Switching from `match` to `fullmatch` breaks existing regex predicates that match only the beginning of an exception message. Preserve `match` while allowing empty patterns.\n- rationale: With `retry_if_exception_message(match=\"timeout\")` and an exception whose message is \"timeout connecting to server\", the previous implementation returns true, but `fullmatch` returns false because trailing text remains. The operation now stops retrying and propagates the exception despite satisfying the existing prefix-matching predicate.\n",
+  "critique": "The finding says the predicate now uses `fullmatch` and so requires the regex to cover the whole message. A message with a matching prefix plus trailing text therefore fails, retrying stops, and the exception propagates. That is the same faulty operation and the same failure path as the labeled defect.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 785,
+    "output_tokens": 108
+  }
+}

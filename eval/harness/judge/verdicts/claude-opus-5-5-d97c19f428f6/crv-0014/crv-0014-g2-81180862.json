@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0014",
+  "gold_id": "crv-0014-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the wrapper now clears and reuses one statistics dict for every call instead of giving each call its own, so concurrent or nested calls of the same decorated function write into the same dict\n- failure path: two threads (or two concurrent awaits of the async wrapper) call the same decorated function; the second call's stats.clear() wipes the first call's start_time and attempt_number, and both read a merged, wrong statistics view afterwards\n\nReviewer finding\n- description: Concurrent invocations now mutate the same statistics dictionary, so their statistics overwrite and accumulate into each other.\n- rationale: When two tasks call the same async decorated function concurrently, both retry copies receive `async_wrapped.statistics`. Starting the second invocation clears the first invocation's statistics, and subsequent retries update shared counters. For example, if both invocations fail once and then succeed, the shared attempt counter can reach three although neither invocation made three attempts. Previously each invocation's copy maintained its own dictionary.\n",
+  "critique": "The finding describes the same mechanism as the label. One statistics dict is shared across concurrent invocations of the decorated function, so the second call's clear wipes the first call's statistics and both calls see merged, wrong counters. Previously each call had its own dict.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 855,
+    "output_tokens": 98
+  }
+}

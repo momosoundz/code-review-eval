@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 112,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The async OR override flattens `retry_all` operands, changing AND conditions into OR conditions. This check should identify `retry_any` instead.",
+        "rationale": "For an async `retry_all` containing predicates that return false and true, OR-ed with an async `retry_any` containing a false predicate, the expected result is false. This branch instead combines all three predicates into `retry_any`, which returns true and causes retries when the configured policy should stop.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 34684,
+      "output_tokens": 1542,
+      "cache_read_input_tokens": 15744
+    },
+    "elapsed_ms": 19742,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "54bc3d49e9eef4a3"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

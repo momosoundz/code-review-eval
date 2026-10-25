@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 195,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "Re-raising the cause with `from None` overwrites the cause's own `__cause__` and sets `__suppress_context__`, so the original exception's chain is discarded.",
+        "rationale": "Trigger: the retried function raises ValueError explicitly `from` a KeyError, then raises TryAgain in an except block. Mechanism: `raise cause from None` sets ValueError.__cause__ to None and suppresses context, so the KeyError link is removed from the exception that gets re-raised. Impact: the operator's traceback loses the root-cause chain that the user's code originally attached, making the failure harder to diagnose.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 32054,
+      "output_tokens": 1407,
+      "cache_read_input_tokens": 27392
+    },
+    "elapsed_ms": 18299,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "agreement:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "76db95b6130b4f43"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

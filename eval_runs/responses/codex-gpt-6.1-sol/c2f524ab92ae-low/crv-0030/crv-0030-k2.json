@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 906,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "String filenames are no longer wrapped as a single path, so existing calls such as `click.edit(filename=\"notes.txt\")` pass individual characters as filenames to the editor.",
+        "rationale": "When `filename` is a string, the new `isinstance(filename, os.PathLike)` check is false. The string reaches `edit_files` as an iterable of characters, causing the editor to open files named after those characters instead of the requested file. Include `str` alongside `os.PathLike` in the check.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 15836,
+      "output_tokens": 231,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 11284,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "99339c90541464dd"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17020-2389-73e0-acfc-2515edfb5147"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 15836,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 231,
+          "reasoning_output_tokens": 79
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 244,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "Changing `match()` to `fullmatch()` breaks existing patterns that match only the beginning of an exception message.",
+        "rationale": "For `retry_if_exception_message(match=\"timeout\")` and `Exception(\"timeout after 5 seconds\")`, the previous implementation returned true, but `fullmatch()` returns false because the pattern does not consume the entire message. The operation therefore stops retrying despite matching the previously supported condition; accepting empty messages does not require this regex behavior change.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 15249,
+      "output_tokens": 228,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 10628,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "4107f170dc778f1a"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1701e-6e96-74c3-ae5b-e50b56925ace"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 15249,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 228,
+          "reasoning_output_tokens": 66
+        }
+      }
+    ]
+  }
+}

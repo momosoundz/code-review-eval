@@ -1,0 +1,43 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1321,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The guard uses all() over the arguments, so the Positional arguments section is dropped whenever any single argument lacks help. The docstring says the section is written 'if at least one is documented', which would need any().",
+        "rationale": "Trigger: a command with two positional arguments, one with help text and one without. The check all(arg.help is not None ...) is False, so format_arguments writes nothing. Mechanism: the section is skipped entirely, even though the fallback in the list comprehension was added so that undocumented arguments still appear. Impact: users see no Positional arguments section at all for partially documented commands, which is the opposite of the commit's goal of listing every argument.",
+        "confidence": 0.8
+      },
+      {
+        "file": "src/click/core.py",
+        "line": 1321,
+        "severity": "medium",
+        "category": "boundary",
+        "description": "When a command has no Argument parameters, all() over an empty list returns True, so an empty 'Positional arguments' heading is written.",
+        "rationale": "Trigger: any command that defines only options and no positional arguments, which is very common. args is empty, so all() is True and formatter.section(...) is entered with no rows. The previous code only emitted the section when args was non-empty. Impact: every such command's --help output gains a stray empty 'Positional arguments:' heading.",
+        "confidence": 0.7
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 17263,
+      "output_tokens": 1553,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 11555,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "f8beab929d73aa79"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

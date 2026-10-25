@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/adapters.py",
+        "line": 304,
+        "severity": "medium",
+        "category": "error_handling",
+        "description": "The missing-CA-bundle check now emits a warning instead of raising OSError, so the request continues with a cert_loc that is None or does not exist.",
+        "rationale": "Trigger: verify=True and DEFAULT_CA_BUNDLE_PATH does not exist on disk, for example when certifi is loaded from a zip where the extraction call was removed. Mechanism: the changed branch only warns, so execution proceeds to set conn.ca_certs to the missing path or None. Impact: the failure surfaces later as a less clear SSL/FileNotFound error, or the request proceeds with a bad trust configuration, instead of the explicit OSError the title did not announce changing.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 32399,
+      "output_tokens": 1480,
+      "cache_read_input_tokens": 15104
+    },
+    "elapsed_ms": 19327,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "c36073f1ad756e56"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0030",
+  "gold_id": "crv-0030-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The shape check before Editor.edit_files tests only for os.PathLike and no longer wraps a plain str, so a string filename is passed on as an iterable and consumed character by character when building the editor command.\n- failure path: click.edit(filename=\"notes.txt\") launches the editor with the nine single-character files n, o, t, e, s, ., t, x, t instead of notes.txt; saving creates stray files in the working directory and the intended file is never opened.\n\nReviewer finding\n- description: String filenames are no longer wrapped as a single path, so they are passed to the editor as individual characters. The condition must accept both `str` and `os.PathLike`.\n- rationale: Calling `click.edit(filename=\"notes.txt\")` now leaves the string unchanged and passes it to `edit_files`, which treats its iterable elements as filenames. The editor therefore opens files named after the individual characters instead of the requested file, breaking the existing string filename API.\n",
+  "critique": "The finding gives the same mechanism as the label. The check no longer wraps a plain str, so edit_files iterates over the string and opens one file per character instead of notes.txt.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 835,
+    "output_tokens": 72
+  }
+}

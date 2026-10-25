@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 906,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The single-file wrap now checks isinstance(filename, os.PathLike), so a plain str is no longer wrapped in a tuple and is passed directly to edit_files as an iterable.",
+        "rationale": "Trigger: calling click.edit(filename='notes.txt') with a str. The check at line 906 is False for a str, so filename stays a str. edit_files then iterates the string character by character, opening 'n', 'o', 't', and so on as separate files. Impact: the str form of the API, which is the documented common case, opens the wrong files or errors instead of editing notes.txt.",
+        "confidence": 0.95
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 34494,
+      "output_tokens": 735,
+      "cache_read_input_tokens": 28160
+    },
+    "elapsed_ms": 17137,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "agreement:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "99339c90541464dd"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

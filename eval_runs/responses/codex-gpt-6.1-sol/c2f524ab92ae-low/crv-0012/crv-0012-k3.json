@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The cutoff comparison is reversed: it returns the maximum wait while the exponential value is still below the cap. The comparison must detect when the exponent reaches or exceeds the logarithmic threshold.",
+        "rationale": "With multiplier=1, max=10, exp_base=2, min=0 and attempt_number=1, exponent=0 satisfies 0 < log\u2082(10), so the new branch returns 10 instead of 1. Ordinary capped exponential retries therefore wait the maximum duration from the first attempt instead of increasing progressively.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 15211,
+      "output_tokens": 246,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 12338,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a7694e2c1dc3fa55"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1700b-91fe-7130-8e68-8fa0cf2a69c2"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 15211,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 246,
+          "reasoning_output_tokens": 77
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 258,
+        "severity": "medium",
+        "category": "wrong_literal_or_default",
+        "description": "The new `min` parameter defaults to 1 second, so every existing `wait_exponential_jitter` caller that relies on sub-second waits now has them silently raised to 1 second.",
+        "rationale": "Trigger: code calls wait_exponential_jitter(initial=0.1, max=10) without passing min. Before this change, the first wait could be about 0.1 to 1.1 seconds. Now the return value is max(max(0, 1), min(result, 10)), so the wait is always at least 1 second. The mechanism is the default value of min=1, which applies the new clamp to all callers. The impact is silently longer waits and different timing for existing users who did not ask for a minimum, and tests that assert on wait durations can break. The title announces a min parameter but not a changed default for existing behavior.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 17588,
+      "output_tokens": 1277,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 15937,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "agreement:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "124d353adf043099"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

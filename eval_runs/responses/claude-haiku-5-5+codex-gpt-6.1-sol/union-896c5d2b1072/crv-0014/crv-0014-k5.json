@@ -1,0 +1,43 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Calling stats.clear() on the shared per-decorator statistics dict, instead of binding a fresh dict, wipes the statistics of any in-progress call that shares it.",
+        "rationale": "Trigger: a retry-decorated function is called re-entrantly (recursion) or concurrently from another thread while an earlier call is still running. Mechanism: the earlier call's self._local.statistics is the same dict object as wrapped_f.statistics, so the new call's clear() empties it mid-run. The original code rebound the attribute to a fresh copy dict, which avoided this and was the protection the existing comment describes. Impact: the outer call's statistics (attempt_number, idle_for, etc.) silently reset or show the inner call's values.",
+        "confidence": 0.6
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 218,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Calling stats.clear() on the shared statistics dict lets a concurrent or re-entrant invocation reset the statistics of a call still in progress.",
+        "rationale": "Trigger: the same async retry-decorated coroutine function is awaited concurrently (e.g. asyncio.gather) or re-entrantly while an earlier invocation is still retrying. Mechanism: the earlier invocation's self._local.statistics is the same dict as async_wrapped.statistics, so the later call's clear() empties it while the earlier call still uses it. The previous rebinding gave each call its own dict. Impact: statistics read by the earlier call (attempt number, elapsed time) are silently wrong or reset.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 33962,
+      "output_tokens": 2398,
+      "cache_read_input_tokens": 27904
+    },
+    "elapsed_ms": 31230,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "831389d6ee1e24ae"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

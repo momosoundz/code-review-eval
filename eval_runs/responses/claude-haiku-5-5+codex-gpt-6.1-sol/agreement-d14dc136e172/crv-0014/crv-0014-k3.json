@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "The wrapper now calls stats.clear() on a single dict shared by every invocation of the decorated function, instead of giving each call its own statistics dict. Concurrent calls from different threads then wipe each other's in-flight statistics.",
+        "rationale": "Trigger: two threads call the same @retry-decorated function at the same time. Mechanism: the second call's stats.clear() on line 377 resets the dict that the first call is still updating, and both calls write into that one dict. Impact: the statistics that wrapped_f.statistics reports for either call are wrong or incomplete, which the original rebinding avoided.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 33999,
+      "output_tokens": 2126,
+      "cache_read_input_tokens": 15616
+    },
+    "elapsed_ms": 23953,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "agreement:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "831389d6ee1e24ae"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

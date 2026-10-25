@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 112,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "In the async retry_any.__ror__, the flatten check tests isinstance(other, retry_all) instead of retry_any, so a left-hand retry_all is merged into the retry_any.",
+        "rationale": "Trigger: an async retry_all as the left operand of |, e.g. all_cond | any_cond, which dispatches to any_cond.__ror__(all_cond). The check passes, so the result is retry_any(*all_cond.retries, *any_cond.retries), i.e. any(a, b, c) instead of any(all(a, b), c). Impact: the retry predicate silently changes meaning and retries under conditions it should not, or fails to retry when it should.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 34676,
+      "output_tokens": 2055,
+      "cache_read_input_tokens": 15744
+    },
+    "elapsed_ms": 12347,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "54bc3d49e9eef4a3"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

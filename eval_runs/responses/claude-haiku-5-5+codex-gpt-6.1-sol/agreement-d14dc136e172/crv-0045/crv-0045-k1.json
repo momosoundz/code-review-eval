@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 180,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The cycle-detection guard was removed from the __cause__ chain walk, so a cyclic cause chain now makes the while loop run forever.",
+        "rationale": "Trigger: an exception whose __cause__ chain loops back on itself, such as e.__cause__ = e, or e1.__cause__ = e2 with e2.__cause__ = e1, raised from a retried function. Mechanism: the loop only stops when exc becomes None, and with a cycle it never does, so the retry predicate never returns. Impact: the retrying call hangs indefinitely instead of deciding whether to retry. Such cycles need explicit manual assignment, so the trigger is uncommon.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 16444,
+      "output_tokens": 760,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 11583,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "agreement:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8d370141e2500f80"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

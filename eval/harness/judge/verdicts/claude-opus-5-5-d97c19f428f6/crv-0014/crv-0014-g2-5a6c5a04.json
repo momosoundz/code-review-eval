@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0014",
+  "gold_id": "crv-0014-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the wrapper now clears and reuses one statistics dict for every call instead of giving each call its own, so concurrent or nested calls of the same decorated function write into the same dict\n- failure path: two threads (or two concurrent awaits of the async wrapper) call the same decorated function; the second call's stats.clear() wipes the first call's start_time and attempt_number, and both read a merged, wrong statistics view afterwards\n\nReviewer finding\n- description: Concurrent asynchronous calls now mutate the same statistics dictionary, allowing one invocation to corrupt the statistics of another.\n- rationale: For example, start call A and let it wait before retrying, then start call B and leave it awaiting its first attempt. B resets the shared statistics to attempt 1; when A retries, it increments that same dictionary to attempt 2. If B then succeeds without retrying, the exposed statistics incorrectly report two attempts for B. Previously each invocation's retry controller maintained a separate dictionary, so A could not alter B's statistics.\n",
+  "critique": "The finding describes the same mechanism as the label. Concurrent calls to the same decorated function now share one statistics dict that each call resets and mutates, so one call corrupts another's stats. The interleaving it gives (B resets, A increments, B reports wrong attempts) is an instance of the labeled failure path.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 866,
+    "output_tokens": 117
+  }
+}

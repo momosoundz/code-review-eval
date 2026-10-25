@@ -1,0 +1,55 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 378,
+        "severity": "medium",
+        "category": "wrong_variable_or_argument",
+        "description": "The synchronous wrapper assigns the copy the previous thread-local statistics dictionary instead of `stats`. On the first call, the wrapper's public statistics remain empty even after retries complete.",
+        "rationale": "On the first invocation of a decorated synchronous function, `self._local.statistics` is a different dictionary from `wrapped_f.statistics`. Line 378 gives that old dictionary to the retry copy, then line 379 switches only `self` to `stats`. The copy records the invocation's statistics in the old dictionary, so users reading the decorated function's statistics\u2014including through an additional decorator\u2014see an empty dictionary.",
+        "confidence": 0.99
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 219,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "Overlapping async invocations now mutate the same statistics dictionary, causing their retry counters to be combined.",
+        "rationale": "If two concurrent calls to the same decorated coroutine each fail once, wait, and then succeed, both retry copies now share `async_wrapped.statistics`. Each call increments that dictionary's attempt counter after its wait, yielding an attempt count of 3 even though each invocation made only 2 attempts. Previously each copy maintained its own dictionary, so the exposed statistics belonged to one invocation rather than combining concurrent calls.",
+        "confidence": 0.96
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 31508,
+      "output_tokens": 592,
+      "cache_read_input_tokens": 15616
+    },
+    "elapsed_ms": 19379,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "831389d6ee1e24ae"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1700e-c170-79d3-b3e2-6ced5639f9f6"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 31508,
+          "cached_input_tokens": 15616,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 592,
+          "reasoning_output_tokens": 183
+        }
+      }
+    ]
+  }
+}

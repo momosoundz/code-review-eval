@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0020",
+  "gold_id": "crv-0020-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: __aexit__ delegates to __exit__ with None for the exception type, value and traceback instead of forwarding the arguments it received\n- failure path: an exception raised inside `async with attempt:` reaches __aexit__, which calls __exit__ with (None, None, None); __exit__ takes its success branch, records no failed outcome and returns None, so the exception propagates out of the async with and past the retry loop: the attempt is never recorded as failed and no retry happens\n\nReviewer finding\n- description: `__aexit__` discards the exception raised inside the async context. Pass `exc_type`, `exc_value`, and `traceback` to `__exit__` so failed attempts are recorded and retried.\n- rationale: When a retryable exception is raised inside `async with attempt`, this calls `__exit__(None, None, None)`, which records a successful result and returns without suppressing the exception. The exception therefore escapes the retry loop immediately instead of triggering another attempt.\n",
+  "critique": "The finding says __aexit__ calls __exit__ with None arguments, so __exit__ takes the success path and the exception escapes without a retry. This is the same mechanism as the labeled defect.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 845,
+    "output_tokens": 79
+  }
+}

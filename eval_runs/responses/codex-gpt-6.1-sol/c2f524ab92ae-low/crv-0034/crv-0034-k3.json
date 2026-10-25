@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 99,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "Calling `.strip()` also removes intentional whitespace from the prompt, including the space after the default `\": \"` suffix. ANSI removal should preserve the remaining text.",
+        "rationale": "When stdout is redirected or otherwise does not support ANSI, a normal prompt such as `\"Name: \"` reaches this branch and becomes `\"Name:\"`. Users see input or captured output run directly against the colon, and any intentional leading whitespace is also lost, even when the prompt contains no ANSI codes.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30754,
+      "output_tokens": 273,
+      "cache_read_input_tokens": 27648
+    },
+    "elapsed_ms": 15285,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "ed6f09c4de2cbd87"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17021-732a-7c91-8fae-f79becc68419"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": ".\n..\nschema.json\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30754,
+          "cached_input_tokens": 27648,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 273,
+          "reasoning_output_tokens": 73
+        }
+      }
+    ]
+  }
+}

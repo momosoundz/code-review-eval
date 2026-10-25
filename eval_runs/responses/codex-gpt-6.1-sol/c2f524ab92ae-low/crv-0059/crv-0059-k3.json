@@ -1,0 +1,58 @@
+{
+  "result": {
+    "findings": [],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 31650,
+      "output_tokens": 181,
+      "cache_read_input_tokens": 28032
+    },
+    "elapsed_ms": 11851,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "0692943553d84957"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17026-2f9e-7fc0-a63d-e567fe38039e"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"ls -a; rg 'requires-python|def version_option|package_name = ' pyproject.toml src/click/decorators.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"ls -a; rg 'requires-python|def version_option|package_name = ' pyproject.toml src/click/decorators.py\"",
+          "aggregated_output": ".\n..\nschema.json\nrg: pyproject.toml: No such file or directory (os error 2)\nrg: src/click/decorators.py: No such file or directory (os error 2)\n",
+          "exit_code": 2,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 31650,
+          "cached_input_tokens": 28032,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 181,
+          "reasoning_output_tokens": 92
+        }
+      }
+    ]
+  }
+}

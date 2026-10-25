@@ -1,0 +1,55 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 378,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "The synchronous wrapper assigns the copy's statistics to the previous controller dictionary instead of `stats`. Statistics remain empty after the first invocation, including through additional decorators.",
+        "rationale": "On the first call to a newly decorated synchronous function, `wrapped_f.statistics` and `self._local.statistics` are different dictionaries. This assignment gives the retry copy the latter dictionary, while line 379 points the original controller at the former. The copy populates its own dictionary during execution, leaving the publicly exposed statistics empty after the call.",
+        "confidence": 0.99
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 219,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "Concurrent asynchronous calls now mutate the same statistics dictionary, allowing one invocation to corrupt the statistics of another.",
+        "rationale": "For example, start call A and let it wait before retrying, then start call B and leave it awaiting its first attempt. B resets the shared statistics to attempt 1; when A retries, it increments that same dictionary to attempt 2. If B then succeeds without retrying, the exposed statistics incorrectly report two attempts for B. Previously each invocation's retry controller maintained a separate dictionary, so A could not alter B's statistics.",
+        "confidence": 0.97
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 31465,
+      "output_tokens": 824,
+      "cache_read_input_tokens": 27904
+    },
+    "elapsed_ms": 31230,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "831389d6ee1e24ae"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1700f-bfd2-71e0-9071-26cdd0662d9c"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 31465,
+          "cached_input_tokens": 27904,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 824,
+          "reasoning_output_tokens": 445
+        }
+      }
+    ]
+  }
+}

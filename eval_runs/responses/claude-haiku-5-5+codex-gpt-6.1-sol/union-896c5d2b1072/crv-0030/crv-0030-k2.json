@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 906,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The single-path check was changed from `isinstance(filename, str)` to `isinstance(filename, os.PathLike)`, so a plain `str` filename is no longer wrapped in a tuple before being passed to `edit_files`.",
+        "rationale": "Trigger: calling `click.edit(filename=\"notes.txt\")` with a str. Mechanism: `str` is not `os.PathLike`, so the string is passed unwrapped to `ed.edit_files`, which iterates it character by character and tries to open files named 'n', 'o', 't', and so on. Impact: the editor opens wrong or nonexistent files for every existing str-based call, a silent regression on a common path. The condition needs to accept both types, e.g. `isinstance(filename, (str, os.PathLike))`.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 18486,
+      "output_tokens": 872,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 11284,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "99339c90541464dd"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

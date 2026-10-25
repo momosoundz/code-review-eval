@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1188,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Help-name conflict filtering no longer checks `param.secondary_opts`. A help name already declared as a secondary boolean flag is therefore incorrectly added as a help option.",
+        "rationale": "For a command with `@click.option('--verbose/--help')` and the default help names, `--help` is reserved in the option's `secondary_opts`. Previously it was excluded from generated help names; now it remains and a conflicting help option is created, so `--help` displays help instead of setting `verbose` to false.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30527,
+      "output_tokens": 285,
+      "cache_read_input_tokens": 27520
+    },
+    "elapsed_ms": 13860,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "177b00e760144ff6"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17021-f92a-7451-a420-2dd603e0e162"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'secondary_opts|get_help_option_names' src/click/core.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'secondary_opts|get_help_option_names' src/click/core.py\"",
+          "aggregated_output": "rg: src/click/core.py: IO error for operation on src/click/core.py: No such file or directory (os error 2)\n",
+          "exit_code": 2,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30527,
+          "cached_input_tokens": 27520,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 285,
+          "reasoning_output_tokens": 69
+        }
+      }
+    ]
+  }
+}

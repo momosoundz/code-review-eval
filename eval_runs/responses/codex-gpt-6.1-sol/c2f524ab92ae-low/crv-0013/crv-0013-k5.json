@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 378,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "Reusing the wrapper's statistics dictionary removes statistics isolation between overlapping invocations. The async wrapper introduces the same defect.",
+        "rationale": "When two concurrent calls to the same decorated function both fail their first attempt and retry, their retry-controller copies now update the same dictionary. Both increment its attempt_number, producing 3 although each call is only on attempt 2; callbacks reading retry_state.retry_object.statistics therefore receive incorrect statistics. Previously each copy had its own statistics dictionary. Concurrent clearing can also remove counters while another call is updating them.",
+        "confidence": 0.97
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 31452,
+      "output_tokens": 742,
+      "cache_read_input_tokens": 15488
+    },
+    "elapsed_ms": 31740,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "71abc98a95e33cc0"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1700d-d971-7541-9c1c-1144493ee394"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 31452,
+          "cached_input_tokens": 15488,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 742,
+          "reasoning_output_tokens": 503
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 99,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "Calling `.strip()` removes prompt whitespace as well as ANSI codes, including the trailing space separating a prompt from the user's input.",
+        "rationale": "When stdout is redirected or otherwise does not support ANSI, a prompt such as `Name: ` becomes `Name:`. Leading whitespace used for indentation is also removed, so users and output consumers see altered prompt formatting. `strip_ansi(text)` alone preserves the intended whitespace.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30875,
+      "output_tokens": 299,
+      "cache_read_input_tokens": 27648
+    },
+    "elapsed_ms": 14051,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "ed6f09c4de2cbd87"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17021-07d3-7741-abf4-f92ce86978eb"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,260p' src/click/termui.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,260p' src/click/termui.py\"",
+          "aggregated_output": "sed: src/click/termui.py: No such file or directory\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'def should_strip_ansi|def resolve_color_default|_readline_prompt|visible_prompt_func' src/click tests\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'def should_strip_ansi|def resolve_color_default|_readline_prompt|visible_prompt_func' src/click tests\"",
+          "aggregated_output": "rg: src/click: No such file or directory (os error 2)\nrg: tests: No such file or directory (os error 2)\n",
+          "exit_code": 2,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30875,
+          "cached_input_tokens": 27648,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 299,
+          "reasoning_output_tokens": 59
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 193,
+        "severity": "medium",
+        "category": "wrong_variable_or_argument",
+        "description": "The fallback to `exc.__context__` treats any implicitly chained exception as the retry's underlying cause, so reraise can surface an unrelated exception that was being handled when TryAgain was raised.",
+        "rationale": "Trigger: a retried function raises a bare TryAgain (no explicit cause) while called from inside an unrelated `except` block, so TryAgain.__context__ is that unrelated exception. Mechanism: when retries are exhausted, the new branch sees a non-None cause and raises it instead of the TryAgain. Impact: the caller receives an unrelated exception from outer code rather than the retry outcome, which misleads debugging and can change caller error handling.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 47677,
+      "output_tokens": 1685,
+      "cache_read_input_tokens": 30336
+    },
+    "elapsed_ms": 22130,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "agreement:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "76db95b6130b4f43"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

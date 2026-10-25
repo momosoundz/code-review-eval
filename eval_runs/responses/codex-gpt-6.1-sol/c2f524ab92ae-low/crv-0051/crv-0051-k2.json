@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 257,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The new `enabled` option is only checked in decorator wrappers, so direct retry-controller calls ignore `enabled=False`. Apply the flag in the controller execution paths as well.",
+        "rationale": "Calling `Retrying(enabled=False, stop=stop_after_attempt(3))(f)` with a function that raises still executes the existing retry loop, invoking the function three times and ultimately raising RetryError instead of invoking it once and propagating its exception. Direct calls through AsyncRetrying have the same problem because the added checks only run in wraps-generated functions.",
+        "confidence": 0.93
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 32005,
+      "output_tokens": 343,
+      "cache_read_input_tokens": 28288
+    },
+    "elapsed_ms": 16499,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "f1b4531906b79320"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17025-f95f-71b0-a550-902f1a0e5a7e"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": ".\n..\nschema.json\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 32005,
+          "cached_input_tokens": 28288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 343,
+          "reasoning_output_tokens": 129
+        }
+      }
+    ]
+  }
+}

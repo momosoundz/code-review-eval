@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "medium",
+        "category": "boundary",
+        "description": "The new logarithm can raise ValueError when max / multiplier underflows to zero, instead of returning the capped wait.",
+        "rationale": "With multiplier=1e300, max=1e-300, exp_base=2 and attempt_number=1, all preceding guards pass, but max / multiplier rounds to 0.0. math.log(0.0, 2) raises an uncaught ValueError, aborting the retry operation; the previous implementation returned 1e-300.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 48118,
+      "output_tokens": 920,
+      "cache_read_input_tokens": 30464
+    },
+    "elapsed_ms": 16387,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "1411fba03c0901df"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

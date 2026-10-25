@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 112,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The async OR override flattens `retry_all` operands, changing AND conditions into OR conditions. This check should identify `retry_any` instead.",
+        "rationale": "For an async `retry_all` containing predicates that return false and true, OR-ed with an async `retry_any` containing a false predicate, the expected result is false. This branch instead combines all three predicates into `retry_any`, which returns true and causes retries when the configured policy should stop.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 31945,
+      "output_tokens": 324,
+      "cache_read_input_tokens": 15744
+    },
+    "elapsed_ms": 19742,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "54bc3d49e9eef4a3"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1701e-1348-71e1-80d5-0b7f37b27292"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,180p' tenacity/asyncio/retry.py; sed -n '1,85p' tenacity/retry.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,180p' tenacity/asyncio/retry.py; sed -n '1,85p' tenacity/retry.py\"",
+          "aggregated_output": "sed: tenacity/asyncio/retry.py: No such file or directory\nsed: tenacity/retry.py: No such file or directory\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 31945,
+          "cached_input_tokens": 15744,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 324,
+          "reasoning_output_tokens": 100
+        }
+      }
+    ]
+  }
+}

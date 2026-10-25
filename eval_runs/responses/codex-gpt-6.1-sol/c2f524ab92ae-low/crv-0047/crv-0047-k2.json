@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3576,
+        "severity": "low",
+        "category": "wrong_condition",
+        "description": "Optional arguments whose type returns an already bracketed metavar now display duplicate brackets in help and usage output.",
+        "rationale": "For an optional argument using click.Choice(['red', 'blue']), the type supplies '[red|blue]'. Unconditionally wrapping optional metavars changes the displayed argument to '[[red|blue]]', regressing the previously correct help and usage text.",
+        "confidence": 0.98
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30183,
+      "output_tokens": 350,
+      "cache_read_input_tokens": 27392
+    },
+    "elapsed_ms": 16568,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "4d5ad745af65283e"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17024-ae42-7733-b655-7457f1492329"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'def get_metavar|already_bracketed|class Choice' src/click/types.py src/click/core.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'def get_metavar|already_bracketed|class Choice' src/click/types.py src/click/core.py\"",
+          "aggregated_output": "rg: src/click/types.py: No such file or directory (os error 2)\nrg: src/click/core.py: No such file or directory (os error 2)\n",
+          "exit_code": 2,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30183,
+          "cached_input_tokens": 27392,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 350,
+          "reasoning_output_tokens": 152
+        }
+      }
+    ]
+  }
+}

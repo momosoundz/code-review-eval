@@ -1,0 +1,58 @@
+{
+  "result": {
+    "findings": [],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 31432,
+      "output_tokens": 178,
+      "cache_read_input_tokens": 27904
+    },
+    "elapsed_ms": 12839,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "2b359924dbe2338d"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17020-9537-71e1-9ba2-989057c2bc75"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"ls -a; rg -n 'def _readline_prompt|def prompt|def confirm|resolve_color_default|def should_strip_ansi|def hidden_input|def visible_input' src/click/{termui.py,_compat.py,testing.py,globals.py}\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"ls -a; rg -n 'def _readline_prompt|def prompt|def confirm|resolve_color_default|def should_strip_ansi|def hidden_input|def visible_input' src/click/{termui.py,_compat.py,testing.py,globals.py}\"",
+          "aggregated_output": ".\n..\nschema.json\nrg: src/click/termui.py: No such file or directory (os error 2)\nrg: src/click/_compat.py: No such file or directory (os error 2)\nrg: src/click/testing.py: No such file or directory (os error 2)\nrg: src/click/globals.py: No such file or directory (os error 2)\n",
+          "exit_code": 2,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 31432,
+          "cached_input_tokens": 27904,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 178,
+          "reasoning_output_tokens": 57
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 421,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "The truthiness check skips valid callable wait strategies that evaluate to false. The same regression exists in the asynchronous retry path.",
+        "rationale": "A custom wait callable with `__bool__` returning `False` and `__call__` returning 5 previously produced a five-second retry delay, provided it did not compare equal to zero. The new condition bypasses the callable and sets the delay to zero, causing immediate retries instead of the configured backoff.",
+        "confidence": 0.98
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30899,
+      "output_tokens": 334,
+      "cache_read_input_tokens": 27648
+    },
+    "elapsed_ms": 15958,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "c1f08bb1923e8913"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17023-1b24-7e43-bab4-af58ed303a41"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": ".\n..\nschema.json\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30899,
+          "cached_input_tokens": 27648,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 334,
+          "reasoning_output_tokens": 145
+        }
+      }
+    ]
+  }
+}

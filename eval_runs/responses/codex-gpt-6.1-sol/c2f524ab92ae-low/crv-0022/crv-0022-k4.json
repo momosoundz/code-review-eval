@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 244,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Replacing `match()` with `fullmatch()` breaks existing patterns that match only the beginning of an exception message. Accepting empty messages does not require changing regex matching semantics.",
+        "rationale": "For `retry_if_exception_message(match=\"temporary\")` and an exception whose text is `temporary failure`, the previous implementation returns true, but `fullmatch()` returns false because the pattern does not consume the entire message. The exception is therefore propagated instead of retried.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 15249,
+      "output_tokens": 241,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 11758,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "4107f170dc778f1a"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1701e-c34b-7c62-a60d-85a7ed12cda9"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 15249,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 241,
+          "reasoning_output_tokens": 82
+        }
+      }
+    ]
+  }
+}

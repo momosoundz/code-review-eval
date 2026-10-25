@@ -1,0 +1,112 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 239,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "Removing the `hasattr` fallback rejects file-like proxies that expose `read` through `__getattr__` on Python 3.12 and later.",
+        "rationale": "When a multipart upload contains a proxy that delegates attributes to an underlying BytesIO or file, `hasattr(fp, \"read\")` is true but the runtime protocol check is false because it uses static attribute lookup on Python 3.12+. The changed condition skips reading the proxy, causing multipart encoding to receive the proxy instead of its contents and fail with TypeError.",
+        "confidence": 0.98
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 46003,
+      "output_tokens": 472,
+      "cache_read_input_tokens": 42752
+    },
+    "elapsed_ms": 17371,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "761607eaab997ea2"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17026-1ed7-7d93-8071-4af486cb3ad2"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": ".\n..\nschema.json\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,90p' src/requests/_types.py; sed -n '190,265p' src/requests/models.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,90p' src/requests/_types.py; sed -n '190,265p' src/requests/models.py\"",
+          "aggregated_output": "sed: src/requests/_types.py: No such file or directory\nsed: src/requests/models.py: No such file or directory\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_3",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"python3 -c 'import sys; from typing import Protocol, runtime_checkable; import io\n@runtime_checkable\nclass SupportsRead(Protocol):\n def read(self, length: int = -1, /): ...\nclass FileProxy:\n def __init__(self): self.stream = io.BytesIO(b\\\"payload\\\")\n def __getattr__(self, name): return getattr(self.stream, name)\np = FileProxy()\nprint(sys.version)\nprint(\\\"hasattr:\\\", hasattr(p, \\\"read\\\"), \\\"protocol:\\\", isinstance(p, SupportsRead))'\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_3",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"python3 -c 'import sys; from typing import Protocol, runtime_checkable; import io\n@runtime_checkable\nclass SupportsRead(Protocol):\n def read(self, length: int = -1, /): ...\nclass FileProxy:\n def __init__(self): self.stream = io.BytesIO(b\\\"payload\\\")\n def __getattr__(self, name): return getattr(self.stream, name)\np = FileProxy()\nprint(sys.version)\nprint(\\\"hasattr:\\\", hasattr(p, \\\"read\\\"), \\\"protocol:\\\", isinstance(p, SupportsRead))'\"",
+          "aggregated_output": "3.13.16 (main, Oct  9 2026, 15:11:24) [Clang 22.1.3 ]\nhasattr: True protocol: False\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 46003,
+          "cached_input_tokens": 42752,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 472,
+          "reasoning_output_tokens": 67
+        }
+      }
+    ]
+  }
+}

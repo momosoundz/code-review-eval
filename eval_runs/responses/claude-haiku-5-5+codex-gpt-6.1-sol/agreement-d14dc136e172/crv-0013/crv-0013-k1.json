@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "stats.clear() empties the single dict that wrapped_f.statistics holds, and that dict is now reused by every call. Overlapping calls to the same decorated function, whether from threads or from recursion, wipe and overwrite each other's statistics.",
+        "rationale": "Trigger: a @retry-decorated function is called concurrently from two threads, or recursively so an inner call starts while an outer call is still running. Previously each call rebound wrapped_f.statistics to its own fresh copy dict. Now the inner or second call clears the shared dict and writes its own values into it, so the outer call's attempt counts and timings are reset or corrupted. The impact is silently wrong retry statistics for the outer call.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 50162,
+      "output_tokens": 2198,
+      "cache_read_input_tokens": 31360
+    },
+    "elapsed_ms": 21661,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "agreement:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "71abc98a95e33cc0"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

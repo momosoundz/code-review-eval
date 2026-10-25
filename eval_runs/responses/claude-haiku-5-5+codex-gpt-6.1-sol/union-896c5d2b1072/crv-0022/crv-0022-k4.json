@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 244,
+        "severity": "high",
+        "category": "logic_other",
+        "description": "The match check changed from re.match (prefix match) to fullmatch (whole-string match), which the commit title does not mention.",
+        "rationale": "Trigger: retry_if_exception_message(match=\"Connection\") applied to an exception whose str is \"Connection refused\". Before, self.match.match succeeded on the prefix and the retry fired. Now fullmatch requires the entire string to match, so it returns False and the exception is not retried. Any existing user pattern that relied on prefix matching silently stops retrying, which is a silent behavior regression.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 17098,
+      "output_tokens": 871,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 11758,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "4107f170dc778f1a"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

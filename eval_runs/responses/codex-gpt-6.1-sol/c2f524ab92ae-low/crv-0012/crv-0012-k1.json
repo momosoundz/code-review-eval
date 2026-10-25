@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The shortcut uses `<` instead of `>=`, returning the maximum wait when the exponential wait is still below the cap.",
+        "rationale": "With multiplier=1, max=10, exp_base=2 and attempt_number=1, the condition evaluates as 0 < log\u2082(10), so the function returns 10 instead of 1. This silently changes ordinary retry schedules to use the maximum delay on early attempts.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30558,
+      "output_tokens": 304,
+      "cache_read_input_tokens": 15104
+    },
+    "elapsed_ms": 14547,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a7694e2c1dc3fa55"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1700b-2260-7fc1-b946-0218e8edc74b"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30558,
+          "cached_input_tokens": 15104,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 304,
+          "reasoning_output_tokens": 110
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "result": {
+    "findings": [],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 15576,
+      "output_tokens": 60,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 7710,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "7b807a1616887da5"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17023-dbc0-7261-9020-b43d9d6cc9b6"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 15576,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 60,
+          "reasoning_output_tokens": 42
+        }
+      }
+    ]
+  }
+}

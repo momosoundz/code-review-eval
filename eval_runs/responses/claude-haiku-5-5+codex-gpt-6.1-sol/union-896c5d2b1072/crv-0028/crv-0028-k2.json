@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3395,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "The separator condition was inverted when moving the join into get_help_spec: it now uses \"; \" when any_prefix_is_slash is false and \" / \" when it is true, the opposite of the original code.",
+        "rationale": "Trigger: any option with no slash prefix, such as --verbose with -v, reaches this join. Originally it rendered as \"-v / --verbose\"; with the inverted condition it renders as \"-v; --verbose\". Options that do use slash prefixes get the wrong separator too. Mechanism: the ternary branches are swapped relative to the original `if any_prefix_is_slash else`. Impact: every option's help left column in the rendered --help output changes, which is a user-visible regression.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 17590,
+      "output_tokens": 752,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 10585,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "0f93c8620e419ffe"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

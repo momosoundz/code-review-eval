@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0011",
+  "gold_id": "crv-0011-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the shortcut guard computes math.log(self.max / self.multiplier, self.exp_base) and the division can underflow to 0.0, which math.log rejects\n- failure path: wait_exponential(multiplier=1e300, max=1e-300) on the first attempt: the guards pass, max / multiplier rounds to 0.0, math.log(0.0, 2) raises ValueError where the previous code returned self.max; only reachable with extreme parameters\n\nReviewer finding\n- description: The new early-return shortcut returns max(max(0, self.min), self.max), while the normal path returns max(max(0, self.min), min(result, self.max)). Once the shortcut triggers, result is already above self.max, so the two agree except for the case where min exceeds max, where both return min.\n- rationale: Trigger: the exponent exceeds log_base(max/multiplier), so multiplier*base**exponent > max. The normal path would then compute min(result, max) = max, so the shortcut returns the same value. The shortcut is therefore a pure optimization with no behavioral change, and I could not find a concrete failing input. Floating-point rounding in math.log near the boundary could differ by an ulp, but the result is clamped to max either way.\n",
+  "critique": "The finding looks at the shortcut's return value and concludes there is no behavioral change. It never mentions that max / multiplier can underflow to 0.0 and make math.log raise ValueError, which is the labeled defect.",
+  "verdict": "no_match",
+  "usage": {
+    "input_tokens": 929,
+    "output_tokens": 89
+  }
+}

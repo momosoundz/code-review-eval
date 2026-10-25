@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 237,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "The match check changed from truthiness to 'is not None', so an empty match pattern is now compiled and accepted. The title only mentions accepting an empty message.",
+        "rationale": "Trigger: retry_if_exception_message(match=\"\") with no message. Before this change, the falsy match raised the 'missing 1 required argument' TypeError. Now re.compile(\"\") is stored, and _check calls self.match.match(...), which succeeds for every exception string, so every exception is retried. Impact: a caller who passes an empty pattern by mistake gets silent retries on all exceptions instead of an error. The title does not announce this change.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 17059,
+      "output_tokens": 949,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 6417,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "8f16be3ae5dd3284"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

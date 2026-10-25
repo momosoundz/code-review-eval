@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 351,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "The enabled flag is checked only in decorator wrappers, so direct use of Retrying or AsyncRetrying still retries when enabled=False.",
+        "rationale": "For example, Retrying(enabled=False, stop=stop_after_attempt(3))(f), where f raises ValueError, still executes the unchanged retry loop and calls f three times. The same issue affects direct AsyncRetrying calls: the constructors accept the flag, but only wraps() honors it, so callers requesting disabled retries still observe repeated execution and retry error handling.",
+        "confidence": 0.96
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 32033,
+      "output_tokens": 355,
+      "cache_read_input_tokens": 28288
+    },
+    "elapsed_ms": 17151,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "f1b4531906b79320"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17026-39d7-78e2-a587-1c56fd05ce7c"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"ls -a; rg -n 'def __call__|def __iter__|def wraps|class .*Retrying|def retry' tenacity; rg --files -g AGENTS.md\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"ls -a; rg -n 'def __call__|def __iter__|def wraps|class .*Retrying|def retry' tenacity; rg --files -g AGENTS.md\"",
+          "aggregated_output": ".\n..\nschema.json\nrg: tenacity: IO error for operation on tenacity: No such file or directory (os error 2)\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 32033,
+          "cached_input_tokens": 28288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 355,
+          "reasoning_output_tokens": 117
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "high",
+        "category": "concurrency",
+        "description": "The wrapper now reuses one statistics dict per decorated function and calls stats.clear() on every invocation, so concurrent calls to the same decorated function share and wipe each other's statistics.",
+        "rationale": "Trigger: two threads call the same @retry-decorated function at the same time. Mechanism: the second call's stats.clear() empties the dict that the first call's retry loop is still writing to, and both copies write attempt counters into the same dict. Previously each call got its own dict via copy.statistics. Impact: statistics read through wrapped_f.statistics or retry.statistics after concurrent calls show wrong attempt numbers and timings.",
+        "confidence": 0.6
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 218,
+        "severity": "high",
+        "category": "concurrency",
+        "description": "The async wrapper clears and shares one statistics dict across all invocations of the decorated coroutine function, so overlapping awaits corrupt each other's statistics.",
+        "rationale": "Trigger: two asyncio tasks await the same decorated coroutine concurrently. Mechanism: the second invocation's stats.clear() resets the dict the first invocation is updating, and both write into the same dict. Before this change each invocation had its own dict. Impact: attempt_number and related statistics reported for a call are wrong or reset mid-retry.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 66294,
+      "output_tokens": 2266,
+      "cache_read_input_tokens": 47232
+    },
+    "elapsed_ms": 30184,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "71abc98a95e33cc0"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

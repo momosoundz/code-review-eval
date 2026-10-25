@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3814,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "Undocumented arguments return `None` as their description instead of an empty string. Return `self.help or \"\"` to preserve the formatter's expected string value.",
+        "rationale": "When a command has both a documented argument and an argument with `help=None`, the documented argument enables the positional-arguments section. The undocumented argument now supplies `(metavar, None)` to `formatter.write_dl`, replacing the previous `(metavar, \"\")` fallback. The formatter expects strings, so rendering `--help` raises a TypeError instead of displaying help.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 33108,
+      "output_tokens": 915,
+      "cache_read_input_tokens": 27776
+    },
+    "elapsed_ms": 14163,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "6ec690de339368e8"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

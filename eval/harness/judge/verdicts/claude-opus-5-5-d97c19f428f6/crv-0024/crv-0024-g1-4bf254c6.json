@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0024",
+  "gold_id": "crv-0024-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: Argument.get_help_record returns self.help unchanged, so the second element of the tuple is None for an undocumented argument even though format_arguments now feeds every record straight into formatter.write_dl without a fallback.\n- failure path: A command declares two arguments and sets help on only one; running it with --help makes write_dl measure and wrap a None description and the help command crashes with a TypeError instead of printing usage.\n\nReviewer finding\n- description: Undocumented arguments return `None` as their description instead of an empty string. Return `self.help or \"\"` to preserve the formatter's expected string value.\n- rationale: When a command has both a documented argument and an argument with `help=None`, the documented argument enables the positional-arguments section. The undocumented argument now supplies `(metavar, None)` to `formatter.write_dl`, replacing the previous `(metavar, \"\")` fallback. The formatter expects strings, so rendering `--help` raises a TypeError instead of displaying help.\n",
+  "critique": "The finding points to the same faulty operation: get_help_record returns None for help instead of an empty string. It also describes the same failure, where a mix of documented and undocumented arguments sends (metavar, None) to write_dl and --help raises a TypeError.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 847,
+    "output_tokens": 97
+  }
+}

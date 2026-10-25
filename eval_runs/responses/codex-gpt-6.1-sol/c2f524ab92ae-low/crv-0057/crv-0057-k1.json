@@ -1,0 +1,90 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 193,
+        "severity": "medium",
+        "category": "wrong_operator",
+        "description": "Select the explicit cause using an `is not None` check. Using `or` discards a cause whose exception class defines false truthiness.",
+        "rationale": "If an exception subclass implements `__bool__` to return False, `raise TryAgain() from FalsyError()` outside an except block sets a valid cause but no context. This expression evaluates to None, so reraise() raises TryAgain instead of the underlying FalsyError; when context exists, it can instead raise the wrong exception.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 45964,
+      "output_tokens": 520,
+      "cache_read_input_tokens": 30336
+    },
+    "elapsed_ms": 22130,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "76db95b6130b4f43"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17024-8f22-71f3-9080-0c8a5a7c27cb"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": ".\n..\nschema.json\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"python -c 'class FalsyError(Exception):\n def __bool__(self): return False\ntry:\n raise Exception(\\\"retry\\\") from FalsyError(\\\"underlying\\\")\nexcept Exception as exc:\n print(type(exc.__cause__).__name__, exc.__context__, exc.__cause__ or exc.__context__)'\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"python -c 'class FalsyError(Exception):\n def __bool__(self): return False\ntry:\n raise Exception(\\\"retry\\\") from FalsyError(\\\"underlying\\\")\nexcept Exception as exc:\n print(type(exc.__cause__).__name__, exc.__context__, exc.__cause__ or exc.__context__)'\"",
+          "aggregated_output": "FalsyError None None\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 45964,
+          "cached_input_tokens": 30336,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 520,
+          "reasoning_output_tokens": 225
+        }
+      }
+    ]
+  }
+}

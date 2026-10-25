@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3814,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "Undocumented arguments return `(metavar, None)` instead of `(metavar, \"\")`. With the formatter's fallback removed, this causes help rendering to fail.",
+        "rationale": "When a command has one argument with help text and another whose help is unset, the positional arguments section is rendered for both. The undocumented argument now passes None as its description to formatter.write_dl, whose string-width calculation raises TypeError. Users requesting --help receive an exception instead of help output.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30974,
+      "output_tokens": 297,
+      "cache_read_input_tokens": 15360
+    },
+    "elapsed_ms": 14382,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "6ec690de339368e8"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1701f-fa94-7b33-a136-8fece6697756"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'def write_dl|def get_help_record|self.help =|def format_arguments' src/click/core.py src/click/formatting.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'def write_dl|def get_help_record|self.help =|def format_arguments' src/click/core.py src/click/formatting.py\"",
+          "aggregated_output": "rg: src/click/core.py: No such file or directory (os error 2)\nrg: src/click/formatting.py: No such file or directory (os error 2)\n",
+          "exit_code": 2,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30974,
+          "cached_input_tokens": 15360,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 297,
+          "reasoning_output_tokens": 70
+        }
+      }
+    ]
+  }
+}

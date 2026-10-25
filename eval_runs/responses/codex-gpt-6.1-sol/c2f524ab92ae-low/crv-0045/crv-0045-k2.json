@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 180,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing the visited-exception guard makes cyclic exception cause chains loop forever when no cause matches the configured types.",
+        "rationale": "For example, a ValueError with `exc.__cause__ = exc` reaches this loop when retrying on an OSError cause. The type check remains false and `exc` repeatedly becomes itself, so the retry predicate never returns and the operation hangs instead of propagating the exception.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 14958,
+      "output_tokens": 205,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 11153,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8d370141e2500f80"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17024-3e94-7d53-ac5e-8fa9da8e503d"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 14958,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 205,
+          "reasoning_output_tokens": 57
+        }
+      }
+    ]
+  }
+}

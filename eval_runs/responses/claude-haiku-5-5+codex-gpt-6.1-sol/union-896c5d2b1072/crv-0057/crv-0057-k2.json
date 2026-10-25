@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 195,
+        "severity": "low",
+        "category": "error_handling",
+        "description": "Re-raising the unwrapped cause with `from None` sets its __cause__ to None and suppresses its context, discarding any exception chain the original cause already carried.",
+        "rationale": "Trigger: the user's inner exception is itself chained (for example, a ValueError raised from a KeyError), and the wrapping TryAgain is raised inside the except block. Mechanism: `raise cause.with_traceback(...) from None` overwrites cause.__cause__ with None and sets __suppress_context__, so the original chain is no longer shown. Impact: the traceback the operator sees loses the earlier underlying exception, making the root cause harder to diagnose. Using a bare `raise cause` would keep the existing chain.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 16831,
+      "output_tokens": 1529,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 13178,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "76db95b6130b4f43"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

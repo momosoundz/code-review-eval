@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 906,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The new check stops wrapping string filenames in a single-element tuple. Include `str` alongside `os.PathLike` to preserve existing string filename support.",
+        "rationale": "Calling `click.edit(filename=\"notes.txt\")` now passes the string directly to `edit_files`, which accepts an iterable of filenames. The string is therefore processed as individual characters, causing the editor to open character-named files instead of the requested file.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 31844,
+      "output_tokens": 231,
+      "cache_read_input_tokens": 28160
+    },
+    "elapsed_ms": 17137,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "99339c90541464dd"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17020-4fa4-7743-bf8c-c7f29031350f"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '710,745p' src/click/_termui_impl.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '710,745p' src/click/_termui_impl.py\"",
+          "aggregated_output": "sed: src/click/_termui_impl.py: No such file or directory\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 31844,
+          "cached_input_tokens": 28160,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 231,
+          "reasoning_output_tokens": 33
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0043",
+  "gold_id": "crv-0043-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: _run_wait decides whether to call the wait strategy by truthiness of self.wait instead of checking for the explicit no-wait values None and 0\n- failure path: a wait strategy object that is falsy, for example a user-defined strategy subclassing list or tuple to hold its parameters, or a strategy class that defines __len__ or __bool__, is never called: `if not self.wait` takes the no-wait branch, every retry sleeps 0 seconds and the configured backoff disappears without any error; under a flaky dependency the client hammers it at full speed\n\nReviewer finding\n- description: The truthiness check skips valid callable wait strategies that evaluate to false. The same regression exists in the asynchronous retry path.\n- rationale: A custom wait callable with `__bool__` returning `False` and `__call__` returning 5 previously produced a five-second retry delay, provided it did not compare equal to zero. The new condition bypasses the callable and sets the delay to zero, causing immediate retries instead of the configured backoff.\n",
+  "critique": "The finding describes the same defect: a truthiness check on the wait strategy skips falsy callables (e.g., __bool__ returning False), so the delay becomes zero and the configured backoff is lost. Its mention of the async path is extra but does not change the mechanism.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 863,
+    "output_tokens": 102
+  }
+}

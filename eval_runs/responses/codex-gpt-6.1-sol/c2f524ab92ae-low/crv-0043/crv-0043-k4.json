@@ -1,0 +1,58 @@
+{
+  "result": {
+    "findings": [],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30964,
+      "output_tokens": 416,
+      "cache_read_input_tokens": 27776
+    },
+    "elapsed_ms": 22147,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "c1f08bb1923e8913"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17023-cb62-7ab0-ab09-c04a30cdd157"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"ls -a; rg -n 'class wait_|def __bool__|def __len__|wait=None|wait=0|self.wait' tenacity tests | head -100\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"ls -a; rg -n 'class wait_|def __bool__|def __len__|wait=None|wait=0|self.wait' tenacity tests | head -100\"",
+          "aggregated_output": ".\n..\nschema.json\nrg: tenacity: No such file or directory (os error 2)\nrg: tests: No such file or directory (os error 2)\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30964,
+          "cached_input_tokens": 27776,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 416,
+          "reasoning_output_tokens": 311
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "result": {
+    "findings": [],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30221,
+      "output_tokens": 206,
+      "cache_read_input_tokens": 27392
+    },
+    "elapsed_ms": 12530,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "4d5ad745af65283e"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17025-7733-72a1-8f91-771e69690834"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '3520,3600p' src/click/core.py; rg -n 'def get_metavar|already_bracketed|\\\\[\\\\[|metavar' tests/test_arguments.py src/click/types.py | head -70\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '3520,3600p' src/click/core.py; rg -n 'def get_metavar|already_bracketed|\\\\[\\\\[|metavar' tests/test_arguments.py src/click/types.py | head -70\"",
+          "aggregated_output": "sed: src/click/core.py: No such file or directory\nrg: tests/test_arguments.py: No such file or directory (os error 2)\nrg: src/click/types.py: No such file or directory (os error 2)\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30221,
+          "cached_input_tokens": 27392,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 206,
+          "reasoning_output_tokens": 82
+        }
+      }
+    ]
+  }
+}

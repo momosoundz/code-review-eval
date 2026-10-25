@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/sessions.py",
+        "line": 671,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "Session.get now accepts a `params` argument but never forwards it: the call `self.request(\"GET\", url, **kwargs)` omits `params`, so it is silently discarded.",
+        "rationale": "Trigger: a caller runs session.get(url, params={\"q\": \"x\"}). The new parameter binds to `params` and is not in kwargs, so request() is called without it and the query string is never built. Impact: the request goes to the bare URL with no query parameters, returning wrong data without any error, which breaks the title's stated goal of aligning with requests.get.",
+        "confidence": 0.95
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 17170,
+      "output_tokens": 603,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 10137,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a4d6f77f87e107d6"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

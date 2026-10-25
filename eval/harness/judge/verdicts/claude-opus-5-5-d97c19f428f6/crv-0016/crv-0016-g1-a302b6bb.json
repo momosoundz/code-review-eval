@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0016",
+  "gold_id": "crv-0016-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The OR composition checks for retry_all when deciding whether to flatten an existing retry_any.\n- failure path: with `(A & B) | C`, the retry_all on the left is spliced into the retry_any as if it were a plain list of predicates, so the combination behaves as `A | B | C`: a retry fires when only A holds although the author required A and B together; no error is raised and the extra retries are silent\n\nReviewer finding\n- description: The async OR implementation flattens a left-hand retry_all, changing its AND conditions into OR conditions. This check should recognize retry_any instead.\n- rationale: For async predicates in (a & b) | (c | d), with a returning true and b, c, and d returning false, this branch constructs retry_any(a, b, c, d). The expression consequently returns true instead of false, causing retries when the configured conditions reject them.\n",
+  "critique": "The finding describes the same mechanism: the OR composition checks for retry_all where it should check for retry_any, so a left-hand retry_all is flattened into the retry_any and its AND semantics become OR, which causes extra retries. The concrete example (a & b) | ... turning into retry_any(a, b, ...) matches the labeled failure path, and calling it the async variant does not change the mechanism.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 805,
+    "output_tokens": 145
+  }
+}

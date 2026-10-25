@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 226,
+        "severity": "medium",
+        "category": "wrong_variable_or_argument",
+        "description": "__aexit__ discards the actual exception arguments and calls self.__exit__(None, None, None), so exceptions raised inside the async with block are never recorded on the retry state.",
+        "rationale": "Trigger: an exception is raised inside `async with AttemptManager(...)`. The sync __exit__ receives exc_type/exc_value and calls set_exception to record the failure so the retry loop can decide whether to retry. Because __aexit__ passes None, the exception is treated as success: set_result(None) is called and the exception is suppressed, so the attempt is reported as successful and the error is silently swallowed rather than retried.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 32042,
+      "output_tokens": 595,
+      "cache_read_input_tokens": 14976
+    },
+    "elapsed_ms": 14971,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "agreement:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "3040043f88ebe9e3"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

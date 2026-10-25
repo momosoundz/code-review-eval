@@ -1,0 +1,43 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/utils.py",
+        "line": 544,
+        "severity": "medium",
+        "category": "wrong_variable_or_argument",
+        "description": "A Content-Type parameter with no '=' (e.g. 'text/html; charset') now yields the boolean True as its value, so get_encoding_from_headers calls .strip() on a bool and raises AttributeError.",
+        "rationale": "Trigger: a response whose Content-Type header is 'text/html; charset' with no value. The new code stores params['charset'] = True instead of skipping the token, so the 'charset' in params check passes and params['charset'].strip(...) fails on a bool. Impact: get_encoding_from_headers raises instead of falling back to the default encoding, which surfaces to the user as a crash on a malformed but previously tolerated header.",
+        "confidence": 0.6
+      },
+      {
+        "file": "src/requests/utils.py",
+        "line": 520,
+        "severity": "medium",
+        "category": "wrong_literal_or_default",
+        "description": "A bare `charset` parameter is now stored as `True`, causing encoding detection to raise `AttributeError` when it calls `.strip()` on that value.",
+        "rationale": "For a response with `Content-Type: text/html; charset`, the parser now returns `{\"charset\": true}`. `get_encoding_from_headers()` then calls `params[\"charset\"].strip()`, crashing response handling. Previously, the bare parameter was ignored and the default text encoding was used.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 17549,
+      "output_tokens": 921,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 9398,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "1afc750f3de9d94b"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 258,
+        "severity": "medium",
+        "category": "wrong_literal_or_default",
+        "description": "The new `min` parameter defaults to 1 second, so every existing caller that did not pass `min` now gets a floor of 1 second, where the previous behavior had a floor of 0.",
+        "rationale": "Trigger: `wait_exponential_jitter(initial=0.1)` or any configuration whose computed wait is below 1s, such as `initial=0.1, max=0.5`. Mechanism: the return value is now `max(max(0, self.min), ...)` with `self.min == 1`, so the wait is clamped up to 1s. Impact: retries that previously slept under a second now sleep at least one second, silently changing timing for existing users who never asked for a minimum.",
+        "confidence": 0.7
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 17590,
+      "output_tokens": 1224,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 15296,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "124d353adf043099"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

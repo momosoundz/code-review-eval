@@ -1,0 +1,43 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/utils.py",
+        "line": 544,
+        "severity": "medium",
+        "category": "wrong_variable_or_argument",
+        "description": "A Content-Type parameter with no '=' (e.g. 'text/html; charset') is now stored as the boolean True, and get_encoding_from_headers then calls .strip() on it, which raises AttributeError.",
+        "rationale": "Trigger: a response header 'Content-Type: text/html; charset' with no value. The new code in _parse_content_type_header stores params['charset'] = True instead of skipping it, so the 'charset' in params check passes and True.strip(...) raises AttributeError. Before this change the bare parameter was ignored and the function fell through to the 'text' branch and returned ISO-8859-1. Impact: a malformed header that previously decoded fine now makes response.encoding/text access fail with an exception.",
+        "confidence": 0.6
+      },
+      {
+        "file": "src/requests/utils.py",
+        "line": 520,
+        "severity": "medium",
+        "category": "wrong_literal_or_default",
+        "description": "A bare `charset` parameter now causes encoding detection to raise `AttributeError`. The parser stores `True`, but `get_encoding_from_headers` expects the charset value to be a string.",
+        "rationale": "For a response with `Content-Type: text/plain; charset`, the changed parser returns `{\"charset\": true}`. `get_encoding_from_headers` then calls `.strip()` on that boolean, causing response processing to fail instead of using the previous default encoding.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 17553,
+      "output_tokens": 852,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 9167,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "1afc750f3de9d94b"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

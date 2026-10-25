@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_utils.py",
+        "line": 15,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing `__reduce_ex__` breaks pickle round trips for both sentinels because their enum values are plain `object()` instances.",
+        "rationale": "When `UNSET`, `FLAG_NEEDS_VALUE`, or an object containing either sentinel is pickled and then unpickled, Enum's default reducer reconstructs the member by value. Unpickling creates a different object that matches neither enum value, causing `ValueError`. The removed reducer reconstructed by member name and avoided this failure.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 46580,
+      "output_tokens": 404,
+      "cache_read_input_tokens": 27776
+    },
+    "elapsed_ms": 15068,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8a3cd15243ee2240"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17024-259c-7bb2-81ff-d42ea8783b23"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"python -c 'import enum,pickle,copy; S=enum.Enum(\\\"S\\\", {\\\"UNSET\\\":object()}); print(copy.copy(S.UNSET) is S.UNSET); print(copy.deepcopy(S.UNSET) is S.UNSET); print(pickle.loads(pickle.dumps(S.UNSET)))'\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"python -c 'import enum,pickle,copy; S=enum.Enum(\\\"S\\\", {\\\"UNSET\\\":object()}); print(copy.copy(S.UNSET) is S.UNSET); print(copy.deepcopy(S.UNSET) is S.UNSET); print(pickle.loads(pickle.dumps(S.UNSET)))'\"",
+          "aggregated_output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import enum,pickle,copy; S=enum.Enum(\"S\", {\"UNSET\":object()}); print(copy.copy(S.UNSET) is S.UNSET); print(copy.deepcopy(S.UNSET) is S.UNSET); print(pickle.loads(pickle.dumps(S.UNSET)))\n                                                                                                                                                         ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/miguelelhaiek/.local/share/uv/python/cpython-3.13.16-macos-aarch64-none/lib/python3.13/enum.py\", line 728, in __call__\n    return cls.__new__(cls, value)\n           ~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/Users/miguelelhaiek/.local/share/uv/python/cpython-3.13.16-macos-aarch64-none/lib/python3.13/enum.py\", line 1205, in __new__\n    raise ve_exc\nValueError: <object object at 0x1061c43d0> is not a valid S\nTrue\nTrue\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 46580,
+          "cached_input_tokens": 27776,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 404,
+          "reasoning_output_tokens": 23
+        }
+      }
+    ]
+  }
+}

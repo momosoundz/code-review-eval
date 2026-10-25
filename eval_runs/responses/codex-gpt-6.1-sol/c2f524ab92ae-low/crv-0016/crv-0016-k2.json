@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 112,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The async OR operator flattens a retry_all operand into retry_any, changing conjunctions into disjunctions. The type check should target retry_any.",
+        "rationale": "For async predicates A=False, B=True and C=False, retry_all(A, B) | retry_any(C) reaches this branch and becomes retry_any(A, B, C). It returns True instead of False, causing retries when the configured condition rejects them.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 31937,
+      "output_tokens": 286,
+      "cache_read_input_tokens": 15744
+    },
+    "elapsed_ms": 12347,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "54bc3d49e9eef4a3"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1701d-5e56-77c1-87cc-98fbbb45cb9f"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"cat tenacity/asyncio/retry.py; sed -n '1,90p' tenacity/retry.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"cat tenacity/asyncio/retry.py; sed -n '1,90p' tenacity/retry.py\"",
+          "aggregated_output": "cat: tenacity/asyncio/retry.py: No such file or directory\nsed: tenacity/retry.py: No such file or directory\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 31937,
+          "cached_input_tokens": 15744,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 286,
+          "reasoning_output_tokens": 76
+        }
+      }
+    ]
+  }
+}

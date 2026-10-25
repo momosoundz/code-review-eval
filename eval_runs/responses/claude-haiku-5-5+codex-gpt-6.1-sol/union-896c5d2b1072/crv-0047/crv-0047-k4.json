@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3576,
+        "severity": "low",
+        "category": "wrong_condition",
+        "description": "Optional arguments with already bracketed type metavars now receive a second pair of brackets in help output.",
+        "rationale": "For an optional argument using click.Choice(['a', 'b']), the type supplies the metavar '[a|b]'. Unconditionally wrapping every optional argument changes the displayed usage to '[[a|b]]', introducing redundant brackets into user-facing help.",
+        "confidence": 0.96
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 31690,
+      "output_tokens": 753,
+      "cache_read_input_tokens": 27264
+    },
+    "elapsed_ms": 19329,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "4d5ad745af65283e"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

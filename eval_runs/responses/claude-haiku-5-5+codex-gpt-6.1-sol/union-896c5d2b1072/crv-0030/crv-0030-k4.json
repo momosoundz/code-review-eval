@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 906,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The single-file wrap check was changed from `isinstance(filename, str)` to `isinstance(filename, os.PathLike)`, so a plain `str` filename is no longer wrapped in a tuple.",
+        "rationale": "Trigger: calling `click.edit(filename=\"notes.txt\")` with a str. The str is not PathLike, so it skips the wrap and is passed to `ed.edit_files(filenames=\"notes.txt\")`. edit_files iterates over the argument, so it treats each character as a separate filename and launches the editor with 'n', 'o', 't', ... as arguments. The intended file is never opened. This breaks the existing str case, which is the most common usage.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 50573,
+      "output_tokens": 902,
+      "cache_read_input_tokens": 44032
+    },
+    "elapsed_ms": 17325,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "99339c90541464dd"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

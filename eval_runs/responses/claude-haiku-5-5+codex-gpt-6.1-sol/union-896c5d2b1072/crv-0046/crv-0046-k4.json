@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_utils.py",
+        "line": 20,
+        "severity": "medium",
+        "category": "other",
+        "description": "Removing the custom __reduce_ex__ means Sentinel members pickle through the default Enum path, which reconstructs them by their object() value. Unpickling yields a new object() that does not match any member, so the round trip fails or produces a non-UNSET value.",
+        "rationale": "Trigger: a Command or Parameter holding the UNSET default is pickled and then unpickled, for example to send it to a multiprocessing worker or cache it. Mechanism: the old __reduce_ex__ returned getattr(Sentinel, name), which preserved identity; the default Enum reduction calls Sentinel(value) with a fresh object(), which fails the lookup. Impact: unpickling raises ValueError or yields a sentinel that fails identity checks such as 'is UNSET', changing option resolution.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 48392,
+      "output_tokens": 1718,
+      "cache_read_input_tokens": 43136
+    },
+    "elapsed_ms": 15139,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8a3cd15243ee2240"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

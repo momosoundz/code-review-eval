@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 258,
+        "severity": "medium",
+        "category": "wrong_literal_or_default",
+        "description": "The new `min` parameter defaults to 1 second, so existing callers that never pass `min` now get a 1-second floor on every wait, which the old code did not have.",
+        "rationale": "Trigger: `wait_exponential_jitter(initial=0.1)` (or any configuration where initial*2**n + jitter is below 1) on an existing call site. Before this change, the first wait was about 0.1s. After this change, `max(max(0, self.min), ...)` with self.min=1 clamps it to 1s. Impact: retry timing changes silently for users who did not opt into `min`, which can slow retries and break callers that depend on the previous timing.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 33251,
+      "output_tokens": 1003,
+      "cache_read_input_tokens": 15360
+    },
+    "elapsed_ms": 20632,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "124d353adf043099"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

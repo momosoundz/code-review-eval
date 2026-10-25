@@ -1,0 +1,80 @@
+{
+  "result": {
+    "findings": [],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 47741,
+      "output_tokens": 265,
+      "cache_read_input_tokens": 43776
+    },
+    "elapsed_ms": 14408,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "48f3dece20513909"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17026-d06a-7dd0-a3f5-f9f15c8bc2f9"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '50,260p' src/click/_termui_impl.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '50,260p' src/click/_termui_impl.py\"",
+          "aggregated_output": "sed: src/click/_termui_impl.py: No such file or directory\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -la'",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -la'",
+          "aggregated_output": "total 8\ndrwx------@   3 miguelelhaiek  staff     96 Oct 24 20:02 .\ndrwx------@ 318 miguelelhaiek  staff  10176 Oct 24 20:02 ..\n-rw-r--r--@   1 miguelelhaiek  staff    812 Oct 24 20:02 schema.json\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 47741,
+          "cached_input_tokens": 43776,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 265,
+          "reasoning_output_tokens": 152
+        }
+      }
+    ]
+  }
+}

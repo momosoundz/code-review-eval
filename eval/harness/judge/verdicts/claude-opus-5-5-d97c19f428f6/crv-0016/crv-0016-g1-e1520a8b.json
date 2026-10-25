@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0016",
+  "gold_id": "crv-0016-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The OR composition checks for retry_all when deciding whether to flatten an existing retry_any.\n- failure path: with `(A & B) | C`, the retry_all on the left is spliced into the retry_any as if it were a plain list of predicates, so the combination behaves as `A | B | C`: a retry fires when only A holds although the author required A and B together; no error is raised and the extra retries are silent\n\nReviewer finding\n- description: The async OR overload checks for `retry_all` instead of `retry_any`, converting a left-hand conjunction into a disjunction.\n- rationale: For async predicates A=False, B=True, and C=False, composing `retry_all(A, B) | retry_any(C)` reaches this branch and produces `retry_any(A, B, C)`. The result is True instead of False, so an operation is retried even though the configured retry condition rejects it.\n",
+  "critique": "Both describe the same fault: the OR overload checks for retry_all instead of retry_any, so a left-hand retry_all gets flattened into a retry_any, turning A AND B into A OR B and causing extra retries. The finding says this is the async overload, which the label does not specify. It is still the same mechanism.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 811,
+    "output_tokens": 117
+  }
+}

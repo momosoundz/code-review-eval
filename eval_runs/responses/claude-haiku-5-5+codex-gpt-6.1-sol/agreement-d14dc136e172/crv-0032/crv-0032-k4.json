@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1188,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The loop now removes only param.opts from the help option names and no longer removes param.secondary_opts, which the old code did.",
+        "rationale": "Trigger: a command has a boolean option such as @click.option('--verbose/--help') whose secondary opt '--help' is reserved. Before this change, '--help' was removed from the candidate help names, so no conflicting help option was created. After it, '--help' stays in the candidates and the help option is added with that name, colliding with the secondary flag. Impact: the command gets a duplicate or shadowed --help, and users can no longer reach the intended behavior through that name.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 17015,
+      "output_tokens": 1002,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 14380,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "agreement:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "177b00e760144ff6"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

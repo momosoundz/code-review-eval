@@ -1,0 +1,90 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 793,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "Constructing a Response now raises AttributeError because self.raw is initialized to None. The underlying response is attached only after construction.",
+        "rationale": "Any call to Response(), including normal HTTP request handling, reaches this assignment before an underlying response has been attached. Accessing self.raw.reason therefore raises AttributeError, preventing response construction and causing requests to fail.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 45872,
+      "output_tokens": 280,
+      "cache_read_input_tokens": 42624
+    },
+    "elapsed_ms": 14414,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "2bb8bd9869d82518"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17022-b406-7ec2-9126-f591e306460e"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '730,820p' src/requests/models.py; rg -n '\\\\.reason =|Response\\\\(' src/requests/adapters.py | head -25\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '730,820p' src/requests/models.py; rg -n '\\\\.reason =|Response\\\\(' src/requests/adapters.py | head -25\"",
+          "aggregated_output": "sed: src/requests/models.py: No such file or directory\nrg: src/requests/adapters.py: IO error for operation on src/requests/adapters.py: No such file or directory (os error 2)\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"pwd; rg --files -g '*models*' -g '*requests*' -g 'AGENTS.md' -g '*.diff' -g '*.patch'\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"pwd; rg --files -g '*models*' -g '*requests*' -g 'AGENTS.md' -g '*.diff' -g '*.patch'\"",
+          "aggregated_output": "/private/var/folders/d3/sspllxrd5slbf25d5hxqxkr40000gn/T/codex-review-wc8qs5un\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 45872,
+          "cached_input_tokens": 42624,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 280,
+          "reasoning_output_tokens": 15
+        }
+      }
+    ]
+  }
+}

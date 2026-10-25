@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 421,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "The truthiness check skips valid callable wait strategies that evaluate to false. The same regression exists in the asynchronous retry path.",
+        "rationale": "A custom wait callable with `__bool__` returning `False` and `__call__` returning 5 previously produced a five-second retry delay, provided it did not compare equal to zero. The new condition bypasses the callable and sets the delay to zero, causing immediate retries instead of the configured backoff.",
+        "confidence": 0.98
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 33006,
+      "output_tokens": 950,
+      "cache_read_input_tokens": 27648
+    },
+    "elapsed_ms": 15958,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "c1f08bb1923e8913"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 193,
+        "severity": "medium",
+        "category": "wrong_operator",
+        "description": "Using `or` discards an explicit cause if that exception evaluates to false. Check whether `__cause__` is `None` instead of testing its truthiness.",
+        "rationale": "If an exception subclass defines `__bool__` to return False (or `__len__` to return zero), raising `TryAgain` from an instance outside an exception handler sets a valid `__cause__` but leaves `__context__` as None. This expression selects None, so exhausted retries still raise TryAgain instead of the underlying exception.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 16827,
+      "output_tokens": 1122,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 14416,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "76db95b6130b4f43"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

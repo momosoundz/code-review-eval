@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The short-circuit fires when the exponent is below the threshold, which is when the exponential result is still under max. The early return then yields self.max, so waits that should grow are pinned at the cap from the start.",
+        "rationale": "Trigger: multiplier=1, exp_base=2, max=100, min=0, and attempt_number=2, so exponent=1. log(100/1, 2) is about 6.64, and 1 < 6.64 is true, so the method returns 100 on the second attempt. The original code computes 1*2**1=2 and returns max(0, min(2, 100))=2. Impact: every exponential backoff wait below the cap becomes the cap, so retries sleep far longer than configured and the backoff schedule is silently wrong.",
+        "confidence": 0.9
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 32428,
+      "output_tokens": 1381,
+      "cache_read_input_tokens": 15104
+    },
+    "elapsed_ms": 22447,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a7694e2c1dc3fa55"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

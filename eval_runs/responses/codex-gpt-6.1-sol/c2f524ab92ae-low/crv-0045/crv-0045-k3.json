@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 180,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing cycle detection makes the retry predicate loop forever on cyclic exception cause chains that contain no matching exception type.",
+        "rationale": "If an exception has `exc.__cause__ = exc` and does not match `exception_cause_types`, each iteration assigns the same exception back to `exc`. The predicate never returns, so the retry operation hangs and consumes CPU instead of deciding whether to retry.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 14954,
+      "output_tokens": 233,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 12044,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8d370141e2500f80"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17024-6a26-7292-a01d-667b6c49ab87"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 14954,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 233,
+          "reasoning_output_tokens": 87
+        }
+      }
+    ]
+  }
+}

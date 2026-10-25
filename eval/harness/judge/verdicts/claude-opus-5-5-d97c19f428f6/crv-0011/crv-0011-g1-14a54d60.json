@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0011",
+  "gold_id": "crv-0011-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the shortcut guard computes math.log(self.max / self.multiplier, self.exp_base) and the division can underflow to 0.0, which math.log rejects\n- failure path: wait_exponential(multiplier=1e300, max=1e-300) on the first attempt: the guards pass, max / multiplier rounds to 0.0, math.log(0.0, 2) raises ValueError where the previous code returned self.max; only reachable with extreme parameters\n\nReviewer finding\n- description: The early-return shortcut returns max(max(0, self.min), self.max), but the original logic is max(max(0, min), min(result, max)). When min > max the original returns min, and this does too. But when exponent exceeds the threshold, result > max, so min(result, max) = max, which matches. The real issue is the threshold check uses math.log with possibly extreme values, which can raise.\n- rationale: math.log(self.max / self.multiplier, self.exp_base) is evaluated before the try block. A tiny multiplier (e.g. 1e-320 as denormal) makes max/multiplier overflow to inf in float division or raise OverflowError for large ints, and with int max/multiplier the division can raise OverflowError ('integer division result too large'). This is not caught, so calling wait raises where previously it returned self.max.\n",
+  "critique": "Both point at the unguarded math.log(self.max / self.multiplier, self.exp_base) raising instead of returning self.max. The label's mechanism is the quotient underflowing to 0.0 (huge multiplier, tiny max), so math.log raises ValueError. The finding instead claims overflow (tiny multiplier giving inf, or int division raising OverflowError); that is a different failure, and inf would not even make math.log raise.",
+  "verdict": "no_match",
+  "usage": {
+    "input_tokens": 955,
+    "output_tokens": 469
+  }
+}

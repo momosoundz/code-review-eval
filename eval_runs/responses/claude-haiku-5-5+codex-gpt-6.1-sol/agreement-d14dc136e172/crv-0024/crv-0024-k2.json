@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3814,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "Argument.get_help_record now always returns a tuple, but when help is None it returns (metavar, None) instead of an empty description string as the docstring and commit title promise. The removed fallback in format_options that substituted \"\" is gone too.",
+        "rationale": "Trigger: a command has one Argument with help set, so the Positional arguments section is rendered, plus another Argument with no help. The second argument yields (metavar, None). HelpFormatter.write_dl then passes None into text wrapping (wrap_text calls expandtabs on the description), which raises AttributeError, or otherwise renders a bogus row. Impact: --help crashes or misprints for any command that mixes documented and undocumented positional arguments, a common pattern.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 33045,
+      "output_tokens": 1330,
+      "cache_read_input_tokens": 27648
+    },
+    "elapsed_ms": 14369,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "agreement:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "6ec690de339368e8"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

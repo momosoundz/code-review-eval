@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0048",
+  "gold_id": "crv-0048-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: _interpret_color no longer checks the 0..255 range, rejects bools or validates tuple length, and an unknown name raises KeyError instead of ValueError\n- failure path: style('x', fg=300) emits an escape with an out-of-range index instead of raising ValueError; fg=True is now accepted where it used to raise, formatting as palette index 1; an unknown color name surfaces as TypeError from the caller's except clause instead of a ValueError naming the color\n\nReviewer finding\n- description: Numeric colors are no longer range-checked before generating ANSI sequences, including RGB components.\n- rationale: Calling style(\"text\", fg=256) or style(\"text\", fg=(256, 0, 0)) now emits an out-of-range ANSI color sequence instead of raising ValueError. Invalid color configuration therefore passes silently into output, where the terminal may ignore or misrender the requested color.\n",
+  "critique": "The finding describes the missing 0..255 range check in color interpretation, which lets out-of-range values like fg=256 produce an escape sequence instead of raising ValueError. That is the core mechanism of the labeled defect. It omits the bool and KeyError aspects, but the faulty operation and failure mode it does name are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 823,
+    "output_tokens": 122
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 793,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "Constructing a Response now raises AttributeError because self.raw is initialized to None before this assignment.",
+        "rationale": "Any call to Response(), including the normal HTTP response construction path, reaches self.raw.reason before a transport response has been assigned to raw. Accessing reason on None raises AttributeError, preventing requests from returning responses.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 45865,
+      "output_tokens": 267,
+      "cache_read_input_tokens": 42496
+    },
+    "elapsed_ms": 12722,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "2bb8bd9869d82518"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17022-1fee-7660-b63a-ebc758457139"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'self.raw|self.reason|class Response' src/requests/models.py; sed -n '750,805p' src/requests/models.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'self.raw|self.reason|class Response' src/requests/models.py; sed -n '750,805p' src/requests/models.py\"",
+          "aggregated_output": "rg: src/requests/models.py: IO error for operation on src/requests/models.py: No such file or directory (os error 2)\nsed: src/requests/models.py: No such file or directory\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"pwd; rg --files -g '*models*' -g '*requests*' -g 'AGENTS.md'\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"pwd; rg --files -g '*models*' -g '*requests*' -g 'AGENTS.md'\"",
+          "aggregated_output": "/private/var/folders/d3/sspllxrd5slbf25d5hxqxkr40000gn/T/codex-review-p0yoxqnl\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 45865,
+          "cached_input_tokens": 42496,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 267,
+          "reasoning_output_tokens": 14
+        }
+      }
+    ]
+  }
+}

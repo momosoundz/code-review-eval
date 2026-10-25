@@ -1,0 +1,43 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "stats.clear() mutates the function-level statistics dict in place, and that same dict is now handed to the per-call copy. A recursive or concurrent call to the same decorated function clears and overwrites statistics that an outer or other-thread call is still using.",
+        "rationale": "Trigger: the decorated function calls itself (the comment itself cites repeated calls in one stack) or two threads call it at once. Mechanism: the original code rebound the attribute to a fresh copy dict per call, so each call kept its own stats. This change makes every call write into one shared dict and clears it at entry, so an inner or concurrent call resets attempt_number and other fields seen by the outer call. Impact: statistics read after or during a call can show values from a different invocation.",
+        "confidence": 0.55
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 218,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "stats.clear() on the shared function-level statistics dict lets concurrent or recursive awaits of the same decorated coroutine wipe each other's statistics.",
+        "rationale": "Trigger: two asyncio tasks await the same decorated coroutine, or the coroutine re-enters itself. Mechanism: the original code gave each call a distinct statistics dict via rebinding. Now every call clears and writes into one dict, so a call entering later erases the counters of an in-flight call. Impact: the statistics a caller observes for its own invocation can be wrong or reset mid-retry.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 34005,
+      "output_tokens": 2282,
+      "cache_read_input_tokens": 15616
+    },
+    "elapsed_ms": 19379,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "agreement:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "831389d6ee1e24ae"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

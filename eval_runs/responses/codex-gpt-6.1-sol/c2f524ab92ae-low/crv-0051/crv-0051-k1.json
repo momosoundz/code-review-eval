@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 257,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The new flag does not disable retries when a retry controller is called directly. It is checked only in decorator wrappers.",
+        "rationale": "For example, `Retrying(enabled=False, stop=stop_after_attempt(3))(f)` still invokes a failing `f` three times because the unchanged `__call__` retry loop never checks `enabled`. Users of the direct controller API therefore still get retries and a RetryError despite explicitly disabling retrying; AsyncRetrying has the same gap.",
+        "confidence": 0.97
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 32072,
+      "output_tokens": 367,
+      "cache_read_input_tokens": 28288
+    },
+    "elapsed_ms": 20793,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "f1b4531906b79320"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17025-a828-7ce0-a3a0-927e9d1939f6"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'def __call__|def wraps|def retry|class .*Retrying|retry_with' tenacity/__init__.py tenacity/asyncio/__init__.py tenacity/tornadoweb.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'def __call__|def wraps|def retry|class .*Retrying|retry_with' tenacity/__init__.py tenacity/asyncio/__init__.py tenacity/tornadoweb.py\"",
+          "aggregated_output": "rg: tenacity/__init__.py: No such file or directory (os error 2)\nrg: tenacity/asyncio/__init__.py: No such file or directory (os error 2)\nrg: tenacity/tornadoweb.py: No such file or directory (os error 2)\n",
+          "exit_code": 2,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 32072,
+          "cached_input_tokens": 28288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 367,
+          "reasoning_output_tokens": 130
+        }
+      }
+    ]
+  }
+}

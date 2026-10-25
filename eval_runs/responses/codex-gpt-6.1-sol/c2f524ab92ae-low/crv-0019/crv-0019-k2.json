@@ -1,0 +1,58 @@
+{
+  "result": {
+    "findings": [],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30666,
+      "output_tokens": 159,
+      "cache_read_input_tokens": 27520
+    },
+    "elapsed_ms": 9693,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "eb99331a14003c17"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1701e-12e8-7202-9268-fc4f7e410401"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"ls -a; sed -n '1,60p' tenacity/__init__.py; sed -n '190,235p' tenacity/__init__.py; rg 'python_requires|requires-python|python =|Programming Language :: Python' pyproject.toml setup.cfg setup.py tox.ini\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"ls -a; sed -n '1,60p' tenacity/__init__.py; sed -n '190,235p' tenacity/__init__.py; rg 'python_requires|requires-python|python =|Programming Language :: Python' pyproject.toml setup.cfg setup.py tox.ini\"",
+          "aggregated_output": ".\n..\nschema.json\nsed: tenacity/__init__.py: No such file or directory\nsed: tenacity/__init__.py: No such file or directory\nrg: pyproject.toml: No such file or directory (os error 2)\nrg: setup.cfg: No such file or directory (os error 2)\nrg: setup.py: No such file or directory (os error 2)\nrg: tox.ini: No such file or directory (os error 2)\n",
+          "exit_code": 2,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30666,
+          "cached_input_tokens": 27520,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 159,
+          "reasoning_output_tokens": 26
+        }
+      }
+    ]
+  }
+}

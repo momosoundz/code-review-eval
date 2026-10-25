@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The short-circuit condition is inverted: it returns the max wait while the computed exponential wait is still below max, instead of only once it has reached max.",
+        "rationale": "Trigger: multiplier=1, max=100, exp_base=2, attempt_number=1, so exponent=0. The condition 0 < log2(100)\u22486.64 is true, so the method returns max(max(0,min),100)=100 on the first retry, even though multiplier*exp_base**0 is only 1. The wait then jumps straight to the cap, and every early attempt waits the maximum instead of growing exponentially. Impact: retries wait far longer than configured, and the backoff curve is wrong for virtually every call.",
+        "confidence": 0.93
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 17023,
+      "output_tokens": 1093,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 14023,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a7694e2c1dc3fa55"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

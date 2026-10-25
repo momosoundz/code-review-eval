@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 275,
+        "severity": "low",
+        "category": "wrong_variable_or_argument",
+        "description": "The `self.initial` attribute is no longer assigned, so code that reads `wait_exponential_jitter(...).initial` now raises AttributeError, even though `initial` is only deprecated.",
+        "rationale": "Trigger: user code reads the `.initial` attribute of an existing wait_exponential_jitter instance. Mechanism: the diff removes `self.initial = initial` and sets only `self.multiplier`. Impact: a deprecated-but-supported parameter breaks any reader of that attribute with an AttributeError, which a deprecation should not do.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 33659,
+      "output_tokens": 1338,
+      "cache_read_input_tokens": 27904
+    },
+    "elapsed_ms": 11100,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "7b807a1616887da5"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

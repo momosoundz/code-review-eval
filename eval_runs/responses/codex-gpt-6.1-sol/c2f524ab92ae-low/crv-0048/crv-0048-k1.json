@@ -1,0 +1,55 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 678,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "Color index 0 is skipped because the new condition tests truthiness. The same regression affects background colors at line 684.",
+        "rationale": "Calling style(\"text\", fg=0) or style(\"text\", bg=0) requests the valid ANSI palette index 0 (black). Since 0 is false, the corresponding escape sequence is omitted, so the text retains the terminal's current color instead of using black.",
+        "confidence": 1.0
+      },
+      {
+        "file": "src/click/termui.py",
+        "line": 573,
+        "severity": "medium",
+        "category": "input_validation",
+        "description": "Numeric colors are no longer range-checked before generating ANSI sequences, including RGB components.",
+        "rationale": "Calling style(\"text\", fg=256) or style(\"text\", fg=(256, 0, 0)) now emits an out-of-range ANSI color sequence instead of raising ValueError. Invalid color configuration therefore passes silently into output, where the terminal may ignore or misrender the requested color.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 15454,
+      "output_tokens": 490,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 20802,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "37c651f9bab89a44"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17022-9cfa-7ff1-8c9b-25be231e0660"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 15454,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 490,
+          "reasoning_output_tokens": 227
+        }
+      }
+    ]
+  }
+}

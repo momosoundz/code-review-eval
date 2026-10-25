@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 239,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "Removing the `hasattr(fp, \"read\")` fallback makes the file-object check depend only on `isinstance(fp, _SupportsRead)`, which on newer Python versions uses static attribute lookup and misses readers whose `read` is provided dynamically via `__getattr__`.",
+        "rationale": "Trigger: a file-like proxy or wrapper that delegates `read` through `__getattr__` and is passed in `files`. Previously `hasattr` returned True and `fp.read()` was called. Now the runtime protocol check may return False, so the object falls through to the other branches and its content is not read as a file part. Impact: the upload silently sends wrong or missing file content instead of the file's data.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 63691,
+      "output_tokens": 1564,
+      "cache_read_input_tokens": 58496
+    },
+    "elapsed_ms": 21971,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "agreement:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "761607eaab997ea2"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

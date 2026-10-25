@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1188,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The refactor dropped the removal of `param.secondary_opts` from the help option candidates. Names used only as secondary options (for example the `--help` in `--shout/--help`) are no longer excluded.",
+        "rationale": "Trigger: a command has a boolean option whose secondary name matches a help option name, such as `@click.option('--shout/--help')`. The old code removed `--help` from the help names because of `secondary_opts`. The new loop only iterates `param.opts`, so `--help` stays a candidate and the help option is also registered with `--help`, colliding with the user's option. Impact: the parser sees a duplicate or ambiguous `--help`, and the user's option or the help option stops working as intended.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 32370,
+      "output_tokens": 909,
+      "cache_read_input_tokens": 27520
+    },
+    "elapsed_ms": 14518,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "agreement:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "177b00e760144ff6"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

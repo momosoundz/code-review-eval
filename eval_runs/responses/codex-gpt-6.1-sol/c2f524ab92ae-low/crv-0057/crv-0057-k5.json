@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 193,
+        "severity": "medium",
+        "category": "wrong_operator",
+        "description": "Using `or` skips an explicit cause if that exception is falsey. Select `__cause__` by checking whether it is `None` instead.",
+        "rationale": "If an exception subclass defines `__bool__` to return False and the user raises `TryAgain() from that_exception` outside an active exception handler, `exc.__cause__ or exc.__context__` evaluates to None. The retry consequently reraises the TryAgain sentinel rather than the explicitly attached underlying exception; inside a handler, it can select an unrelated context instead.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30341,
+      "output_tokens": 351,
+      "cache_read_input_tokens": 27392
+    },
+    "elapsed_ms": 18299,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "76db95b6130b4f43"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17025-8c6b-7640-a97a-d98521fcd727"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": ".\n..\nschema.json\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30341,
+          "cached_input_tokens": 27392,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 351,
+          "reasoning_output_tokens": 141
+        }
+      }
+    ]
+  }
+}

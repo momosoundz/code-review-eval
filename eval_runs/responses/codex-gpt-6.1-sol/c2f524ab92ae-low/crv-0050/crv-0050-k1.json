@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/utils.py",
+        "line": 520,
+        "severity": "medium",
+        "category": "wrong_literal_or_default",
+        "description": "A bare `charset` parameter now causes encoding detection to raise `AttributeError` instead of using the content type's default encoding.",
+        "rationale": "For `Content-Type: text/plain; charset`, the parser now stores `params['charset'] = True`. `get_encoding_from_headers` then calls `.strip()` on that boolean, raising `AttributeError`; previously the bare parameter was ignored and ISO-8859-1 was returned. A server returning this malformed header can therefore cause response processing to fail.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 15444,
+      "output_tokens": 233,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 11681,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "1afc750f3de9d94b"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17024-607e-78c3-89fe-dff664f49ae6"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 15444,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 233,
+          "reasoning_output_tokens": 67
+        }
+      }
+    ]
+  }
+}

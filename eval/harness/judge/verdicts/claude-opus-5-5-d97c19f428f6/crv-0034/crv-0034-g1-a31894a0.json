@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0034",
+  "gold_id": "crv-0034-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: After stripping ANSI codes the prompt text is also passed through str.strip(), which removes the whitespace at the end of the prompt that separates it from the user's typed input.\n- failure path: click.prompt(\"Name\") builds the prompt 'Name: '; when the stream does not support color (piped output, CliRunner, NO_COLOR) the prompt is shown as 'Name:' with the cursor glued to the colon, while on a color-capable terminal the same call keeps the trailing space, so transcripts differ between the two environments.\n\nReviewer finding\n- description: Calling `.strip()` also removes intentional leading and trailing whitespace from the prompt, even when it contains no ANSI codes.\n- rationale: When stdout does not support ANSI, a prompt such as `\"Name: \"` becomes `\"Name:\"`, and prompts with leading newlines or indentation lose that formatting. The branch should remove ANSI sequences while preserving the prompt's whitespace; otherwise displayed or captured prompts change beyond color removal.\n",
+  "critique": "The finding names the same mechanism: `.strip()` applied after ANSI removal on the non-color path drops the prompt's trailing whitespace, turning 'Name: ' into 'Name:'. It ties this to the case where stdout lacks ANSI support, which is the labeled defect.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 868,
+    "output_tokens": 110
+  }
+}

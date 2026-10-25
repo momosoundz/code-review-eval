@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "medium",
+        "category": "boundary",
+        "description": "The shortcut raises ValueError when max / multiplier underflows to zero, instead of returning the capped wait.",
+        "rationale": "For wait_exponential(multiplier=1e308, max=1e-308) on attempt 1, all preceding guards pass, but the division rounds to 0.0 and math.log(0.0, 2) raises ValueError outside the try block. Previously the calculation returned 1e-308, so this valid configuration now aborts retry processing.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 17074,
+      "output_tokens": 1336,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 16390,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "1411fba03c0901df"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

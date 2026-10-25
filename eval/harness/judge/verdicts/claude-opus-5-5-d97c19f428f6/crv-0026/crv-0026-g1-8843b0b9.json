@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0026",
+  "gold_id": "crv-0026-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The guard uses all(...) instead of any(...) over the arguments' help attributes, so the section is gated on every argument being documented rather than on at least one.\n- failure path: A command with arguments SRC (help set) and DST (no help) prints no 'Positional arguments' section at all in --help, silently dropping the documented text; conversely a command with zero arguments satisfies all([]) and prints an empty 'Positional arguments' header on every --help.\n\nReviewer finding\n- description: The condition requires every argument to have help, so a command with both documented and undocumented arguments loses its entire positional arguments section. Use an `any` check to show all arguments when at least one is documented.\n- rationale: For a command with two arguments where one has help text and the other has `help=None`, `all(...)` returns false and skips formatting entirely. Users lose the previously displayed argument documentation, and the new empty-description fallback is never reached for undocumented arguments.\n",
+  "critique": "The finding identifies the same faulty all(...) guard. It describes the same failure: a mix of documented and undocumented arguments drops the whole positional arguments section. It also proposes the any() fix. It does not mention the empty-header case for zero arguments, but the core mechanism matches.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 833,
+    "output_tokens": 108
+  }
+}

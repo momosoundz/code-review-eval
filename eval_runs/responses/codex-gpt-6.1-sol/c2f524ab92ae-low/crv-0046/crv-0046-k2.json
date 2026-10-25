@@ -1,0 +1,90 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_utils.py",
+        "line": 15,
+        "severity": "medium",
+        "category": "resource_lifecycle",
+        "description": "Removing `__reduce_ex__` breaks pickle round trips for both sentinel members. Preserve name-based serialization because their `object()` values cannot be reconstructed by identity.",
+        "rationale": "When a sentinel, or an object containing one, is pickled and then unpickled, Enum's default reducer reconstructs the member from its value. Unpickling creates a new object that matches neither member's value, so deserialization raises ValueError instead of restoring the sentinel.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 46799,
+      "output_tokens": 478,
+      "cache_read_input_tokens": 43136
+    },
+    "elapsed_ms": 16862,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8a3cd15243ee2240"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17023-66e2-79d2-a02b-b8c7d16e7db9"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": ".\n..\nschema.json\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"python -c 'import enum,pickle,copy; S=enum.Enum(\\\"Sentinel\\\", {\\\"UNSET\\\":object(),\\\"FLAG_NEEDS_VALUE\\\":object()}); globals()[\\\"Sentinel\\\"]=S; print(copy.copy(S.UNSET) is S.UNSET, copy.deepcopy(S.UNSET) is S.UNSET); print(pickle.loads(pickle.dumps(S.UNSET)))'\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"python -c 'import enum,pickle,copy; S=enum.Enum(\\\"Sentinel\\\", {\\\"UNSET\\\":object(),\\\"FLAG_NEEDS_VALUE\\\":object()}); globals()[\\\"Sentinel\\\"]=S; print(copy.copy(S.UNSET) is S.UNSET, copy.deepcopy(S.UNSET) is S.UNSET); print(pickle.loads(pickle.dumps(S.UNSET)))'\"",
+          "aggregated_output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import enum,pickle,copy; S=enum.Enum(\"Sentinel\", {\"UNSET\":object(),\"FLAG_NEEDS_VALUE\":object()}); globals()[\"Sentinel\"]=S; print(copy.copy(S.UNSET) is S.UNSET, copy.deepcopy(S.UNSET) is S.UNSET); print(pickle.loads(pickle.dumps(S.UNSET)))\n                                                                                                                                                                                                              ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/miguelelhaiek/.local/share/uv/python/cpython-3.13.16-macos-aarch64-none/lib/python3.13/enum.py\", line 728, in __call__\n    return cls.__new__(cls, value)\n           ~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/Users/miguelelhaiek/.local/share/uv/python/cpython-3.13.16-macos-aarch64-none/lib/python3.13/enum.py\", line 1205, in __new__\n    raise ve_exc\nValueError: <object object at 0x105efc3e0> is not a valid Sentinel\nTrue True\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 46799,
+          "cached_input_tokens": 43136,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 478,
+          "reasoning_output_tokens": 30
+        }
+      }
+    ]
+  }
+}

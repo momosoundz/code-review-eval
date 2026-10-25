@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 239,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "Removing the `hasattr` fallback breaks multipart uploads of file proxies that expose `read` through `__getattr__` on Python 3.12 and later.",
+        "rationale": "For example, a proxy that delegates missing attributes to an internal `io.BytesIO` has a callable `read`, but fails the runtime protocol check because Python 3.12+ checks protocol attributes using static lookup. Previously the fallback read its bytes; now the proxy falls through as the multipart field data, causing upload preparation to fail instead of sending the file.",
+        "confidence": 0.98
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 63590,
+      "output_tokens": 891,
+      "cache_read_input_tokens": 58368
+    },
+    "elapsed_ms": 21392,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "761607eaab997ea2"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

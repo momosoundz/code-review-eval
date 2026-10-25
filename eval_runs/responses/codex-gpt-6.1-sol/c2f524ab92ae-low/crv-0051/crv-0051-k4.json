@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 257,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The enabled flag is checked only by decorated wrappers, so calling Retrying(enabled=False) directly still retries. AsyncRetrying has the same gap.",
+        "rationale": "For example, Retrying(enabled=False, stop=stop_after_attempt(3))(f), where f raises ValueError, enters the unchanged retry loop and calls f three times before raising RetryError. Users of the direct-call API therefore still experience repeated calls and retry delays despite explicitly disabling retries.",
+        "confidence": 0.97
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 31972,
+      "output_tokens": 329,
+      "cache_read_input_tokens": 28160
+    },
+    "elapsed_ms": 18672,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "f1b4531906b79320"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17026-7cd2-7f20-82a0-a72e40d8cf72"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": ".\n..\nschema.json\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 31972,
+          "cached_input_tokens": 28160,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 329,
+          "reasoning_output_tokens": 142
+        }
+      }
+    ]
+  }
+}

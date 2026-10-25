@@ -1,0 +1,90 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/asyncio/retry.py",
+        "line": 112,
+        "severity": "high",
+        "category": "wrong_condition",
+        "description": "The async OR implementation flattens a left-hand retry_all, changing its AND conditions into OR conditions. This check should recognize retry_any instead.",
+        "rationale": "For async predicates in (a & b) | (c | d), with a returning true and b, c, and d returning false, this branch constructs retry_any(a, b, c, d). The expression consequently returns true instead of false, causing retries when the configured conditions reject them.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 48182,
+      "output_tokens": 385,
+      "cache_read_input_tokens": 31744
+    },
+    "elapsed_ms": 17091,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "54bc3d49e9eef4a3"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1701d-d08a-7893-a417-7053aca94cad"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"cat tenacity/asyncio/retry.py; sed -n '1,85p' tenacity/retry.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"cat tenacity/asyncio/retry.py; sed -n '1,85p' tenacity/retry.py\"",
+          "aggregated_output": "cat: tenacity/asyncio/retry.py: No such file or directory\nsed: tenacity/retry.py: No such file or directory\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -la'",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -la'",
+          "aggregated_output": "total 8\ndrwx------@   3 miguelelhaiek  staff     96 Oct 24 19:52 .\ndrwx------@ 320 miguelelhaiek  staff  10240 Oct 24 19:52 ..\n-rw-r--r--@   1 miguelelhaiek  staff    812 Oct 24 19:52 schema.json\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 48182,
+          "cached_input_tokens": 31744,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 385,
+          "reasoning_output_tokens": 141
+        }
+      }
+    ]
+  }
+}

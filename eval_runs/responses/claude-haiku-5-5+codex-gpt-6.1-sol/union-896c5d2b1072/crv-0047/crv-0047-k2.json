@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3576,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "Removing the already_bracketed check means an optional parameter whose metavar is already bracketed (e.g. metavar=\"[FOO]\") is now wrapped again, producing \"[[FOO]]\" in the usage line.",
+        "rationale": "Trigger: an option with required=False and a user-supplied metavar such as \"[FOO]\". Before this change the code skipped the extra brackets; now line 3576 always wraps, so the usage string becomes \"[[FOO]]\". Impact: help and usage output shows doubled brackets for such CLIs, a visible regression in generated help text.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 31694,
+      "output_tokens": 963,
+      "cache_read_input_tokens": 27392
+    },
+    "elapsed_ms": 16568,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "4d5ad745af65283e"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

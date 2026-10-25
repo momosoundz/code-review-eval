@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 226,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "Forward the exception arguments to `__exit__` instead of always passing `None`. Exceptions raised inside `async with attempt:` currently bypass retry handling.",
+        "rationale": "When an operation raises inside `async with attempt:`, `__aexit__` discards the exception information and calls the synchronous exit handler as though the attempt succeeded. That handler records a successful `None` result and does not suppress the exception, so the exception escapes the retry loop immediately instead of triggering the configured retries.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30410,
+      "output_tokens": 351,
+      "cache_read_input_tokens": 27392
+    },
+    "elapsed_ms": 18597,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "3040043f88ebe9e3"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1701e-ce26-7af1-9d40-a214d8105634"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '170,235p' tenacity/__init__.py; rg -n 'AttemptManager|async for|async with' tenacity/asyncio tests | head -65\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '170,235p' tenacity/__init__.py; rg -n 'AttemptManager|async for|async with' tenacity/asyncio tests | head -65\"",
+          "aggregated_output": "sed: tenacity/__init__.py: No such file or directory\nrg: tenacity/asyncio: No such file or directory (os error 2)\nrg: tests: No such file or directory (os error 2)\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30410,
+          "cached_input_tokens": 27392,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 351,
+          "reasoning_output_tokens": 113
+        }
+      }
+    ]
+  }
+}

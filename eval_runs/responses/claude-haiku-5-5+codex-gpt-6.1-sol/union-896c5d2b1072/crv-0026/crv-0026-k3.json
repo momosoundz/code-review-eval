@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1321,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The guard `all(arg.help is not None for arg in args)` shows the Positional arguments section only when every argument has help, but the docstring and commit title say it should appear when at least one is documented. It also evaluates true for a command with no positional arguments, so an empty section header is rendered.",
+        "rationale": "Trigger: a command with two arguments, one with help and one without. Under the original code the documented argument is listed. Under this guard all() is False, so the whole section is dropped and the undocumented argument is not listed either, contradicting the title. Trigger: a command with no Argument params. all([]) is True, so an empty 'Positional arguments:' heading is written, which the original code skipped. The impact is that help output loses positional arguments or shows an empty section.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 32800,
+      "output_tokens": 998,
+      "cache_read_input_tokens": 27648
+    },
+    "elapsed_ms": 13024,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "f8beab929d73aa79"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

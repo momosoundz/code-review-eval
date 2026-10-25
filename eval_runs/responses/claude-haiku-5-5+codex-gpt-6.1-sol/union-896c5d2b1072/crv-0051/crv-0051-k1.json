@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 257,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The new flag does not disable retries when a retry controller is called directly. It is checked only in decorator wrappers.",
+        "rationale": "For example, `Retrying(enabled=False, stop=stop_after_attempt(3))(f)` still invokes a failing `f` three times because the unchanged `__call__` retry loop never checks `enabled`. Users of the direct controller API therefore still get retries and a RetryError despite explicitly disabling retrying; AsyncRetrying has the same gap.",
+        "confidence": 0.97
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 34947,
+      "output_tokens": 675,
+      "cache_read_input_tokens": 28288
+    },
+    "elapsed_ms": 20793,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "f1b4531906b79320"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

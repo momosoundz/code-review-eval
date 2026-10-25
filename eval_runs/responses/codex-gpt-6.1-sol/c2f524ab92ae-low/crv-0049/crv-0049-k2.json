@@ -1,0 +1,112 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 239,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "Removing the `hasattr` fallback breaks uploads of file-like proxies that expose `read` through `__getattr__` on Python 3.12+. These objects support reading but fail the runtime protocol check.",
+        "rationale": "Pass a proxy wrapping `io.BytesIO` whose `__getattr__` delegates to the wrapped stream as a multipart file. On Python 3.12+, runtime protocol checks use static attribute lookup, so `isinstance(fp, _SupportsRead)` returns false although `fp.read()` works. The proxy is consequently passed as multipart data instead of being read, causing upload preparation to fail with a TypeError.",
+        "confidence": 0.98
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 62016,
+      "output_tokens": 739,
+      "cache_read_input_tokens": 58496
+    },
+    "elapsed_ms": 21971,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "761607eaab997ea2"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17025-633b-7b13-9472-2fe7fb22ac1a"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'ls -a'",
+          "aggregated_output": ".\n..\nschema.json\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python -V'",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python -V'",
+          "aggregated_output": "Python 3.13.16\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_3",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python -c $'\"'from typing import Protocol, runtime_checkable\\\\nfrom io import BytesIO\\\\n@runtime_checkable\\\\nclass SupportsRead(Protocol):\\\\n    def read(self, length: int = ..., /) -> bytes: ...\\\\nclass FileProxy:\\\\n    def __init__(self):\\\\n        self.file = BytesIO(b\\\"upload contents\\\")\\\\n    def __getattr__(self, name):\\\\n        return getattr(self.file, name)\\\\nf = FileProxy()\\\\nprint(\\\"hasattr:\\\", hasattr(f, \\\"read\\\"))\\\\nprint(\\\"protocol:\\\", isinstance(f, SupportsRead))\\\\nprint(\\\"read:\\\", f.read())'\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_3",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python -c $'\"'from typing import Protocol, runtime_checkable\\\\nfrom io import BytesIO\\\\n@runtime_checkable\\\\nclass SupportsRead(Protocol):\\\\n    def read(self, length: int = ..., /) -> bytes: ...\\\\nclass FileProxy:\\\\n    def __init__(self):\\\\n        self.file = BytesIO(b\\\"upload contents\\\")\\\\n    def __getattr__(self, name):\\\\n        return getattr(self.file, name)\\\\nf = FileProxy()\\\\nprint(\\\"hasattr:\\\", hasattr(f, \\\"read\\\"))\\\\nprint(\\\"protocol:\\\", isinstance(f, SupportsRead))\\\\nprint(\\\"read:\\\", f.read())'\"",
+          "aggregated_output": "hasattr: True\nprotocol: False\nread: b'upload contents'\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 62016,
+          "cached_input_tokens": 58496,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 739,
+          "reasoning_output_tokens": 147
+        }
+      }
+    ]
+  }
+}

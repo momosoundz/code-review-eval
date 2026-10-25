@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0040",
+  "gold_id": "crv-0040-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: Session.get accepts the new explicit params argument but the forwarding call self.request(\"GET\", url, **kwargs) omits it, so the value is never passed on.\n- failure path: session.get(url, {\"q\": \"x\"}) or session.get(url, params={\"q\": \"x\"}) sends a GET with no query string; the server receives the bare URL and the caller gets a response for the wrong resource with no error.\n\nReviewer finding\n- description: The new `params` argument is never forwarded to `self.request`, so GET query parameters are silently discarded.\n- rationale: Calling `session.get(url, params={\"page\": 2})` now binds the value to the explicit `params` parameter instead of leaving it in `kwargs`. Because the request call only forwards `kwargs`, the server receives no `page` query parameter, potentially returning incorrect results. Positional parameters are also discarded.\n",
+  "critique": "The finding describes the same mechanism as the label. Session.get binds `params` explicitly, but the forwarding call only passes **kwargs, so query parameters are dropped silently whether given positionally or by keyword.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 811,
+    "output_tokens": 85
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 99,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "Calling `.strip()` also removes intentional leading and trailing whitespace from the prompt, even when it contains no ANSI codes.",
+        "rationale": "When stdout does not support ANSI, a prompt such as `\"Name: \"` becomes `\"Name:\"`, and prompts with leading newlines or indentation lose that formatting. The branch should remove ANSI sequences while preserving the prompt's whitespace; otherwise displayed or captured prompts change beyond color removal.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30759,
+      "output_tokens": 288,
+      "cache_read_input_tokens": 15232
+    },
+    "elapsed_ms": 13424,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "ed6f09c4de2cbd87"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17021-3ec4-72e3-bcf7-07ae13d2782a"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,260p' src/click/termui.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,260p' src/click/termui.py\"",
+          "aggregated_output": "sed: src/click/termui.py: No such file or directory\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30759,
+          "cached_input_tokens": 15232,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 288,
+          "reasoning_output_tokens": 90
+        }
+      }
+    ]
+  }
+}

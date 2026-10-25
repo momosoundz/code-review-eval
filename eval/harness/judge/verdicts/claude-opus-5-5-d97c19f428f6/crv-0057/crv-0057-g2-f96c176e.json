@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0057",
+  "gold_id": "crv-0057-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: `raise cause ... from None` sets __suppress_context__ and clears the re-raised exception's own __cause__\n- failure path: the retried function raises ValueError from KeyError, catches it and raises TryAgain; with reraise=True the ValueError that reaches the caller has lost its KeyError cause, so the root cause disappears from the traceback\n\nReviewer finding\n- description: Using `or` discards an explicit cause when that exception is falsey. Select `__cause__` by checking whether it is `None` instead.\n- rationale: If a user raises `TryAgain` from an exception whose class defines `__bool__` to return false (or `__len__` to return zero), this expression falls back to `__context__`. With no context, retry exhaustion still raises the opaque `TryAgain`; with a different context, it raises the wrong exception instead of the explicit cause.\n",
+  "critique": "The labeled defect is that `raise ... from None` clears the re-raised exception's own __cause__, so the original exception's chain is lost. The finding is about using `or` to pick between __cause__ and __context__, which goes wrong when an exception object is falsey. That is a different operation and a different failure mode.",
+  "verdict": "no_match",
+  "usage": {
+    "input_tokens": 809,
+    "output_tokens": 116
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 351,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "The enabled flag is checked only in decorator wrappers, so direct use of Retrying or AsyncRetrying still retries when enabled=False.",
+        "rationale": "For example, Retrying(enabled=False, stop=stop_after_attempt(3))(f), where f raises ValueError, still executes the unchanged retry loop and calls f three times. The same issue affects direct AsyncRetrying calls: the constructors accept the flag, but only wraps() honors it, so callers requesting disabled retries still observe repeated execution and retry error handling.",
+        "confidence": 0.96
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 34908,
+      "output_tokens": 689,
+      "cache_read_input_tokens": 28288
+    },
+    "elapsed_ms": 17151,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "f1b4531906b79320"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

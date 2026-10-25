@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3814,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "Argument.get_help_record returns (metavar, self.help) without substituting an empty string, so an undocumented argument yields a None description, contrary to the docstring's promise of an empty description.",
+        "rationale": "Trigger: a command with one argument that has help and another argument with no help. format_options sees an argument with help, so it calls write_dl on records that include (metavar, None) for the undocumented argument. The formatter then wraps the None description via text wrapping, which raises a TypeError. Impact: help output for such a command crashes instead of listing the argument with an empty description.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 33108,
+      "output_tokens": 865,
+      "cache_read_input_tokens": 15360
+    },
+    "elapsed_ms": 14382,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "6ec690de339368e8"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

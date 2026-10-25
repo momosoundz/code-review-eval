@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3814,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "Argument.get_help_record returns self.help unchanged, so an argument without help yields (metavar, None) instead of an empty description as the new docstring promises.",
+        "rationale": "Trigger: a command with at least one positional argument that has help and another positional argument with no help. format_positionals then builds the records list from get_help_record for every argument, including the undocumented one, which becomes (metavar, None). That None is passed to formatter.write_dl, which wraps the description text, so it fails on None. The old code avoided this with the `or (arg.make_metavar(ctx), \"\")` fallback, which this change removed. Impact: help output for such a command crashes, or at minimum the row is not rendered as the title and docstring describe.",
+        "confidence": 0.8
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 33102,
+      "output_tokens": 953,
+      "cache_read_input_tokens": 27776
+    },
+    "elapsed_ms": 13516,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "agreement:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "6ec690de339368e8"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

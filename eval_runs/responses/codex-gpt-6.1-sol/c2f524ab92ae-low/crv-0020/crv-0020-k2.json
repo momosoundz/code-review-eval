@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 226,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "`__aexit__` discards the exception raised inside the async context. Pass `exc_type`, `exc_value`, and `traceback` to `__exit__` so failed attempts are recorded and retried.",
+        "rationale": "When a retryable exception is raised inside `async with attempt`, this calls `__exit__(None, None, None)`, which records a successful result and returns without suppressing the exception. The exception therefore escapes the retry loop immediately instead of triggering another attempt.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30371,
+      "output_tokens": 322,
+      "cache_read_input_tokens": 14976
+    },
+    "elapsed_ms": 14971,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "3040043f88ebe9e3"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1701e-93ad-78c2-bd23-d302b233c275"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n -A 55 -B 12 'class AttemptManager' tenacity/__init__.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n -A 55 -B 12 'class AttemptManager' tenacity/__init__.py\"",
+          "aggregated_output": "rg: tenacity/__init__.py: IO error for operation on tenacity/__init__.py: No such file or directory (os error 2)\n",
+          "exit_code": 2,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30371,
+          "cached_input_tokens": 14976,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 322,
+          "reasoning_output_tokens": 100
+        }
+      }
+    ]
+  }
+}

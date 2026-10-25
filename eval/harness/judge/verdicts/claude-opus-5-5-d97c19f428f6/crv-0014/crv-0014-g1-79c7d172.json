@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0014",
+  "gold_id": "crv-0014-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The copied retry instance receives the original instance\u2019s statistics dictionary instead of the wrapper\u2019s shared dictionary.\n- failure path: When the wrapped function runs, updates go to the original retry object\u2019s statistics while decorators still expose the separate wrapper dictionary, so the observed statistics remain empty or stale.\n\nReviewer finding\n- description: The synchronous wrapper gives the copy the previous thread-local statistics dictionary instead of the dictionary exposed by `wrapped_f.statistics`. Statistics from the first call are therefore never published on the decorated function.\n- rationale: On the first invocation of a decorated synchronous function, `self._local.statistics` and the wrapper's initial statistics dictionary are distinct objects. This assignment makes the retry execution update the former, while line 379 exposes the latter, which remains empty. Users reading the function's statistics after that call receive no results, including through additional decorators.\n",
+  "critique": "Both describe the same defect: the copied retry instance is given the original instance's (thread-local) statistics dictionary rather than the wrapper's exposed `wrapped_f.statistics` dictionary. As a result, updates go to the wrong object and the exposed statistics stay empty or stale, including through other decorators. The mechanism and the consequence are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 834,
+    "output_tokens": 133
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The threshold comparison is reversed, returning the maximum wait before the exponential result reaches the cap.",
+        "rationale": "With multiplier=1, max=60, exp_base=2 and attempt_number=1, the condition evaluates as 0 < log\u2082(60), so the method returns 60 instead of 1. Ordinary early retries therefore wait the maximum duration; the shortcut should apply when the exponent reaches or exceeds the threshold.",
+        "confidence": 1.0
+      },
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "medium",
+        "category": "boundary",
+        "description": "The new logarithm can raise ValueError when the positive ratio underflows to zero.",
+        "rationale": "With multiplier=1e308, max=1e-308 and exp_base=2, max / multiplier rounds to zero, so math.log raises ValueError outside the try block. A retry that previously returned the capped wait now fails instead.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 15211,
+      "output_tokens": 420,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 15937,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a7694e2c1dc3fa55"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1700c-19e1-7f40-823b-1141ed410498"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 15211,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 420,
+          "reasoning_output_tokens": 173
+        }
+      }
+    ]
+  }
+}

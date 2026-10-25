@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0047",
+  "gold_id": "crv-0047-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: an optional argument's metavar is wrapped in brackets without checking whether the type already bracketed it\n- failure path: an optional Choice argument renders in the usage line as [[foo|bar|baz]] with two pairs of brackets instead of [foo|bar|baz]\n\nReviewer finding\n- description: Optional arguments whose type returns an already bracketed metavar now display duplicate brackets in help and usage output.\n- rationale: For an optional argument using click.Choice(['red', 'blue']), the type supplies '[red|blue]'. Unconditionally wrapping optional metavars changes the displayed argument to '[[red|blue]]', regressing the previously correct help and usage text.\n",
+  "critique": "The finding describes the same mechanism as the label: an optional argument's metavar is wrapped in brackets unconditionally even though the Choice type already supplied them. The result is the same double-bracket output ([[red|blue]]) in the usage line.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 756,
+    "output_tokens": 96
+  }
+}

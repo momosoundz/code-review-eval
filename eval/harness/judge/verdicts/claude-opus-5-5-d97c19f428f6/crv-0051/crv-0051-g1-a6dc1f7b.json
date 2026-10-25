@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0051",
+  "gold_id": "crv-0051-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the new enabled flag is stored on the retry object but only checked inside wraps(), so the direct call, iterator and async paths retry regardless of it\n- failure path: Retrying(enabled=False, stop=stop_after_attempt(3))(f) where f raises ValueError: f is called three times and RetryError is raised, identical to enabled=True; only the decorator path honors the flag\n\nReviewer finding\n- description: The enabled flag is checked only by decorated wrappers, so calling Retrying(enabled=False) directly still retries. AsyncRetrying has the same gap.\n- rationale: For example, Retrying(enabled=False, stop=stop_after_attempt(3))(f), where f raises ValueError, enters the unchanged retry loop and calls f three times before raising RetryError. Users of the direct-call API therefore still experience repeated calls and retry delays despite explicitly disabling retries.\n",
+  "critique": "The finding matches the label's mechanism: the enabled flag is checked only in the decorator wrapper, so direct calls (and async) still retry. It also gives the same failure example of three calls followed by RetryError.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 827,
+    "output_tokens": 84
+  }
+}

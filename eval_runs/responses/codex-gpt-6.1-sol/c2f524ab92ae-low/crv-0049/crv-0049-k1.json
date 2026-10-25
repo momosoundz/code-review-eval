@@ -1,0 +1,90 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 239,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "Removing the `hasattr` fallback breaks multipart uploads of file proxies that expose `read` through `__getattr__` on Python 3.12 and later.",
+        "rationale": "For example, a proxy that delegates missing attributes to an internal `io.BytesIO` has a callable `read`, but fails the runtime protocol check because Python 3.12+ checks protocol attributes using static lookup. Previously the fallback read its bytes; now the proxy falls through as the multipart field data, causing upload preparation to fail instead of sending the file.",
+        "confidence": 0.98
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 61915,
+      "output_tokens": 677,
+      "cache_read_input_tokens": 58368
+    },
+    "elapsed_ms": 21392,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "761607eaab997ea2"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17025-0fb5-7363-9089-70a4fcd76639"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"ls -a; rg -n 'SupportsRead|python_requires|requires-python' src/requests/_types.py pyproject.toml setup.py setup.cfg\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"ls -a; rg -n 'SupportsRead|python_requires|requires-python' src/requests/_types.py pyproject.toml setup.py setup.cfg\"",
+          "aggregated_output": ".\n..\nschema.json\nrg: src/requests/_types.py: No such file or directory (os error 2)\nrg: pyproject.toml: No such file or directory (os error 2)\nrg: setup.py: No such file or directory (os error 2)\nrg: setup.cfg: No such file or directory (os error 2)\n",
+          "exit_code": 2,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python3 -c $'\"'import sys, io\\\\nfrom typing import Protocol, runtime_checkable\\\\n@runtime_checkable\\\\nclass SupportsRead(Protocol):\\\\n    def read(self, length: int = ..., /) -> bytes: ...\\\\nclass FileProxy:\\\\n    def __init__(self): self.file = io.BytesIO(b\\\"payload\\\")\\\\n    def __getattr__(self, name): return getattr(self.file, name)\\\\nf = FileProxy()\\\\nprint(sys.version)\\\\nprint(\\\"hasattr:\\\", hasattr(f, \\\"read\\\"), \\\"protocol:\\\", isinstance(f, SupportsRead))'\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python3 -c $'\"'import sys, io\\\\nfrom typing import Protocol, runtime_checkable\\\\n@runtime_checkable\\\\nclass SupportsRead(Protocol):\\\\n    def read(self, length: int = ..., /) -> bytes: ...\\\\nclass FileProxy:\\\\n    def __init__(self): self.file = io.BytesIO(b\\\"payload\\\")\\\\n    def __getattr__(self, name): return getattr(self.file, name)\\\\nf = FileProxy()\\\\nprint(sys.version)\\\\nprint(\\\"hasattr:\\\", hasattr(f, \\\"read\\\"), \\\"protocol:\\\", isinstance(f, SupportsRead))'\"",
+          "aggregated_output": "3.13.16 (main, Oct  9 2026, 15:11:24) [Clang 22.1.3 ]\nhasattr: True protocol: False\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 61915,
+          "cached_input_tokens": 58368,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 677,
+          "reasoning_output_tokens": 125
+        }
+      }
+    ]
+  }
+}

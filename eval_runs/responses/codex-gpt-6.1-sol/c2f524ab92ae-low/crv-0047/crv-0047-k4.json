@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3576,
+        "severity": "low",
+        "category": "wrong_condition",
+        "description": "Optional arguments with already bracketed type metavars now receive a second pair of brackets in help output.",
+        "rationale": "For an optional argument using click.Choice(['a', 'b']), the type supplies the metavar '[a|b]'. Unconditionally wrapping every optional argument changes the displayed usage to '[[a|b]]', introducing redundant brackets into user-facing help.",
+        "confidence": 0.96
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30179,
+      "output_tokens": 357,
+      "cache_read_input_tokens": 27264
+    },
+    "elapsed_ms": 19329,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "4d5ad745af65283e"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17025-2ba2-7901-8221-b184013f36d9"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'already_bracketed|def get_metavar|class Argument|def make_metavar' src/click/core.py src/click/types.py; rg -n '\\\\[.*\\\\]|metavar' tests/test_arguments.py | tail -50\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'already_bracketed|def get_metavar|class Argument|def make_metavar' src/click/core.py src/click/types.py; rg -n '\\\\[.*\\\\]|metavar' tests/test_arguments.py | tail -50\"",
+          "aggregated_output": "rg: src/click/core.py: No such file or directory (os error 2)\nrg: src/click/types.py: No such file or directory (os error 2)\nrg: tests/test_arguments.py: IO error for operation on tests/test_arguments.py: No such file or directory (os error 2)\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30179,
+          "cached_input_tokens": 27264,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 357,
+          "reasoning_output_tokens": 133
+        }
+      }
+    ]
+  }
+}

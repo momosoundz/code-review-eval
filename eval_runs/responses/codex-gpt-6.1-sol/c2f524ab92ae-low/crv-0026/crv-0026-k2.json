@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1321,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "Using `all` suppresses the entire positional arguments section when any argument lacks help. The section should appear when at least one argument is documented.",
+        "rationale": "For a command with one argument whose help is set and another whose help is None, this condition is false, so even the documented argument disappears from help. The empty-description fallback is never reached for the mixed case it is intended to support.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 15286,
+      "output_tokens": 207,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 10367,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "f8beab929d73aa79"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1701f-492c-7b23-a764-b3ce839d344e"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 15286,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 207,
+          "reasoning_output_tokens": 53
+        }
+      }
+    ]
+  }
+}

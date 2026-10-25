@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 99,
+        "severity": "low",
+        "category": "wrong_literal_or_default",
+        "description": "When ANSI stripping applies, the added `.strip()` also removes all leading and trailing whitespace from the prompt, not just the escape codes the title describes.",
+        "rationale": "Trigger: a prompt on a non-TTY stream where stripping applies, for example prompt('Name') whose text ends in ': ' after suffix construction. Mechanism: `strip_ansi(text).strip()` drops the trailing space, so the prompt is written as 'Name:' instead of 'Name: '. Impact: the prompt output differs from the unstripped case by a trailing space, and the input text is not separated from the prompt. Only ANSI removal was announced, so this extra whitespace change is unintended.",
+        "confidence": 0.55
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 32838,
+      "output_tokens": 1118,
+      "cache_read_input_tokens": 15232
+    },
+    "elapsed_ms": 12720,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "ed6f09c4de2cbd87"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0049",
+  "gold_id": "crv-0049-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: _encode_files only treats an object as a file when isinstance(fp, _SupportsRead) succeeds, which a wrapper that exposes read through __getattr__ fails\n- failure path: on Python 3.12 and later, isinstance against a runtime_checkable Protocol uses inspect.getattr_static and does not see attributes served by __getattr__; a file wrapper that proxies read() that way fails the check, is not read, and its contents never reach the multipart body; before 3.12 the Protocol check used hasattr and the removed `or hasattr(fp, 'read')` was redundant, so the defect only manifests on 3.12+\n\nReviewer finding\n- description: Removing the `hasattr` fallback rejects file proxies that expose `read` dynamically through `__getattr__` on Python 3.12 and later.\n- rationale: When a caller supplies such a proxy in `files`, `hasattr(fp, \"read\")` is true and `fp.read()` works, but the runtime protocol check uses static attribute lookup and returns false. The changed branch therefore passes the proxy onward without reading its contents, causing multipart encoding to fail instead of uploading the file.\n",
+  "critique": "The finding names the same mechanism as the label. Removing the hasattr fallback leaves only the runtime_checkable Protocol isinstance check. On 3.12+ that check uses static lookup and misses read exposed via __getattr__, so the proxy is never read. The finding says the encoding fails rather than the content silently going missing, but that is the same faulty branch and only a small difference in the stated consequence.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 912,
+    "output_tokens": 148
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0011",
+  "gold_id": "crv-0011-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the shortcut guard computes math.log(self.max / self.multiplier, self.exp_base) and the division can underflow to 0.0, which math.log rejects\n- failure path: wait_exponential(multiplier=1e300, max=1e-300) on the first attempt: the guards pass, max / multiplier rounds to 0.0, math.log(0.0, 2) raises ValueError where the previous code returned self.max; only reachable with extreme parameters\n\nReviewer finding\n- description: The shortcut raises ValueError when max / multiplier underflows to zero, instead of returning the capped wait.\n- rationale: For wait_exponential(multiplier=1e308, max=1e-308) on attempt 1, all preceding guards pass, but the division rounds to 0.0 and math.log(0.0, 2) raises ValueError outside the try block. Previously the calculation returned 1e-308, so this valid configuration now aborts retry processing.\n",
+  "critique": "The finding describes the same mechanism: max/multiplier underflows to 0.0 and math.log(0.0, exp_base) raises ValueError instead of returning max. It uses the same kind of extreme-parameter example as the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 839,
+    "output_tokens": 91
+  }
+}

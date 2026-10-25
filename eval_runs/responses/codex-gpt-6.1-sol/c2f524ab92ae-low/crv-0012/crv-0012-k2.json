@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 211,
+        "severity": "high",
+        "category": "wrong_operator",
+        "description": "The shortcut comparison is reversed: it returns the maximum wait when the exponential result is below the cap.",
+        "rationale": "With multiplier=1, max=60, exp_base=2, min=0, and attempt_number=1, the condition evaluates as 0 < log\u2082(60), so the function returns 60 instead of the expected 1. Ordinary early retry attempts therefore wait for the maximum interval instead of following exponential backoff. The shortcut should apply when the exponent reaches or exceeds the cap threshold.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 15211,
+      "output_tokens": 306,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 14023,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a7694e2c1dc3fa55"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1700b-5b2e-7332-9c14-5536be79421d"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 15211,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 306,
+          "reasoning_output_tokens": 138
+        }
+      }
+    ]
+  }
+}

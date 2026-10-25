@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_utils.py",
+        "line": 15,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing `__reduce_ex__` breaks pickle round trips for both sentinels because their enum values are plain `object()` instances.",
+        "rationale": "When a sentinel, or an object containing one, is pickled and then unpickled, Enum's default reduction reconstructs the member by value. Unpickling creates a new object that matches neither enum value, raising ValueError and preventing previously supported deserialization. The removed override reconstructed members by name and avoided this failure.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 46538,
+      "output_tokens": 475,
+      "cache_read_input_tokens": 43136
+    },
+    "elapsed_ms": 16398,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8a3cd15243ee2240"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17023-26d7-7630-a45b-e2574a6444d5"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python -c $'\"'import enum, pickle, copy\\\\nclass Sentinel(enum.Enum):\\\\n UNSET = object()\\\\n FLAG_NEEDS_VALUE = object()\\\\ns = Sentinel.UNSET\\\\nprint(\\\"copy\\\", copy.copy(s) is s)\\\\nprint(\\\"deepcopy\\\", copy.deepcopy(s) is s)\\\\nfor protocol in (0, 4, pickle.HIGHEST_PROTOCOL):\\\\n try:\\\\n  print(protocol, pickle.loads(pickle.dumps(s, protocol)) is s)\\\\n except Exception as e:\\\\n  print(protocol, type(e).__name__, str(e))'\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python -c $'\"'import enum, pickle, copy\\\\nclass Sentinel(enum.Enum):\\\\n UNSET = object()\\\\n FLAG_NEEDS_VALUE = object()\\\\ns = Sentinel.UNSET\\\\nprint(\\\"copy\\\", copy.copy(s) is s)\\\\nprint(\\\"deepcopy\\\", copy.deepcopy(s) is s)\\\\nfor protocol in (0, 4, pickle.HIGHEST_PROTOCOL):\\\\n try:\\\\n  print(protocol, pickle.loads(pickle.dumps(s, protocol)) is s)\\\\n except Exception as e:\\\\n  print(protocol, type(e).__name__, str(e))'\"",
+          "aggregated_output": "copy True\ndeepcopy True\n0 ValueError <object object at 0x1051f83f0> is not a valid Sentinel\n4 ValueError <object object at 0x1051f83c0> is not a valid Sentinel\n5 ValueError <object object at 0x1051f83f0> is not a valid Sentinel\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 46538,
+          "cached_input_tokens": 43136,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 475,
+          "reasoning_output_tokens": 0
+        }
+      }
+    ]
+  }
+}

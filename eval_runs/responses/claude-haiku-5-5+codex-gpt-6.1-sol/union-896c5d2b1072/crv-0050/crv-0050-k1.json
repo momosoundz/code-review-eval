@@ -1,0 +1,43 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/utils.py",
+        "line": 544,
+        "severity": "medium",
+        "category": "null_or_missing_value",
+        "description": "A Content-Type parameter with no '=' such as 'text/html; charset' now stores the value as the boolean True, and get_encoding_from_headers then calls .strip() on it, which raises AttributeError.",
+        "rationale": "Trigger: a response header 'Content-Type: text/html; charset' (charset with no value). The changed parser now stores params['charset'] = True instead of skipping the token. Line 544 then calls True.strip(...), which raises AttributeError. Previously the token was ignored and the function fell through to ISO-8859-1. The impact is that reading r.text or r.encoding for such a response raises an exception instead of returning a result.",
+        "confidence": 0.6
+      },
+      {
+        "file": "src/requests/utils.py",
+        "line": 520,
+        "severity": "medium",
+        "category": "wrong_literal_or_default",
+        "description": "A bare `charset` parameter now causes encoding detection to raise `AttributeError` instead of using the content type's default encoding.",
+        "rationale": "For `Content-Type: text/plain; charset`, the parser now stores `params['charset'] = True`. `get_encoding_from_headers` then calls `.strip()` on that boolean, raising `AttributeError`; previously the bare parameter was ignored and ISO-8859-1 was returned. A server returning this malformed header can therefore cause response processing to fail.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 17553,
+      "output_tokens": 847,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 11681,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "1afc750f3de9d94b"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

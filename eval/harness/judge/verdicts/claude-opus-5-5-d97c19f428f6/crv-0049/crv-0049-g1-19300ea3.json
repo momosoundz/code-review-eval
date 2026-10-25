@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0049",
+  "gold_id": "crv-0049-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: _encode_files only treats an object as a file when isinstance(fp, _SupportsRead) succeeds, which a wrapper that exposes read through __getattr__ fails\n- failure path: on Python 3.12 and later, isinstance against a runtime_checkable Protocol uses inspect.getattr_static and does not see attributes served by __getattr__; a file wrapper that proxies read() that way fails the check, is not read, and its contents never reach the multipart body; before 3.12 the Protocol check used hasattr and the removed `or hasattr(fp, 'read')` was redundant, so the defect only manifests on 3.12+\n\nReviewer finding\n- description: Removing the `hasattr` fallback rejects file-like proxies that expose `read` through `__getattr__` on Python 3.12 and later.\n- rationale: When a multipart upload contains a proxy that delegates attributes to an underlying BytesIO or file, `hasattr(fp, \"read\")` is true but the runtime protocol check is false because it uses static attribute lookup on Python 3.12+. The changed condition skips reading the proxy, causing multipart encoding to receive the proxy instead of its contents and fail with TypeError.\n",
+  "critique": "The finding identifies the same mechanism. Removing the hasattr fallback leaves only the runtime Protocol check, and on Python 3.12+ that check uses static lookup and so misses a read() proxied through __getattr__, which means the wrapper's contents are not read into the multipart body. The finding's claim of a downstream TypeError is a slightly different consequence, but the faulty operation and the trigger are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 925,
+    "output_tokens": 151
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3576,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing the already_bracketed guard means an optional parameter whose metavar is already bracketed gets wrapped again, producing doubled brackets such as [[a|b]] in usage output.",
+        "rationale": "Trigger: an optional click.Option whose type's get_metavar returns a bracketed string, such as click.Choice (which returns \"[a|b]\"). Mechanism: with the guard gone, line 3576 always wraps var in brackets, giving \"[[a|b]]\". Impact: the generated help and usage text shows malformed doubled brackets for such options, a regression from the previous output.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 31732,
+      "output_tokens": 964,
+      "cache_read_input_tokens": 27392
+    },
+    "elapsed_ms": 12530,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "4d5ad745af65283e"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

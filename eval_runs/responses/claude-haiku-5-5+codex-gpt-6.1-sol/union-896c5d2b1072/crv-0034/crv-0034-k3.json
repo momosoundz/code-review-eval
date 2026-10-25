@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 99,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "When ANSI is stripped, the prompt text is also stripped of leading and trailing whitespace, which the commit title does not mention. A prompt such as \"Name: \" is shown as \"Name:\" with no trailing space.",
+        "rationale": "Trigger: a prompt whose text ends in a space (the usual form, e.g. prompt(\"Name: \")) is run on a stream that does not support ANSI, such as a redirected or piped stderr/stdout. Mechanism: strip_ansi(text).strip() removes the trailing space along with the codes. Impact: the user sees the prompt run into the typed input (\"Name:John\"), and the output differs from the same prompt on a color-capable terminal, even though the change should only remove escape codes.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 32722,
+      "output_tokens": 1007,
+      "cache_read_input_tokens": 27648
+    },
+    "elapsed_ms": 15285,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "ed6f09c4de2cbd87"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

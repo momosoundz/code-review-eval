@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0014",
+  "gold_id": "crv-0014-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The copied retry instance receives the original instance\u2019s statistics dictionary instead of the wrapper\u2019s shared dictionary.\n- failure path: When the wrapped function runs, updates go to the original retry object\u2019s statistics while decorators still expose the separate wrapper dictionary, so the observed statistics remain empty or stale.\n\nReviewer finding\n- description: The first invocation writes statistics into the previous thread-local dictionary instead of the dictionary exposed by the wrapper. Consequently, the decorated function and any outer functools.wraps wrapper retain empty statistics after that invocation.\n- rationale: On the first call to a newly decorated synchronous function, wrapped_f.statistics and self._local.statistics are separate dictionaries. Assigning the latter to copy._local.statistics before rebinding self._local.statistics causes the executing copy to update the old dictionary, leaving the publicly exposed dictionary empty.\n",
+  "critique": "Both describe the same defect: the copied retry instance is handed the original object's statistics dictionary rather than the wrapper's exposed one. As a result, updates land in a dictionary the decorator does not expose and its statistics stay empty. The finding's detail about assigning before rebinding is the same mechanism.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 834,
+    "output_tokens": 115
+  }
+}

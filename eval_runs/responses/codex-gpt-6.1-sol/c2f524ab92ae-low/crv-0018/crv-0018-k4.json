@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/wait.py",
+        "line": 258,
+        "severity": "medium",
+        "category": "wrong_literal_or_default",
+        "description": "Defaulting the new minimum to 1 changes existing callers' subsecond backoff behavior. The default should be 0 to preserve the previous lower bound when callers omit `min`.",
+        "rationale": "For an existing caller using `wait_exponential_jitter(initial=0.1, jitter=0)`, the first wait previously returned 0.1 seconds but now returns 1 second because the new default minimum clamps the result. Existing configurations with a maximum below 1 second also now return waits exceeding that maximum, increasing retry latency without any caller opting into a minimum.",
+        "confidence": 0.94
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 15438,
+      "output_tokens": 315,
+      "cache_read_input_tokens": 0
+    },
+    "elapsed_ms": 15937,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "124d353adf043099"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1701d-d60d-7290-85c3-407fb9cd6fc1"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 15438,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 315,
+          "reasoning_output_tokens": 151
+        }
+      }
+    ]
+  }
+}

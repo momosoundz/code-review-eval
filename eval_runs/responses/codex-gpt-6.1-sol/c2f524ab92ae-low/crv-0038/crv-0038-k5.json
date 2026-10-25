@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 793,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "`Response.__init__` initializes `self.raw` to `None`, so accessing `self.raw.reason` raises `AttributeError` during construction.",
+        "rationale": "Every call to `Response()` reaches this assignment before an adapter can attach the raw HTTP response. Dereferencing `None` prevents response construction, causing ordinary HTTP requests to fail instead of returning a response.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30378,
+      "output_tokens": 228,
+      "cache_read_input_tokens": 14976
+    },
+    "elapsed_ms": 11976,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "2bb8bd9869d82518"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17022-ec50-7450-a084-8eb0a5c27d7c"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'self.raw|self.reason|class Response' src/requests/models.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'self.raw|self.reason|class Response' src/requests/models.py\"",
+          "aggregated_output": "rg: src/requests/models.py: IO error for operation on src/requests/models.py: No such file or directory (os error 2)\n",
+          "exit_code": 2,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30378,
+          "cached_input_tokens": 14976,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 228,
+          "reasoning_output_tokens": 35
+        }
+      }
+    ]
+  }
+}

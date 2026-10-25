@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 257,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The enabled flag is only checked by decorator wrappers, so direct calls through Retrying or AsyncRetrying still retry when enabled=False.",
+        "rationale": "For example, Retrying(enabled=False, stop=stop_after_attempt(3))(f), where f raises a retryable exception, still executes f three times because the retry controller's __call__ path never checks enabled. Users of the direct controller API therefore cannot disable retries with the newly accepted parameter; the same omission affects iterator-based retry loops.",
+        "confidence": 0.97
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 32078,
+      "output_tokens": 363,
+      "cache_read_input_tokens": 24832
+    },
+    "elapsed_ms": 15639,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "f1b4531906b79320"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17026-c5c8-7b71-a865-f25dc7bccd82"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"ls -a; sed -n '300,400p' tenacity/__init__.py; sed -n '450,510p' tenacity/__init__.py; sed -n '170,230p' tenacity/asyncio/__init__.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"ls -a; sed -n '300,400p' tenacity/__init__.py; sed -n '450,510p' tenacity/__init__.py; sed -n '170,230p' tenacity/asyncio/__init__.py\"",
+          "aggregated_output": ".\n..\nschema.json\nsed: tenacity/__init__.py: No such file or directory\nsed: tenacity/__init__.py: No such file or directory\nsed: tenacity/asyncio/__init__.py: No such file or directory\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 32078,
+          "cached_input_tokens": 24832,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 363,
+          "reasoning_output_tokens": 113
+        }
+      }
+    ]
+  }
+}

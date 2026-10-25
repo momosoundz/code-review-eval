@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0014",
+  "gold_id": "crv-0014-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The copied retry instance receives the original instance\u2019s statistics dictionary instead of the wrapper\u2019s shared dictionary.\n- failure path: When the wrapped function runs, updates go to the original retry object\u2019s statistics while decorators still expose the separate wrapper dictionary, so the observed statistics remain empty or stale.\n\nReviewer finding\n- description: The synchronous wrapper assigns the copy's statistics to the previous controller dictionary instead of `stats`. Statistics remain empty after the first invocation, including through additional decorators.\n- rationale: On the first call to a newly decorated synchronous function, `wrapped_f.statistics` and `self._local.statistics` are different dictionaries. This assignment gives the retry copy the latter dictionary, while line 379 points the original controller at the former. The copy populates its own dictionary during execution, leaving the publicly exposed statistics empty after the call.\n",
+  "critique": "The finding says the sync wrapper gives the retry copy the original controller's statistics dictionary (self._local.statistics) rather than the shared `stats` dict. As a result, updates land in a different dictionary and the exposed wrapper statistics stay empty, including through further decorators. This is the same faulty assignment and the same failure mechanism as the label.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 826,
+    "output_tokens": 130
+  }
+}

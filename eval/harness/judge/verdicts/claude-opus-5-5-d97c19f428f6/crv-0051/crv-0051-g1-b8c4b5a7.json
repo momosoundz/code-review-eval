@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0051",
+  "gold_id": "crv-0051-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the new enabled flag is stored on the retry object but only checked inside wraps(), so the direct call, iterator and async paths retry regardless of it\n- failure path: Retrying(enabled=False, stop=stop_after_attempt(3))(f) where f raises ValueError: f is called three times and RetryError is raised, identical to enabled=True; only the decorator path honors the flag\n\nReviewer finding\n- description: The enabled flag is checked only in decorator wrappers, so direct use of Retrying or AsyncRetrying still retries when enabled=False.\n- rationale: For example, Retrying(enabled=False, stop=stop_after_attempt(3))(f), where f raises ValueError, still executes the unchanged retry loop and calls f three times. The same issue affects direct AsyncRetrying calls: the constructors accept the flag, but only wraps() honors it, so callers requesting disabled retries still observe repeated execution and retry error handling.\n",
+  "critique": "The finding identifies the same defect: the enabled flag is checked only in wraps(), so direct calls to Retrying and AsyncRetrying still retry. It gives the identical failure example: f is called three times despite enabled=False.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 843,
+    "output_tokens": 91
+  }
+}

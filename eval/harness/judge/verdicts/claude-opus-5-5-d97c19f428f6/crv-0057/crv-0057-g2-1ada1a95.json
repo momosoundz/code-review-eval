@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0057",
+  "gold_id": "crv-0057-g2",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: `raise cause ... from None` sets __suppress_context__ and clears the re-raised exception's own __cause__\n- failure path: the retried function raises ValueError from KeyError, catches it and raises TryAgain; with reraise=True the ValueError that reaches the caller has lost its KeyError cause, so the root cause disappears from the traceback\n\nReviewer finding\n- description: Using `or` discards an explicit cause if that exception evaluates to false. Check whether `__cause__` is `None` instead of testing its truthiness.\n- rationale: If an exception subclass defines `__bool__` to return False (or `__len__` to return zero), raising `TryAgain` from an instance outside an exception handler sets a valid `__cause__` but leaves `__context__` as None. This expression selects None, so exhausted retries still raise TryAgain instead of the underlying exception.\n",
+  "critique": "The finding is about choosing the cause with an `or` truthiness check when an exception evaluates to false. The labeled defect is about `raise cause from None` clearing the re-raised exception's own `__cause__` chain. These are different mechanisms with different failure paths.",
+  "verdict": "no_match",
+  "usage": {
+    "input_tokens": 815,
+    "output_tokens": 103
+  }
+}

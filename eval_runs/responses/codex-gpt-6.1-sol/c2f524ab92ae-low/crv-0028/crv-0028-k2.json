@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 3395,
+        "severity": "low",
+        "category": "wrong_condition",
+        "description": "The separator condition is inverted, changing the help formatting for options with secondary spellings. Preserve the original condition: `\"; \" if any_prefix_is_slash else \" / \"`.",
+        "rationale": "For a boolean option declared as `--foo/--no-foo`, the extracted method now displays `--foo; --no-foo` instead of `--foo / --no-foo`. Slash-prefixed options likewise switch from the semicolon separator to a slash, regressing the existing help output during extraction.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 15420,
+      "output_tokens": 238,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 10585,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "0f93c8620e419ffe"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17020-d1fa-7f90-bb03-14ee58c3d5f5"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 15420,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 238,
+          "reasoning_output_tokens": 68
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/sessions.py",
+        "line": 671,
+        "severity": "high",
+        "category": "wrong_variable_or_argument",
+        "description": "The new `params` argument is never forwarded to `self.request`, so GET query parameters are silently dropped.",
+        "rationale": "Calling `session.get(url, params={\"page\": 2})` now binds the dictionary to the explicit `params` parameter instead of leaving it in `kwargs`. Since the request call forwards only `kwargs`, the server receives no `page` query parameter and may return the wrong results. Forward `params=params` to preserve existing keyword behavior and support the new positional argument.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 15262,
+      "output_tokens": 263,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 13032,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "a4d6f77f87e107d6"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17023-6adb-7601-b93d-98d372b1fcbb"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 15262,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 263,
+          "reasoning_output_tokens": 95
+        }
+      }
+    ]
+  }
+}

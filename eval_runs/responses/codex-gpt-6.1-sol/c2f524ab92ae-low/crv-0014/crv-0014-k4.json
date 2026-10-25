@@ -1,0 +1,55 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 378,
+        "severity": "medium",
+        "category": "wrong_variable_or_argument",
+        "description": "The first invocation writes statistics into the previous thread-local dictionary instead of the dictionary exposed by the wrapper. Consequently, the decorated function and any outer functools.wraps wrapper retain empty statistics after that invocation.",
+        "rationale": "On the first call to a newly decorated synchronous function, wrapped_f.statistics and self._local.statistics are separate dictionaries. Assigning the latter to copy._local.statistics before rebinding self._local.statistics causes the executing copy to update the old dictionary, leaving the publicly exposed dictionary empty.",
+        "confidence": 0.98
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 219,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "Concurrent invocations now share their live statistics dictionary, so one invocation resets and modifies another invocation's counters.",
+        "rationale": "When two tasks call the same decorated async function and overlap during an await, both copies receive the same stats dictionary. The second call clears and initializes the first call's statistics, and subsequent retries from both tasks increment the same counters; users and statistics callbacks observe combined or reset attempt counts instead of per-invocation statistics.",
+        "confidence": 0.97
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 31504,
+      "output_tokens": 557,
+      "cache_read_input_tokens": 15616
+    },
+    "elapsed_ms": 21779,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "831389d6ee1e24ae"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1700f-6ab7-71d2-a6ba-1c5d89310c0f"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 31504,
+          "cached_input_tokens": 15616,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 557,
+          "reasoning_output_tokens": 187
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/requests/models.py",
+        "line": 793,
+        "severity": "high",
+        "category": "null_or_missing_value",
+        "description": "Response.__init__ now assigns self.reason from self.raw.reason, but self.raw is initialized to None in the same constructor, so this attribute access fails.",
+        "rationale": "Trigger: any Response() construction, such as the one in adapters.build_response or a direct Response() in user or test code. Mechanism: in __init__ self.raw is still None when line 793 runs, so self.raw.reason raises AttributeError. Impact: every Response object creation crashes, breaking all requests calls and direct Response instantiation.",
+        "confidence": 0.85
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 47559,
+      "output_tokens": 1003,
+      "cache_read_input_tokens": 42624
+    },
+    "elapsed_ms": 14414,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "2bb8bd9869d82518"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

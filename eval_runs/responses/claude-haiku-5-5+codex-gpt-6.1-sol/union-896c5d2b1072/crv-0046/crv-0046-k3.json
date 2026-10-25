@@ -1,0 +1,43 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_utils.py",
+        "line": 21,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "Removing the custom __reduce_ex__ means pickling UNSET or FLAG_NEEDS_VALUE falls back to Enum's default reduce, which pickles the underlying object() value; unpickling then produces a value that does not match the sentinel.",
+        "rationale": "Trigger: a Context, parameter, or default containing UNSET is pickled and unpickled. Mechanism: the removed __reduce_ex__ returned getattr(cls, name) so the singleton was restored by name; the default Enum reduce reconstructs via the value, which is a fresh object() that no longer matches any member, so lookup fails or yields a non-identical sentinel. Impact: unpickling raises ValueError or the restored sentinel fails `is UNSET` checks, changing option-resolution behavior. Copy and deepcopy are unaffected because Enum already returns self.",
+        "confidence": 0.45
+      },
+      {
+        "file": "src/click/_utils.py",
+        "line": 15,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing `__reduce_ex__` breaks pickle round trips for both sentinels. Enum's default implementation reconstructs members by value, but these `object()` values lose their identity when unpickled.",
+        "rationale": "When a caller pickles and then unpickles UNSET, FLAG_NEEDS_VALUE, or an object containing either sentinel, unpickling creates a new object for the enum value. That object matches neither member, so Enum raises ValueError instead of restoring the sentinel. The removed implementation reconstructed members by name and avoided this failure.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 64479,
+      "output_tokens": 1542,
+      "cache_read_input_tokens": 46208
+    },
+    "elapsed_ms": 16810,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8a3cd15243ee2240"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

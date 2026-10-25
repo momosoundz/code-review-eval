@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0051",
+  "gold_id": "crv-0051-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: the new enabled flag is stored on the retry object but only checked inside wraps(), so the direct call, iterator and async paths retry regardless of it\n- failure path: Retrying(enabled=False, stop=stop_after_attempt(3))(f) where f raises ValueError: f is called three times and RetryError is raised, identical to enabled=True; only the decorator path honors the flag\n\nReviewer finding\n- description: The new `enabled` option is only checked in decorator wrappers, so direct retry-controller calls ignore `enabled=False`. Apply the flag in the controller execution paths as well.\n- rationale: Calling `Retrying(enabled=False, stop=stop_after_attempt(3))(f)` with a function that raises still executes the existing retry loop, invoking the function three times and ultimately raising RetryError instead of invoking it once and propagating its exception. Direct calls through AsyncRetrying have the same problem because the added checks only run in wraps-generated functions.\n",
+  "critique": "The finding says the same thing as the label: `enabled` is checked only in the wraps/decorator wrappers, so direct `__call__` (and the async paths) ignore it. It also uses the identical failure scenario, three calls ending in RetryError. It does not mention the iterator path, but the root cause and mechanism are the same.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 851,
+    "output_tokens": 121
+  }
+}

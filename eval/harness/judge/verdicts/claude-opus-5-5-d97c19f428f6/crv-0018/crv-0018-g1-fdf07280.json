@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0018",
+  "gold_id": "crv-0018-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The new minimum wait defaults to one second instead of zero.\n- failure path: With default options, an early exponential result below one second is raised to a one-second delay, slowing retries that previously had no configured floor.\n\nReviewer finding\n- description: Defaulting the new minimum to 1 changes existing subsecond backoff configurations and can make waits exceed the configured maximum. Defaulting it to 0 would preserve existing behavior unless callers explicitly request a minimum.\n- rationale: For an existing configuration such as wait_exponential_jitter(initial=0.1, max=0.5, jitter=0), callers omit the newly added min argument. It now defaults to 1, so the outer max in __call__ returns 1 on every attempt instead of waits between 0.1 and 0.5 seconds, slowing retries and exceeding the caller's configured maximum.\n",
+  "critique": "The finding names the same root cause: the new min parameter defaults to 1 instead of 0. It also describes the same failure: subsecond exponential waits get raised to one second when callers omit min, which slows retries. The extra point about exceeding max is a consequence of the same mechanism.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 810,
+    "output_tokens": 106
+  }
+}

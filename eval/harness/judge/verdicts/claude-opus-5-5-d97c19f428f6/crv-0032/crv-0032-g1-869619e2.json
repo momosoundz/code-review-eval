@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0032",
+  "gold_id": "crv-0032-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The rewritten loop removes only each parameter's primary opts from the candidate help names and no longer removes its secondary_opts, dropping a step the replaced set-based code performed.\n- failure path: A command with context help_option_names ['-h', '--help'] and an option declared as '--hint/-h' keeps -h as a help name, so the generated help option and the user's option both claim -h and `cmd -h` prints help instead of setting the flag the author declared.\n\nReviewer finding\n- description: Help-name conflict filtering no longer checks `param.secondary_opts`. A help name already declared as a secondary boolean flag is therefore incorrectly added as a help option.\n- rationale: For a command with `@click.option('--verbose/--help')` and the default help names, `--help` is reserved in the option's `secondary_opts`. Previously it was excluded from generated help names; now it remains and a conflicting help option is created, so `--help` displays help instead of setting `verbose` to false.\n",
+  "critique": "The finding names the same mechanism: the rewritten filter no longer excludes names found in `param.secondary_opts`, so a help name that is also a secondary flag stays as a help name. Its example (`--verbose/--help`) differs from the label's (`--hint/-h`), but it is the same faulty operation and the same failure.",
+  "verdict": "match",
+  "usage": {
+    "input_tokens": 847,
+    "output_tokens": 121
+  }
+}

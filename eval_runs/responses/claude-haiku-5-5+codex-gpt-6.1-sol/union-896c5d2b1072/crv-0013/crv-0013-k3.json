@@ -1,0 +1,43 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/__init__.py",
+        "line": 377,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "stats.clear() empties the single statistics dict that is shared by every call through the wrapper, so a concurrent or re-entrant call on another thread wipes or overwrites statistics that an in-flight call is still updating.",
+        "rationale": "Trigger: two threads (or a recursive call) invoke the same decorated function, so the second call reaches this block while the first is still retrying. Mechanism: the old code rebound wrapped_f.statistics to a fresh per-call dict, which isolated calls. The new code reuses one dict and clears it, so both calls write to the same object. Impact: the statistics a caller reads (e.g. attempt_number) can show values from the other call, or reset mid-run.",
+        "confidence": 0.55
+      },
+      {
+        "file": "tenacity/asyncio/__init__.py",
+        "line": 218,
+        "severity": "medium",
+        "category": "concurrency",
+        "description": "async_wrapped's statistics dict is cleared and then shared across all concurrent coroutines that call the same decorated function, instead of being replaced with a fresh per-call dict.",
+        "rationale": "Trigger: two asyncio tasks await the same decorated coroutine at once. Mechanism: the clear() call and the shared reference let the second invocation reset and overwrite the dict that the first invocation's retry loop is updating. Impact: statistics reported for one call reflect the other call's attempts, which is silently wrong.",
+        "confidence": 0.5
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 35062,
+      "output_tokens": 1960,
+      "cache_read_input_tokens": 16128
+    },
+    "elapsed_ms": 20730,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "71abc98a95e33cc0"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/termui.py",
+        "line": 99,
+        "severity": "low",
+        "category": "logic_other",
+        "description": "Calling `.strip()` also removes intentional whitespace from the prompt, including the trailing space that separates the prompt from the answer. ANSI removal should preserve that whitespace.",
+        "rationale": "When stdout is redirected or otherwise requires ANSI stripping, a normal prompt such as `\"Name: \"` becomes `\"Name:\"`. Leading indentation and whitespace-only prompts are also removed, changing the displayed prompt even when it contains no ANSI codes.",
+        "confidence": 0.99
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30868,
+      "output_tokens": 331,
+      "cache_read_input_tokens": 27648
+    },
+    "elapsed_ms": 16204,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "ed6f09c4de2cbd87"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17021-e09f-73a0-af91-39967fe5b0a8"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'def (_readline_prompt|should_strip_ansi|resolve_color_default)|_readline_prompt\\\\(' src/click; sed -n '70,120p' src/click/termui.py; rg -n 'def should_strip_ansi' src/click/_compat.py\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'def (_readline_prompt|should_strip_ansi|resolve_color_default)|_readline_prompt\\\\(' src/click; sed -n '70,120p' src/click/termui.py; rg -n 'def should_strip_ansi' src/click/_compat.py\"",
+          "aggregated_output": "rg: src/click: IO error for operation on src/click: No such file or directory (os error 2)\nsed: src/click/termui.py: No such file or directory\nrg: src/click/_compat.py: IO error for operation on src/click/_compat.py: No such file or directory (os error 2)\n",
+          "exit_code": 2,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30868,
+          "cached_input_tokens": 27648,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 331,
+          "reasoning_output_tokens": 95
+        }
+      }
+    ]
+  }
+}

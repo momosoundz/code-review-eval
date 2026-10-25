@@ -1,0 +1,46 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/core.py",
+        "line": 1321,
+        "severity": "medium",
+        "category": "wrong_condition",
+        "description": "The condition requires every argument to have help, so a command with both documented and undocumented arguments loses its entire positional arguments section. Use an `any` check to show all arguments when at least one is documented.",
+        "rationale": "For a command with two arguments where one has help text and the other has `help=None`, `all(...)` returns false and skips formatting entirely. Users lose the previously displayed argument documentation, and the new empty-description fallback is never reached for undocumented arguments.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 15284,
+      "output_tokens": 200,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 11555,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "f8beab929d73aa79"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a1701f-1c12-72a3-9492-99239462b216"
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 15284,
+          "cached_input_tokens": 12416,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 200,
+          "reasoning_output_tokens": 56
+        }
+      }
+    ]
+  }
+}

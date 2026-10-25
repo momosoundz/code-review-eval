@@ -1,0 +1,58 @@
+{
+  "result": {
+    "findings": [],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 30406,
+      "output_tokens": 114,
+      "cache_read_input_tokens": 27392
+    },
+    "elapsed_ms": 11339,
+    "model": "codex-gpt-6.1-sol",
+    "prompt_id": "c2f524ab92ae",
+    "context_used": "hunk_plus_title_verified",
+    "input_sha256": "03f9d56bc7b5e7c3"
+  },
+  "raw": {
+    "codex_events": [
+      {
+        "type": "thread.started",
+        "thread_id": "01a17021-52d7-7132-afdc-86cc2d051d47"
+      },
+      {
+        "type": "item.started",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'reason|class Response' src/requests/models.py src/requests/adapters.py; rg --files -g 'AGENTS.md'\"",
+          "aggregated_output": "",
+          "exit_code": null,
+          "status": "in_progress"
+        }
+      },
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_1",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg -n 'reason|class Response' src/requests/models.py src/requests/adapters.py; rg --files -g 'AGENTS.md'\"",
+          "aggregated_output": "rg: src/requests/models.py: No such file or directory (os error 2)\nrg: src/requests/adapters.py: No such file or directory (os error 2)\n",
+          "exit_code": 1,
+          "status": "failed"
+        }
+      },
+      {
+        "type": "turn.completed",
+        "usage": {
+          "input_tokens": 30406,
+          "cached_input_tokens": 27392,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 114,
+          "reasoning_output_tokens": 14
+        }
+      }
+    ]
+  }
+}

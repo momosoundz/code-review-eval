@@ -1,0 +1,13 @@
+{
+  "case_id": "crv-0012",
+  "gold_id": "crv-0012-g1",
+  "judge_model": "claude-opus-5-5",
+  "judge_prompt_hash": "d97c19f428f6",
+  "input": "Labeled defect\n- root cause: The exponential cap check uses the reversed comparison and returns the cap while the computed delay is still below it.\n- failure path: With a retry attempt whose exponent is below the cap threshold, the wait strategy immediately returns the maximum delay instead of the smaller exponential delay.\n\nReviewer finding\n- description: The new logarithm can raise ValueError when the positive ratio underflows to zero.\n- rationale: With multiplier=1e308, max=1e-308 and exp_base=2, max / multiplier rounds to zero, so math.log raises ValueError outside the try block. A retry that previously returned the capped wait now fails instead.\n",
+  "critique": "The finding describes a math.log ValueError caused by floating-point underflow with extreme parameters. The labeled defect is a reversed cap comparison that returns the max delay too early. These are different mechanisms.",
+  "verdict": "no_match",
+  "usage": {
+    "input_tokens": 739,
+    "output_tokens": 85
+  }
+}

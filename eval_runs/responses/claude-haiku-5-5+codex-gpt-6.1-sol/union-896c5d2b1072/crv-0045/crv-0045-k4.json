@@ -1,0 +1,34 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "tenacity/retry.py",
+        "line": 183,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "The while loop walking the __cause__ chain no longer tracks visited exceptions, so a cyclic __cause__ chain makes it loop forever when no cause matches the configured types.",
+        "rationale": "Trigger: the retried function raises an exception whose __cause__ chain forms a cycle (e.g. a.__cause__ = b and b.__cause__ = a, which Python permits when set manually) and none of the causes is an instance of exception_cause_types. The loop then keeps reassigning exc to __cause__ forever, since the removed seen-set was the only termination guard for that case. Impact: the retry predicate never returns, hanging the caller's thread instead of retrying or re-raising.",
+        "confidence": 0.6
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 16444,
+      "output_tokens": 723,
+      "cache_read_input_tokens": 12416
+    },
+    "elapsed_ms": 17690,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8d370141e2500f80"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}

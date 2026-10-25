@@ -1,0 +1,43 @@
+{
+  "result": {
+    "findings": [
+      {
+        "file": "src/click/_utils.py",
+        "line": 20,
+        "severity": "medium",
+        "category": "logic_other",
+        "description": "Removing the custom __reduce_ex__ means pickling Sentinel members (e.g. UNSET) now falls back to Enum's default reduction, which pickles the raw object() value and fails.",
+        "rationale": "Trigger: pickle.dumps(UNSET) or pickling an object holding UNSET, such as a Parameter or default value, under the new code. Mechanism: the removed __reduce_ex__ returned getattr(Sentinel, name), which pickles by name; without it Enum reduces using _value_, an object() instance that is not picklable, so pickling raises. Impact: code that previously pickled click objects containing these sentinels, such as multiprocessing or caching, now raises a PicklingError.",
+        "confidence": 0.5
+      },
+      {
+        "file": "src/click/_utils.py",
+        "line": 15,
+        "severity": "medium",
+        "category": "resource_lifecycle",
+        "description": "Removing `__reduce_ex__` breaks pickle round trips for both sentinel members. Preserve name-based serialization because their `object()` values cannot be reconstructed by identity.",
+        "rationale": "When a sentinel, or an object containing one, is pickled and then unpickled, Enum's default reducer reconstructs the member from its value. Unpickling creates a new object that matches neither member's value, so deserialization raises ValueError instead of restoring the sentinel.",
+        "confidence": 1.0
+      }
+    ],
+    "no_output": false,
+    "error": null,
+    "dropped": [],
+    "usage": {
+      "input_tokens": 48744,
+      "output_tokens": 1366,
+      "cache_read_input_tokens": 43136
+    },
+    "elapsed_ms": 16862,
+    "model": "claude-haiku-5-5+codex-gpt-6.1-sol",
+    "prompt_id": "union:c2f524ab92ae+c2f524ab92ae",
+    "context_used": "hunk_only",
+    "input_sha256": "8a3cd15243ee2240"
+  },
+  "raw": {
+    "merged_from": [
+      "exp2a-title-verified",
+      "exp3-codex-title-verified"
+    ]
+  }
+}
