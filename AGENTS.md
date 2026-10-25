@@ -15,6 +15,7 @@ Hard limits, enforced by ruff: functions under 100 lines, cyclomatic complexity 
 | numbering a diff | `reviewer/diffs.py` |
 | the model call and the output contract | `reviewer/review.py`, `reviewer/prompt.md`, `reviewer/schema.json` |
 | the Anthropic client | `reviewer/llm.py` (the only module that imports `anthropic`) |
+| which backend answers a prompt | `reviewer/backends.py`: the Anthropic API, or `codex exec` for `codex-<model>` ids |
 | what the reviewer is: model, effort, size cap, taxonomy | `reviewer/config.py` |
 | how it is scored: tolerance, floors, bootstrap, budget | `eval/harness/config.py` |
 | dataset contract and validation | `eval/harness/dataset.py`, `eval/dataset/README.md` |
@@ -23,6 +24,7 @@ Hard limits, enforced by ruff: functions under 100 lines, cyclomatic complexity 
 | the judge and its verdict store | `eval/harness/judge.py`, `eval/harness/judge/` |
 | statistics | `eval/harness/stats.py` |
 | scoring a run, comparing two runs | `eval/harness/score.py`, `eval/harness/compare.py` |
+| combining two runs under a policy | `eval/harness/merge.py` (`union`, `agreement`; no model call) |
 
 `eval/` imports from `reviewer/`, never the reverse. A constant goes in a config module when it is recorded in a run manifest or changed between experiments; a constant with one consumer stays in that module. The defect taxonomy has one source, `reviewer/config.py`; `tests/reviewer/test_schema.py` fails if the schema, the prompt or `eval/dataset/taxonomy.md` drift from it.
 
@@ -46,4 +48,4 @@ Hard limits, enforced by ruff: functions under 100 lines, cyclomatic complexity 
 
 ## What not to add
 
-No second provider, framework, abstraction layer, retry loop, cache beyond the response store, or metric until a run shows the number it would change. A feature that nobody measured is not in this repo.
+No framework, abstraction layer, retry loop, cache beyond the response store, or metric until a run shows the number it would change. A second backend exists (`codex exec`) because experiment 3 measured it; a third one needs the same justification. A feature that nobody measured is not in this repo.

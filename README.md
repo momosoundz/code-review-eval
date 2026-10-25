@@ -48,13 +48,24 @@ Both write `findings.json`:
 
 The reviewer is one call to the Anthropic Messages API with a JSON schema enforced through structured outputs, no tools, no agent loop. The prompt is `reviewer/prompt.md`; `prompt_id` is a hash of prompt, schema and context mode, so two runs with the same id used the same reviewer. The default model is `claude-haiku-5-5` at effort `low`. One review of a 100-line diff costs well under a cent.
 
+## A second reviewer through Codex
+
+`--model codex-<model>` (for example `codex-gpt-6.1-sol`) sends the same prompt and schema through the Codex CLI on your ChatGPT subscription instead of the Anthropic API: `codex exec` headless, schema enforced, read-only sandbox in an empty directory (the CLI may still run read-only commands; every tool item it reports is kept in the raw envelope). Two collected runs can be combined without any model call, `union` (anything either reviewer flagged, once; the first run's wording wins on a shared anchor) or `agreement` (only what both flagged near the same line, at the lower severity), and the merged run scores and compares like any other:
+
+```bash
+uv run python -m eval.harness.collect --run exp3-codex --k 5 --split release \
+    --model codex-gpt-6.1-sol --context-mode hunk_plus_title_verified
+uv run python -m eval.harness.merge --a exp2a-title-verified --b exp3-codex --policy agreement --out exp3-agreement
+uv run python -m eval.harness.score --run exp3-agreement --online
+```
+
 ## Run the eval
 
 ```bash
 make eval RUN=baseline K=5                 # K reviewer calls per case, raw responses stored, scored
 make score RUN=baseline                    # re-scores from the committed files; never calls the API
-make compare A=baseline-n49 B=exp2a-title-verified-n49
-make report RUN=exp2a-title-verified-n49 BASELINE=baseline-n49   # markdown tables
+make compare A=baseline B=exp2a-title-verified
+make report RUN=exp2a-title-verified BASELINE=baseline   # markdown tables
 ```
 
 A different model, effort or context mode is a different reviewer version:
@@ -88,7 +99,7 @@ Three tools, all append-only, all resumable:
 
 ```bash
 uv run python scripts/review_cases.py --pass 1 --split release   # blind pass over the gold
-uv run python scripts/adjudicate.py --runs baseline-n49,exp2c-sonnet-n49   # alarms on clean cases
+uv run python scripts/adjudicate.py --runs baseline,exp2c-sonnet   # alarms on clean cases
 uv run python scripts/label_pairs.py                               # pairs that calibrate the judge
-uv run python -m eval.harness.calibrate --runs baseline-n49,exp2a-title-verified-n49
+uv run python -m eval.harness.calibrate --runs baseline,exp2a-title-verified
 ```
