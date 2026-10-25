@@ -40,8 +40,8 @@ eval:  ## collect K runs per case into the raw cache, then score (needs ANTHROPI
 score:  ## re-score a run offline from the committed caches; never calls the API
 	$(UV) python -m eval.harness.score --run $(RUN)
 
-compare:  ## make compare A=baseline B=exp1  (exit code: 0 PASS, 1 FAIL, 2 INCONCLUSIVE; make does not fail on it)
-	-$(UV) python -m eval.harness.compare --a $(A) --b $(B)
+compare:  ## make compare A=baseline B=exp1  (for exit codes 0/1/2 call the module directly)
+	@$(UV) python -m eval.harness.compare --a $(A) --b $(B) || true
 
 
 report:  ## make report RUN=exp1 [BASELINE=baseline]
