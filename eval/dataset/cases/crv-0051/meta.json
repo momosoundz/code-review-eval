@@ -1,14 +1,14 @@
 {
   "family_id": "fam-031",
   "split": "release",
-  "source": "clean",
+  "source": "discovered",
   "provenance": {
     "repo": "jd/tenacity",
     "commit": "39eb157",
     "paths": [
       "production code only"
     ],
-    "note": "merged commit as is; added to reach 20 clean cases for the false-alarm floor",
+    "note": "merged commit as is; added to reach 20 clean cases for the false-alarm floor; adjudication 2026-10-25 (rules v1): a Codex alarm adjudicated as a defect by the human; clean -> discovered",
     "commit_title": "feat: add enabled parameter to disable retrying (#604)"
   },
   "status": "active"

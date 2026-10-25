@@ -1,4 +1,20 @@
 {
   "case_id": "crv-0011",
-  "expected_findings": []
+  "expected_findings": [
+    {
+      "gold_id": "crv-0011-g1",
+      "file": "tenacity/wait.py",
+      "spans": [
+        [
+          211,
+          211
+        ]
+      ],
+      "category": "boundary",
+      "severity": "low",
+      "root_cause": "the shortcut guard computes math.log(self.max / self.multiplier, self.exp_base) and the division can underflow to 0.0, which math.log rejects",
+      "failure_path": "wait_exponential(multiplier=1e300, max=1e-300) on the first attempt: the guards pass, max / multiplier rounds to 0.0, math.log(0.0, 2) raises ValueError where the previous code returned self.max; only reachable with extreme parameters",
+      "needs_context_beyond_diff": false
+    }
+  ]
 }

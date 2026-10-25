@@ -1,4 +1,31 @@
 {
   "case_id": "crv-0051",
-  "expected_findings": []
+  "expected_findings": [
+    {
+      "gold_id": "crv-0051-g1",
+      "file": "tenacity/__init__.py",
+      "spans": [
+        [
+          351,
+          351
+        ]
+      ],
+      "also": [
+        {
+          "file": "tenacity/__init__.py",
+          "spans": [
+            [
+              257,
+              257
+            ]
+          ]
+        }
+      ],
+      "category": "wrong_condition",
+      "severity": "medium",
+      "root_cause": "the new enabled flag is stored on the retry object but only checked inside wraps(), so the direct call, iterator and async paths retry regardless of it",
+      "failure_path": "Retrying(enabled=False, stop=stop_after_attempt(3))(f) where f raises ValueError: f is called three times and RetryError is raised, identical to enabled=True; only the decorator path honors the flag",
+      "needs_context_beyond_diff": false
+    }
+  ]
 }

@@ -1,14 +1,14 @@
 {
   "family_id": "fam-007",
   "split": "release",
-  "source": "clean",
+  "source": "discovered",
   "provenance": {
     "repo": "jd/tenacity",
     "commit": "29d398b",
     "paths": [
       "production code only"
     ],
-    "note": "merged commit as is; context-only lines 219-220 (the fallback return) added after adjudication so the shortcut can be compared with the original expression",
+    "note": "merged commit as is; context-only lines 219-220 (the fallback return) added after adjudication so the shortcut can be compared with the original expression; adjudication 2026-10-25 (rules v1): a Codex alarm adjudicated as a defect by the human; clean -> discovered",
     "commit_title": "Avoid unnecessary exponential wait computation (#654)"
   },
   "status": "active"
