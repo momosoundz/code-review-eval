@@ -1,0 +1,26 @@
+{
+  "findings": [
+    {
+      "file": "src/requests/models.py",
+      "line": 793,
+      "severity": "high",
+      "category": "null_or_missing_value",
+      "description": "`Response()` now raises `AttributeError` because `self.raw` is initialized to `None` before this assignment. This also breaks normal HTTP requests, whose adapters construct a response before assigning its raw transport response.",
+      "rationale": "Trigger: constructing any `Response`, including during a normal HTTP request. Mechanism: the constructor evaluates `self.raw.reason` while `self.raw` is still `None`; the adapter cannot populate it until construction finishes. Impact: response construction crashes, preventing requests from returning a response.",
+      "confidence": 0.99
+    }
+  ],
+  "no_output": false,
+  "error": null,
+  "dropped": [],
+  "usage": {
+    "input_tokens": 31283,
+    "output_tokens": 239,
+    "cache_read_input_tokens": 15488
+  },
+  "elapsed_ms": 12770,
+  "model": "codex-gpt-6.1-sol",
+  "prompt_id": "c2f524ab92ae",
+  "context_used": "hunk_only",
+  "input_sha256": "91fc2c2a353fa582"
+}

@@ -172,6 +172,25 @@ def compare_runs(
     return out
 
 
+def _floors_line(floors: dict[str, Any]) -> str:
+    """One line per floor: baseline -> candidate and whether the floor holds."""
+    pr, cl = floors["precision"], floors["clean_fp_rate"]
+
+    def pct(x: float | None) -> str:
+        return "n/a" if x is None else f"{100 * x:.0f}%"
+
+    def state(floor: dict[str, Any]) -> str:
+        if floor["ok"]:
+            return "floor ok"
+        enough = floor.get("enough_findings", floor.get("enough_cases", True))
+        return "floor not declarable" if not enough else "floor NOT met"
+
+    return (
+        f"  precision@>=medium {pct(pr['baseline'])} -> {pct(pr['candidate'])} ({state(pr)}); "
+        f"clean cases alarming {pct(cl['baseline'])} -> {pct(cl['candidate'])} ({state(cl)})"
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     """CLI: ``--a BASELINE --b CANDIDATE``. Exit 0 PASS, 1 FAIL, 2 INCONCLUSIVE, 3 error."""
     parser = argparse.ArgumentParser(description="Compare two scored runs.")
@@ -189,6 +208,7 @@ def main(argv: list[str] | None = None) -> int:
         f"{out['verdict']}: {GATE_METRIC} delta {rh['delta']:+.3f} CI95 {rh['ci95']} "
         f"over {rh['n_cases']} cases in {rh['families']} families"
     )
+    print(_floors_line(out["floors"]))
     for label in ("lost_cases", "gained_cases", "new_clean_alarms"):
         for item in out[label]:
             print(f"  {label}: {item['case_id']} {item['baseline']} -> {item['candidate']}")

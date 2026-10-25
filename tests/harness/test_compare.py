@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from eval.harness.compare import compare_runs
+from eval.harness.compare import compare_runs, main
 
 ROW_KEYS = ("tp", "tp_medium_plus", "fp", "fn", "noise", "duplicates", "findings", "no_output")
 
@@ -210,3 +210,14 @@ def test_writes_comparison_json(tmp_path: Path) -> None:
     compare_runs("a", "b", runs_dir=tmp_path, resamples=100)
     out = json.loads((tmp_path / "b" / "comparison-vs-a.json").read_text())
     assert out["baseline"] == "a" and out["candidate"] == "b"
+
+
+def test_cli_prints_the_floors_with_their_state(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    write_run(tmp_path, "a", big_rows())
+    write_run(tmp_path, "b", big_rows())
+    assert main(["--a", "a", "--b", "b", "--runs-dir", str(tmp_path)]) == 0
+    out = capsys.readouterr().out
+    assert "precision@>=medium 90% -> 90% (floor ok)" in out
+    assert "clean cases alarming 5% -> 5% (floor ok)" in out
