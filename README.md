@@ -18,11 +18,13 @@ make check                   # lint, types, tests
 ## Review a diff
 
 ```bash
-make review DIFF=change.patch
-make review REPO=. BASE=main HEAD=my-branch
+make review DIFF=eval/dataset/cases/crv-0038/diff.patch          # a case with a known defect
+make review DIFF=eval/dataset/cases/crv-0054/diff.patch          # a clean commit: empty list
+make review REPO=../click BASE=71f2baf^ HEAD=71f2baf             # any repository, any two refs
+make review DIFF=change.patch MODEL=codex-gpt-6.1-sol OUT=findings-codex.json   # the second backend
 ```
 
-Both write `findings.json`:
+All of them write `findings.json` (or `OUT`):
 
 ```json
 {
@@ -49,7 +51,7 @@ Both write `findings.json`:
 
 `line` is the post-change line number. `no_output: true` means the model refused or returned invalid JSON; the harness scores that as a miss, never as a clean review. A finding that cites a file or line outside the diff is dropped and its reason listed under `dropped`; the rest of the review stands. Exit code is 0 for a valid review, 2 for no usable output, 1 for a diff over the size cap.
 
-The reviewer is one call to the Anthropic Messages API with a JSON schema enforced through structured outputs, no tools, no agent loop. The prompt is `reviewer/prompt.md`; `prompt_id` is a hash of prompt, schema and context mode, so two runs with the same id used the same reviewer. The default model is `claude-haiku-5-5` at effort `low`. One review of a 100-line diff costs well under a cent.
+The reviewer is one call to the Anthropic Messages API with a JSON schema enforced through structured outputs, no tools, no agent loop. The prompt is `reviewer/prompt.md`; `prompt_id` is a hash of prompt, schema and context mode, so two runs with the same id used the same reviewer. The default model is `claude-haiku-5-5` at effort `low`; `MODEL=codex-gpt-6.1-sol` sends the same prompt through the Codex CLI (see below). One review of a 100-line diff costs well under a cent.
 
 ## A second reviewer through Codex
 

@@ -8,6 +8,8 @@ B ?=
 REPO ?= .
 BASE ?= main
 HEAD ?= HEAD
+MODEL ?= claude-haiku-5-5
+OUT ?= findings.json
 
 check: lint types test
 
@@ -21,11 +23,11 @@ types:
 test:
 	$(UV) pytest
 
-review:  ## make review DIFF=path.patch  |  make review REPO=. BASE=main HEAD=my-branch
+review:  ## make review DIFF=path.patch [MODEL=codex-gpt-6.1-sol] [OUT=findings.json]  |  make review REPO=. BASE=main HEAD=my-branch
 ifdef DIFF
-	$(UV) python -m reviewer.review --diff $(DIFF) --out findings.json
+	$(UV) python -m reviewer.review --diff $(DIFF) --model $(MODEL) --out $(OUT)
 else
-	$(UV) python -m reviewer.review --repo $(REPO) --base $(BASE) --head $(HEAD) --out findings.json
+	$(UV) python -m reviewer.review --repo $(REPO) --base $(BASE) --head $(HEAD) --model $(MODEL) --out $(OUT)
 endif
 
 validate-dataset:
