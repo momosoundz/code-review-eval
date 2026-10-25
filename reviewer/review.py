@@ -277,7 +277,16 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
 def main(argv: list[str] | None = None) -> int:
     """CLI entry point. Exit 0 on a valid review, 2 when the model produced no usable output."""
     args = _parse_args(argv)
-    diff_text = args.diff.read_text() if args.diff else git_diff(args.repo, args.base, args.head)
+    try:
+        diff_text = (
+            args.diff.read_text() if args.diff else git_diff(args.repo, args.base, args.head)
+        )
+    except FileNotFoundError:
+        print(f"error: no such diff file: {args.diff}", file=sys.stderr)
+        return 1
+    except subprocess.CalledProcessError as exc:
+        print(f"error: git diff failed: {exc.stderr.strip()}", file=sys.stderr)
+        return 1
     try:
         options = ReviewOptions(args.model, args.effort, args.context_mode, clean_title(args.title))
         result = run_review(diff_text, args.out, args.raw_out, options)

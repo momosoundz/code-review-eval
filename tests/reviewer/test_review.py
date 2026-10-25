@@ -248,3 +248,17 @@ def test_verified_title_mode_adds_the_check_instruction() -> None:
         prompt_id("hunk_only"),
         prompt_id("hunk_plus_title"),
     )
+
+
+def test_cli_reports_a_missing_diff_file_without_a_traceback(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    code = review.main(["--diff", str(tmp_path / "nope.patch"), "--out", str(tmp_path / "o")])
+    assert code == 1
+    assert "no such diff file" in capsys.readouterr().err
+
+
+def test_cli_reports_a_failing_git_diff(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    code = review.main(["--repo", str(tmp_path), "--base", "x", "--head", "y"])
+    assert code == 1
+    assert "git diff failed" in capsys.readouterr().err
