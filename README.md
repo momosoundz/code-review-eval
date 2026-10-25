@@ -7,10 +7,13 @@ The reviewer takes a diff and writes structured findings to a file. The harness 
 ## Setup
 
 ```bash
+git clone https://github.com/momosoundz/code-review-eval && cd code-review-eval
 uv sync                      # Python 3.13, pinned dependencies
-cp .env.example .env         # add ANTHROPIC_API_KEY (reviewer and judge calls)
+cp .env.example .env         # add ANTHROPIC_API_KEY; the tools read .env themselves
 make check                   # lint, types, tests
 ```
+
+`.env` is read from the repository root when `ANTHROPIC_API_KEY` is not already in the shell; a variable already exported wins. `make score` needs no key.
 
 ## Review a diff
 
