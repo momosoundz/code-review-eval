@@ -21,7 +21,7 @@ make check                   # lint, types, tests
 make review DIFF=eval/dataset/cases/crv-0038/diff.patch          # a case with a known defect
 make review DIFF=eval/dataset/cases/crv-0054/diff.patch          # a clean commit: empty list
 make review REPO=../click BASE=71f2baf^ HEAD=71f2baf             # any repository, any two refs
-make review DIFF=change.patch MODEL=codex-gpt-6.1-sol OUT=findings-codex.json   # the second backend
+make review DIFF=eval/dataset/cases/crv-0038/diff.patch MODEL=codex-gpt-6.1-sol OUT=findings-codex.json   # same diff, the second backend
 ```
 
 All of them write `findings.json` (or `OUT`):
