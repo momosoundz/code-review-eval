@@ -13,6 +13,7 @@ from typing import Any
 
 from eval.harness.config import BUDGET_USD, PRICES_PER_MTOK, RUNS_DIR
 from eval.harness.dataset import Case, gold_hash, load_dataset
+from reviewer.backends import BackendUnavailableError
 from reviewer.config import CONTEXT_MODE, CONTEXT_MODES, EFFORT, MODEL
 from reviewer.diffs import number_diff
 from reviewer.review import ReviewResult, input_sha256, prompt_id, review_diff
@@ -180,8 +181,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--model", default=MODEL)
     parser.add_argument("--effort", default=EFFORT)
     parser.add_argument("--context-mode", default=CONTEXT_MODE, choices=CONTEXT_MODES)
+    parser.add_argument("--only", default=None, help="comma-separated case ids (a shard)")
     args = parser.parse_args(argv)
     cases = [c for c in load_dataset() if c.active and c.split == args.split]
+    if args.only:
+        wanted = set(args.only.split(","))
+        cases = [c for c in cases if c.case_id in wanted]
     if not cases:
         print(f"no active cases in split {args.split!r}", file=sys.stderr)
         return 1
@@ -193,6 +198,9 @@ def main(argv: list[str] | None = None) -> int:
     except (BudgetExceededError, FileExistsError, UnknownModelError) as exc:
         print(f"stopped: {exc}", file=sys.stderr)
         return 3
+    except BackendUnavailableError as exc:
+        print(f"stopped: {exc}; nothing was cached for that call, rerun to resume", file=sys.stderr)
+        return 4
     print(
         f"{manifest['calls_made']} call(s), {manifest['cache_hits']} cached, "
         f"{manifest['no_output']} no_output, est. {manifest['cost_usd']:.3f} USD"

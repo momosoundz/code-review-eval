@@ -12,20 +12,18 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from reviewer import llm
+from reviewer import backends
+from reviewer.backends import Completion
 from reviewer.config import (
     CONTEXT_MODE,
     CONTEXT_MODES,
     EFFORT,
-    MAX_OUTPUT_TOKENS,
     MODEL,
     PROMPT_PATH,
     SCHEMA_PATH,
     SEVERITIES,
 )
 from reviewer.diffs import DiffTooLargeError, NumberedDiff, number_diff
-
-THINKING_BLOCKS = ("thinking", "redacted_thinking")
 
 
 class InvalidFindingsError(ValueError):
@@ -73,10 +71,6 @@ def input_sha256(numbered_diff: str, context_mode: str, title: str | None) -> st
     """Hash of everything the model saw for one review: system prompt and user message."""
     blob = load_prompt() + "\n" + user_message(numbered_diff, context_mode, title)
     return hashlib.sha256(blob.encode()).hexdigest()[:16]
-
-
-def _create_message(**kwargs: Any) -> Any:
-    return llm.client().messages.create(**kwargs)
 
 
 def _normalize_path(path: str) -> str:
@@ -135,37 +129,18 @@ def normalize_findings(
     return kept, dropped
 
 
-def _parse_payload(response: Any) -> Any:
-    if response.stop_reason == "refusal":
+def _parse_payload(completion: Completion) -> Any:
+    if completion.refused:
         msg = "model refused the request"
         raise InvalidFindingsError(msg)
-    text = next((b.text for b in response.content if getattr(b, "type", "") == "text"), None)
-    if text is None:
+    if completion.text is None:
         msg = "response has no text block"
         raise InvalidFindingsError(msg)
     try:
-        return json.loads(text)
+        return json.loads(completion.text)
     except json.JSONDecodeError as exc:
         msg = f"response is not valid JSON: {exc}"
         raise InvalidFindingsError(msg) from exc
-
-
-def _auditable_envelope(response: Any) -> dict[str, Any]:
-    """The API response minus thinking blocks: their text is empty and the signature is opaque."""
-    raw = json.loads(json.dumps(response.model_dump(), default=str))
-    raw["content"] = [
-        block for block in raw.get("content", []) if block.get("type") not in THINKING_BLOCKS
-    ]
-    return raw
-
-
-def _usage(response: Any) -> dict[str, int]:
-    usage = response.usage
-    return {
-        "input_tokens": int(usage.input_tokens),
-        "output_tokens": int(usage.output_tokens),
-        "cache_read_input_tokens": int(getattr(usage, "cache_read_input_tokens", 0) or 0),
-    }
 
 
 TEMPLATES = {
@@ -206,31 +181,30 @@ def review_diff(
 ) -> tuple[ReviewResult, dict[str, Any]]:
     """Review ``diff_text`` with one model call; return the result and the raw API envelope.
 
-    A refusal or invalid JSON yields ``no_output=True`` with an empty findings list, so the
-    caller scores it as a miss instead of a clean review. A finding that cites a file or line
-    outside the diff is dropped and recorded in ``dropped``; the rest of the review stands.
-    ``context_mode`` selects what accompanies the diff; it is part of ``prompt_id``.
+    ``model`` picks the backend (``reviewer.backends``): ``codex-<model>`` runs through the
+    Codex CLI, any other id through the Anthropic API. A refusal or invalid JSON yields
+    ``no_output=True`` with an empty findings list, so the caller scores it as a miss instead
+    of a clean review. A finding that cites a file or line outside the diff is dropped and
+    recorded in ``dropped``; the rest of the review stands. ``context_mode`` selects what
+    accompanies the diff; it is part of ``prompt_id``.
     """
     numbered = number_diff(diff_text)
     version = prompt_id(context_mode)
     used = effective_context(context_mode, title)
     digest = input_sha256(numbered.text, context_mode, title)
     started = time.monotonic()
-    response = _create_message(
-        model=model,
-        max_tokens=MAX_OUTPUT_TOKENS,
-        system=load_prompt(),
-        messages=[{"role": "user", "content": user_message(numbered.text, context_mode, title)}],
-        output_config={
-            "effort": effort,
-            "format": {"type": "json_schema", "schema": load_schema()},
-        },
+    completion = backends.complete(
+        model,
+        effort,
+        load_prompt(),
+        user_message(numbered.text, context_mode, title),
+        load_schema(),
     )
     elapsed_ms = int((time.monotonic() - started) * 1000)
-    raw = _auditable_envelope(response)
-    usage = _usage(response)
+    raw = completion.raw
+    usage = completion.usage
     try:
-        findings, dropped = normalize_findings(_parse_payload(response), numbered)
+        findings, dropped = normalize_findings(_parse_payload(completion), numbered)
         result = ReviewResult(
             findings, False, None, dropped, usage, elapsed_ms, model, version, used, digest
         )

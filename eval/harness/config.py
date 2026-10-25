@@ -13,6 +13,8 @@ PRICES_PER_MTOK = {
     "claude-haiku-5-5": (0.10, 0.50),
     "claude-sonnet-5-5": (2.00, 10.00),
     "claude-opus-5-5": (4.00, 20.00),
+    # Codex CLI models run on the user's ChatGPT subscription: no per-token charge is tracked.
+    "codex-gpt-6.1-sol": (0.0, 0.0),
 }
 
 # Matching: a finding is eligible for a gold defect when it cites the same file and a line within

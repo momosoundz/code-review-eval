@@ -4,7 +4,7 @@ from typing import Any
 
 import pytest
 
-from reviewer import review
+from reviewer import backends, review
 from reviewer.review import (
     InvalidFindingsError,
     ReviewOptions,
@@ -119,7 +119,7 @@ def test_run_review_writes_findings(tmp_path: Path, monkeypatch: pytest.MonkeyPa
         calls.append(kwargs)
         return FakeResponse(good_payload())
 
-    monkeypatch.setattr(review, "_create_message", fake_create)
+    monkeypatch.setattr(backends, "_create_message", fake_create)
     out = tmp_path / "findings.json"
     result = run_review(SAMPLE, out_path=out, raw_out=tmp_path / "raw.json")
     written = json.loads(out.read_text())
@@ -139,7 +139,7 @@ def test_run_review_marks_refusal_as_no_output(
         resp.content = []
         return resp
 
-    monkeypatch.setattr(review, "_create_message", fake_create)
+    monkeypatch.setattr(backends, "_create_message", fake_create)
     result = run_review(SAMPLE, out_path=tmp_path / "f.json")
     assert result.no_output is True
     assert result.error is not None
@@ -153,7 +153,7 @@ def test_run_review_marks_invalid_json_as_no_output(
         resp.content = [FakeBlock("not json")]
         return resp
 
-    monkeypatch.setattr(review, "_create_message", fake_create)
+    monkeypatch.setattr(backends, "_create_message", fake_create)
     result = run_review(SAMPLE, out_path=tmp_path / "f.json")
     assert result.no_output is True
 
@@ -167,7 +167,7 @@ def test_prompt_id_changes_with_prompt(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_raw_envelope_drops_thinking_blocks(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    monkeypatch.setattr(review, "_create_message", lambda **kw: FakeResponse(good_payload()))
+    monkeypatch.setattr(backends, "_create_message", lambda **kw: FakeResponse(good_payload()))
     raw_out = tmp_path / "raw.json"
     run_review(SAMPLE, out_path=tmp_path / "f.json", raw_out=raw_out)
     raw = json.loads(raw_out.read_text())
@@ -202,7 +202,7 @@ def test_template_text_is_part_of_prompt_id(monkeypatch: pytest.MonkeyPatch) -> 
 def test_title_mode_without_title_is_recorded_as_hunk_only(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    monkeypatch.setattr(review, "_create_message", lambda **kw: FakeResponse(good_payload()))
+    monkeypatch.setattr(backends, "_create_message", lambda **kw: FakeResponse(good_payload()))
     result = run_review(
         SAMPLE, tmp_path / "f.json", options=ReviewOptions(context_mode="hunk_plus_title")
     )
@@ -218,7 +218,7 @@ def test_cli_threads_context_mode_and_title(
         calls.append(kwargs)
         return FakeResponse(good_payload())
 
-    monkeypatch.setattr(review, "_create_message", fake_create)
+    monkeypatch.setattr(backends, "_create_message", fake_create)
     patch = tmp_path / "d.patch"
     patch.write_text(SAMPLE)
     out = tmp_path / "f.json"

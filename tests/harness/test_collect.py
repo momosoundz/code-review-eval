@@ -14,6 +14,7 @@ from eval.harness.collect import (
     reviewer_version,
 )
 from eval.harness.dataset import load_dataset
+from reviewer.backends import BackendUnavailableError
 from reviewer.config import CONTEXT_MODE
 from reviewer.diffs import number_diff
 from reviewer.review import ReviewResult, input_sha256
@@ -324,3 +325,23 @@ def test_manifest_lists_cases_without_title_in_title_mode(
         settings=CollectSettings(runs_dir=tmp_path / "runs", context_mode="hunk_plus_title"),
     )
     assert manifest["cases_without_title"] == ["crv-0001", "crv-0002"]
+
+
+def test_cli_only_filters_the_cases_and_a_backend_failure_caches_nothing(
+    dataset: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(collect, "load_dataset", lambda: load_dataset(dataset))
+    monkeypatch.setattr(collect, "RUNS_DIR", tmp_path / "runs")
+    seen: list[str] = []
+
+    def failing(diff: str, m: str, e: str, c: str, t: str | None = None) -> tuple:
+        seen.append(diff[:1])
+        raise BackendUnavailableError("codex exec failed (exit 1)")
+
+    monkeypatch.setattr(collect, "review_diff", failing)
+    monkeypatch.setattr(
+        collect, "CollectSettings", lambda **kw: CollectSettings(runs_dir=tmp_path / "runs", **kw)
+    )
+    code = collect.main(["--run", "r", "--k", "1", "--split", "dev", "--only", "crv-0002"])
+    assert code == 4 and len(seen) == 1
+    assert not list((tmp_path / "runs").glob("responses/**/*.json"))

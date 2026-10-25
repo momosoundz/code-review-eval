@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 from eval.harness import compare, dataset, score
-from reviewer import review
+from reviewer import backends, review
 from tests.conftest import SAMPLE_DIFF, gold, meta, write_case
 from tests.harness.test_compare import big_rows, write_run
 
@@ -82,7 +82,7 @@ def test_review_cli_exit_codes(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) 
         def model_dump(self) -> dict:
             return {"content": []}
 
-    monkeypatch.setattr(review, "_create_message", lambda **kw: Refusal())
+    monkeypatch.setattr(backends, "_create_message", lambda **kw: Refusal())
     patch = tmp_path / "d.patch"
     patch.write_text(SAMPLE_DIFF)
     assert review.main(["--diff", str(patch), "--out", str(tmp_path / "f.json")]) == 2
